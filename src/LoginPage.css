@@ -1,0 +1,144 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f0effe;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.container {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+  flex-direction: row;
+}
+
+/* LEFT PANEL */
+.left {
+  flex: 1;
+  background: linear-gradient(135deg, #0D1B2A, #1B263B);
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  text-align: center;
+}
+
+.left h1 {
+  font-size: 2.5rem;
+  font-weight: 300;
+}
+
+.left h1 span {
+  font-weight: 500;
+  display: block;
+  margin-top: 1rem;
+}
+
+/* RIGHT PANEL */
+.right {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  background-color: #f0effe;
+}
+
+.form-box {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  width: 100%;
+  max-width: 400px;
+}
+
+.form-box h2 {
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+  color: #1b263b;
+  text-align: center;
+}
+
+.form-box input {
+  width: 100%;
+  padding: 0.8rem;
+  margin-bottom: 1rem;
+  border: 1px solid #d0d0d0;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  font-size: 1rem;
+}
+
+.form-box input:focus {
+  outline: none;
+  border-color: #2563eb;
+  background-color: #fff;
+}
+
+.forgot {
+  display: block;
+  text-align: right;
+  font-size: 0.85rem;
+  color: #2563eb;
+  text-decoration: none;
+  margin-bottom: 1.5rem;
+}
+
+button {
+  width: 100%;
+  padding: 0.9rem;
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+button:hover {
+  background-color: #1e4dd8;
+}
+
+.form-box p {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.form-box a {
+  color: #2563eb;
+  text-decoration: none;
+}
+
+/* MOBILE & TABLET */
+@media screen and (max-width: 768px) {
+  .container {
+    flex-direction: column;
+  }
+
+  .left {
+    height: 250px;
+  }
+
+  .left h1 {
+    font-size: 1.8rem;
+  }
+
+  .right {
+    padding: 1rem;
+  }
+
+  .form-box {
+    margin-top: -50px;
+  }
+}

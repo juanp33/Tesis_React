@@ -1,0 +1,154 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f0effe;
+}
+
+.registro-container {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+}
+
+/* IZQUIERDA: fondo azul degradado */
+.registro-left {
+  width: 50%;
+  background: linear-gradient(135deg, #0d1b2a, #0f2f5e);
+  color: #dcdcdc;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 2rem;
+}
+
+.registro-left h1 {
+  font-size: 2.2rem;
+  font-weight: 300;
+  line-height: 1.4;
+}
+
+.registro-left h1 span {
+  font-weight: 400;
+  display: block;
+  margin-top: 1rem;
+  color: #b0b0b0;
+}
+
+/* DERECHA: formulario */
+.registro-right {
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f0effe;
+  padding: 2rem;
+}
+
+.form-box {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+}
+
+.form-box h2 {
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+  color: #1b263b;
+  text-align: center;
+}
+
+/* Inputs */
+.form-box input[type="email"],
+.form-box input[type="password"] {
+  width: 100%;
+  padding: 0.8rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  font-size: 1rem;
+}
+
+.input-password {
+  position: relative;
+}
+
+.input-password input {
+  padding-right: 40px;
+}
+
+.toggle-visibility {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 1rem;
+  color: #666;
+}
+
+.forgot {
+  display: block;
+  text-align: right;
+  font-size: 0.85rem;
+  color: #2563eb;
+  margin-bottom: 1.5rem;
+  text-decoration: none;
+}
+
+button {
+  width: 100%;
+  padding: 0.9rem;
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+button:hover {
+  background-color: #1e4dd8;
+}
+
+.form-box p {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.form-box a {
+  color: #2563eb;
+  text-decoration: none;
+}
+
+/* RESPONSIVO */
+@media screen and (max-width: 768px) {
+  .registro-container {
+    flex-direction: column;
+  }
+
+  .registro-left, .registro-right {
+    width: 100%;
+    height: 50vh;
+  }
+
+  .form-box {
+    margin-top: -40px;
+  }
+
+  .registro-left h1 {
+    font-size: 1.8rem;
+  }
+}
