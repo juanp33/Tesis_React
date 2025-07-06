@@ -1,12 +1,16 @@
-
-import  { useState } from 'react';
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 import './LoginPage.css';
+import { useNavigate } from 'react-router-dom';
+
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
+
 
   const handleLogin = async () => {
     try {
@@ -18,11 +22,14 @@ const LoginPage = () => {
       const token = response.data.token;
       localStorage.setItem('jwt', token);
       alert('Inicio de sesión exitoso');
-   
-      // window.location.href = '';
+
+       navigate("/perfil"); // ✅ redirección al perfil
+      // Redirigir si querés:
+      // window.location.href = '/dashboard';
 
     } catch (err) {
-      
+      console.log(err);
+      setError('Credenciales inválidas. Intenta nuevamente.');
     }
   };
 
@@ -52,7 +59,9 @@ const LoginPage = () => {
           <a href="#" className="forgot">Olvidé mi contraseña</a>
           <button onClick={handleLogin}>Iniciar sesión</button>
           {error && <p style={{ color: 'red', marginTop: '1rem' }}>{error}</p>}
-          <p>Aún no estás registrado? <a href="#">Registrarse</a></p>
+          <p>
+            ¿Aún no estás registrado? <Link to="/registro">Registrarse</Link>
+          </p>
         </div>
       </div>
     </div>

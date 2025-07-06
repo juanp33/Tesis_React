@@ -15,14 +15,13 @@ body {
   display: flex;
   height: 100vh;
   width: 100%;
-  flex-direction: row;
 }
 
 /* LEFT PANEL */
 .left {
-  flex: 1;
+  width: 50%;
   background: linear-gradient(135deg, #0D1B2A, #1B263B);
-  color: white;
+  color: #dcdcdc;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -31,19 +30,21 @@ body {
 }
 
 .left h1 {
-  font-size: 2.5rem;
+  font-size: 2.2rem;
   font-weight: 300;
+  line-height: 1.4;
 }
 
 .left h1 span {
-  font-weight: 500;
+  font-weight: 400;
   display: block;
   margin-top: 1rem;
+  color: #b0b0b0;
 }
 
 /* RIGHT PANEL */
 .right {
-  flex: 1;
+  width: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -55,7 +56,7 @@ body {
   background-color: white;
   padding: 2rem;
   border-radius: 16px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
   width: 100%;
   max-width: 400px;
 }
@@ -71,16 +72,36 @@ body {
   width: 100%;
   padding: 0.8rem;
   margin-bottom: 1rem;
-  border: 1px solid #d0d0d0;
+  border: 1px solid #ccc;
   border-radius: 8px;
   background-color: #f9f9f9;
   font-size: 1rem;
+  color: #000; /* ✅ texto negro */
 }
 
 .form-box input:focus {
   outline: none;
   border-color: #2563eb;
   background-color: #fff;
+  color: #000; /* ✅ texto negro también cuando está enfocado */
+}
+
+.input-password {
+  position: relative;
+}
+
+.input-password input {
+  padding-right: 40px;
+}
+
+.toggle-visibility {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 1rem;
+  color: #666;
 }
 
 .forgot {
@@ -126,19 +147,16 @@ button:hover {
     flex-direction: column;
   }
 
-  .left {
-    height: 250px;
+  .left, .right {
+    width: 100%;
+    height: 50vh;
+  }
+
+  .form-box {
+    margin-top: -40px;
   }
 
   .left h1 {
     font-size: 1.8rem;
-  }
-
-  .right {
-    padding: 1rem;
-  }
-
-  .form-box {
-    margin-top: -50px;
   }
 }

@@ -67,8 +67,7 @@ body {
 }
 
 /* Inputs */
-.form-box input[type="email"],
-.form-box input[type="password"] {
+.form-box input {
   width: 100%;
   padding: 0.8rem;
   margin-bottom: 1rem;
@@ -139,7 +138,8 @@ button:hover {
     flex-direction: column;
   }
 
-  .registro-left, .registro-right {
+  .registro-left,
+  .registro-right {
     width: 100%;
     height: 50vh;
   }
