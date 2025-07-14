@@ -27,7 +27,7 @@ const handleRegister = async () => {
 
     setMensaje('Usuario registrado con éxito');
     setError('');
-    navigate('/perfil');
+    navigate('/');
   } catch (err: any) {
     if (err.response && err.response.data) {
       setError(err.response.data);

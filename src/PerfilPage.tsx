@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import './PerfilPage.css';
+import MasterPage from './MasterPage';
 
 interface Usuario {
   id: number;
@@ -35,19 +37,34 @@ const PerfilPage = () => {
   }, []);
 
   return (
-    <div style={{ padding: '2rem', fontFamily: 'Segoe UI, sans-serif' }}>
-      <h2>Perfil del Usuario</h2>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      {usuario ? (
-        <div>
-          <p><strong>ID:</strong> {usuario.id}</p>
-          <p><strong>Username:</strong> {usuario.username}</p>
-          <p><strong>Email:</strong> {usuario.email}</p>
-        </div>
-      ) : !error ? (
-        <p>Cargando...</p>
-      ) : null}
-    </div>
+    <MasterPage>
+      <div className="perfil-container">
+        <h2>Perfil del Usuario</h2>
+        {error && <p className="error-msg">{error}</p>}
+        {usuario ? (
+          <>
+            <div className="perfil-card">
+              <p><span className="label">ID:</span> {usuario.id}</p>
+              <p><span className="label">Username:</span> {usuario.username}</p>
+              <p><span className="label">Email:</span> {usuario.email}</p>
+            </div>
+            <div className="perfil-actions">
+              <button onClick={() => alert('Ir a configuración')}>Configuración</button>
+              <button
+                onClick={() => {
+                  localStorage.removeItem('jwt');
+                  window.location.reload();
+                }}
+              >
+                Cerrar sesión
+              </button>
+            </div>
+          </>
+        ) : !error ? (
+          <p className="cargando">Cargando...</p>
+        ) : null}
+      </div>
+    </MasterPage>
   );
 };
 

@@ -1,0 +1,85 @@
+.ocr-page {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 2rem;
+  
+  gap: 3rem;
+  flex-wrap: wrap;
+}
+
+.ocr-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  align-items: center;
+  justify-content: flex-start;
+  min-width: 250px;
+}
+
+.ocr-controls input[type="file"] {
+  font-size: 1rem;
+  color: #000;
+}
+
+.ocr-controls button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.ocr-controls button:disabled {
+  background-color: #999;
+  cursor: not-allowed;
+}
+
+.ocr-result {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  flex: 1;
+  max-width: 800px;
+}
+
+.ocr-result iframe {
+  width: 100%;
+  height: 600px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: white;
+}
+
+.ocr-result a {
+  margin-top: 1rem;
+  text-decoration: none;
+  color: #007bff;
+  font-weight: bold;
+  padding: 0.5rem 1rem;
+  border: 2px solid #007bff;
+  border-radius: 6px;
+  background-color: white;
+  transition: all 0.3s ease;
+}
+
+.ocr-result a:hover {
+  background-color: #007bff;
+  color: white;
+}
+
+@media (max-width: 768px) {
+  .ocr-page {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .ocr-result iframe {
+    height: 500px;
+  }
+}

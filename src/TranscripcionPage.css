@@ -1,0 +1,114 @@
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #eaf4fc;
+}
+
+.transcripcion-layout {
+  display: flex;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+.panel-contenedor {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  width: 100%;
+  max-width: 1100px;
+}
+
+@media (min-width: 900px) {
+  .panel-contenedor {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+}
+
+.transcripcion-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  background-color: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  min-width: 250px;
+  flex-shrink: 0;
+}
+
+.transcripcion-controls input[type="file"] {
+  font-size: 14px;
+}
+
+.transcripcion-controls button {
+  background: linear-gradient(180deg, #030C2C 0%, #061859 75.13%, #0A2892 100%);
+  color: white;
+  padding: 10px 16px;
+  font-size: 15px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: opacity 0.2s ease-in-out;
+  width: 100%;
+}
+
+.transcripcion-controls button:hover {
+  opacity: 0.9;
+}
+.transcripcion-controls label {
+  font-size: 13px;
+  color: #555;
+  margin-bottom: 2px;
+}
+
+.transcripcion-controls input[type="text"] {
+  padding: 8px 10px;
+  font-size: 14px;
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: #333;
+  color: white;
+}
+
+.transcripcion-output {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+}
+
+.transcripcion-textarea {
+  width: 100%;
+  height: 500px;
+  padding: 20px;
+  font-family: 'Courier New', monospace;
+  font-size: 14px;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  resize: vertical;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+  white-space: pre-wrap;
+  color: black;
+}
+.exportar-btn {
+  margin-top: 20px;
+  background: linear-gradient(180deg, #030C2C 0%, #061859 75.13%, #0A2892 100%);
+  color: white;
+  padding: 12px 20px;
+  font-size: 15px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: opacity 0.2s ease-in-out;
+  width: 100%;
+}
+
+.exportar-btn:hover {
+  opacity: 0.9;
+}
