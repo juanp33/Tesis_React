@@ -1,0 +1,309 @@
+/* Util: oculto accesible */
+.ra-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Contenedor principal de la página (dentro de tu masterpage) */
+.ra-page {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+}
+
+/* En pantallas grandes, dos columnas */
+@media (min-width: 1024px) {
+  .ra-page {
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+  }
+}
+
+/* Columna izquierda (controles / archivos / exportación) */
+.ra-left {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Fila con select + input */
+.ra-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.ra-select {
+  height: 48px;
+  width: 220px;
+  min-width: 200px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 0 12px;
+  background: #fff;
+  font: inherit;
+}
+
+.ra-input {
+  height: 48px;
+  flex: 1 1 260px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 0 12px;
+  background: #fff;
+  min-width: 0;
+  font: inherit;
+}
+
+/* Dropzones */
+.ra-dropzone {
+  display: block;
+}
+
+.ra-drop {
+  border: 1px solid #0003;
+  border-radius: 16px;
+  min-height: 180px;
+  padding: 24px;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  transition: border-color .2s ease, background-color .2s ease, box-shadow .2s ease;
+  box-shadow: 0 1px 2px rgba(0,0,0,.04);
+}
+
+.ra-drop--active {
+  border-color: #3b82f6;
+  background: #eff6ff;
+  box-shadow: 0 4px 12px rgba(59,130,246,.15);
+}
+
+.ra-drop__content input {
+  margin-top: 12px;
+}
+
+.ra-drop__title {
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.ra-drop__hint {
+  font-size: 12px;
+  color: #6b7280;
+  margin-top: 4px;
+}
+
+/* Botonera de exportación */
+.ra-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.ra-btn {
+  height: 56px;
+  padding: 0 20px;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  background: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: filter .15s ease, transform .02s ease;
+}
+
+.ra-btn:hover { filter: brightness(0.98); }
+.ra-btn:active { transform: translateY(1px); }
+.ra-btn:disabled { opacity: .6; cursor: not-allowed; }
+
+.ra-btn--primary {
+  background: #007BFF;
+  color: #fff;
+  border-color: #000;
+}
+
+/* Columna derecha (panel con instrucciones + resultado) */
+.ra-right {
+  background: linear-gradient(90.12deg, #030C2C 13.12%, #061859 45.04%, #0A2892 68.96%);
+  border-radius: 20px;
+  padding: 16px;
+}
+
+@media (min-width: 640px) {
+  .ra-right { padding: 24px; }
+}
+
+.ra-right__actions {
+  display: flex;
+  justify-content: flex-end;
+  margin: 8px 0 12px 0;
+}
+
+/* Textareas */
+.ra-textarea {
+  width: 100%;
+  min-height: 320px;
+  border: 1px solid #d1d5db;
+  border-radius: 12px;
+  padding: 12px;
+  resize: vertical;
+  font: inherit;
+  background: #fff;
+}
+
+.ra-textarea--small { min-height: 120px; }
+
+/* Resultado */
+.ra-result {
+  background: #fff;
+  border: 1px solid #d1d5db;
+  border-radius: 16px;
+  padding: 12px;
+  margin-top: 12px;
+}
+
+.ra-error {
+  color: #dc2626;
+  font-size: 14px;
+}
+
+/* Ayuda para que el panel derecho no aplaste al izquierdo en móviles */
+@media (max-width: 1023.98px) {
+  .ra-right { order: 2; }
+  .ra-left  { order: 1; }
+}
+/* ==== Botones: fix de estilos pisados por la masterpage ==== */
+.ra-btn {
+  /* Reseteos fuertes para evitar herencias globales */
+  all: unset;
+  -webkit-appearance: none;
+  appearance: none;
+
+  /* Box model y layout */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: auto;               /* evita width:100% global */
+  min-width: 180px;          /* tamaño cómodo */
+  height: 48px;              /* consistente con inputs */
+  padding: 0 18px;
+
+  /* Visual */
+  background: #ffffff;       /* botón claro por defecto */
+  color: #111827;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  box-shadow: 0 1px 2px rgba(0,0,0,.06);
+
+  /* Tipografía */
+  font: inherit;
+  font-weight: 600;
+  line-height: 1;            /* centra verticalmente el texto */
+  white-space: nowrap;
+  cursor: pointer;
+
+  /* Transiciones */
+  transition: transform .02s ease, filter .15s ease, box-shadow .15s ease;
+}
+
+.ra-btn:hover { filter: brightness(0.98); }
+.ra-btn:active { transform: translateY(1px); }
+.ra-btn:disabled { opacity: .6; cursor: not-allowed; }
+
+/* Variante primaria (Exportar PDF) */
+.ra-btn--primary {
+  background: #0a66ff;         /* azul vivo */
+  color: #ffffff;
+  border-color: #0a66ff;
+  box-shadow: 0 6px 14px rgba(10,102,255,.18);
+}
+.ra-btn--primary:hover { filter: brightness(1.02); }
+.ra-btn--primary:active { transform: translateY(1px); }
+
+/* Botón dentro del panel derecho (por si el contenedor tiene estilos agresivos) */
+.ra-right .ra-btn {
+  background: #ffffff !important;
+  color: #111827 !important;
+  border-color: #e5e7eb !important;
+  box-shadow: 0 1px 2px rgba(0,0,0,.06);
+}
+
+/* Alineación de la botonera izquierda */
+.ra-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+/* Opcional: versión a ancho completo si algún día la necesitás */
+/* .ra-btn--block { width: 100%; min-width: 0; } */
+/* ===== Select estilizado con flecha custom ===== */
+.ra-selectWrap {
+  position: relative;
+  display: inline-block;
+}
+
+.ra-select {
+  /* reset fuerte para evitar estilos de la masterpage */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+
+  height: 48px;
+  min-width: 220px;
+  padding: 0 40px 0 12px; /* espacio para la flecha */
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  background: #ffffff;
+  color: #111827;
+  font: inherit;
+  line-height: 48px;
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgba(0,0,0,.04);
+  transition: border-color .15s ease, box-shadow .15s ease, filter .15s ease;
+}
+
+.ra-select:hover { filter: brightness(.99); }
+.ra-select:focus {
+  outline: none;
+  border-color: #0a66ff;
+  box-shadow: 0 0 0 3px rgba(10,102,255,.18);
+}
+
+/* Oculta la flecha vieja en IE */
+.ra-select::-ms-expand { display: none; }
+
+/* Flecha custom */
+.ra-selectWrap::after {
+  content: "";
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  width: 10px;
+  height: 10px;
+  transform: translateY(-50%) rotate(45deg);
+  border-right: 2px solid #6b7280;
+  border-bottom: 2px solid #6b7280;
+  pointer-events: none;
+}
+
+/* Modo disabled (por si lo usás) */
+.ra-select:disabled {
+  background: #f9fafb;
+  color: #9ca3af;
+  cursor: not-allowed;
+}
+
+/* Opcional: tamaño compacto */
+.ra-select--sm { height: 40px; line-height: 40px; }

@@ -1,0 +1,157 @@
+/* Variables globales */
+:root {
+  --primary-color: #3451b2;
+  --secondary-color: #233070;
+  --bg-light: #f6f8fc;
+  --bg-white: #ffffff;
+  --border-light: #b8c1ec;
+  --shadow-light: rgba(198, 208, 225, 0.3);
+  --font-family: 'Inter', sans-serif;
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --transition-fast: 0.2s ease-in-out;
+}
+
+/* Global reset/context */
+body {
+  margin: 0;
+  font-family: var(--font-family);
+  background: var(--bg-light);
+  color: #333;
+}
+
+h2 {
+  color: var(--primary-color);
+  font-weight: 600;
+  margin: 0 0 var(--spacing-lg) 0;
+  letter-spacing: 0.5px;
+  font-size: 1.75rem;
+}
+
+/* Formulario */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  background: var(--bg-white);
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-md);
+  box-shadow: 0 2px 8px var(--shadow-light);
+  margin-bottom: var(--spacing-lg);
+  max-width: 480px;
+  width: 100%;
+}
+
+label {
+  font-weight: 500;
+  color: var(--primary-color);
+}
+
+input,
+select,
+textarea {
+  font-size: 1rem;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-sm);
+  background: var(--bg-light);
+  outline: none;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(52, 81, 178, 0.2);
+}
+
+button {
+  align-self: flex-start;
+  font-size: 1rem;
+  padding: var(--spacing-sm) var(--spacing-lg);
+  border: none;
+  border-radius: var(--radius-sm);
+  background: var(--primary-color);
+  color: var(--bg-white);
+  font-weight: 500;
+  cursor: pointer;
+  transition: background var(--transition-fast), transform var(--transition-fast);
+}
+
+button:hover {
+  background: var(--secondary-color);
+  transform: translateY(-1px);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+/* Lista de ítems */
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: var(--spacing-md);
+}
+
+li {
+  background: var(--bg-white);
+  padding: var(--spacing-md);
+  border-radius: var(--radius-md);
+  box-shadow: 0 1px 3px var(--shadow-light);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+li strong {
+  font-weight: 600;
+  color: var(--primary-color);
+}
+
+li button {
+  background: transparent;
+  color: var(--primary-color);
+  border: 1px solid var(--border-light);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-sm);
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+
+li button:hover {
+  background: var(--primary-color);
+  color: var(--bg-white);
+}
+
+/* Select múltiple */
+select[multiple] {
+  height: 140px;
+  min-width: 200px;
+  background: var(--bg-light);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  /* Form full-width */
+  form {
+    padding: var(--spacing-md);
+  }
+
+  /* Lista en una sola columna */
+  ul {
+    grid-template-columns: 1fr;
+  }
+  form input,
+form select,
+form textarea {
+  color: #333333;
+}
+}

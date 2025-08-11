@@ -6,7 +6,7 @@ import { jsPDF } from "jspdf";
 const TranscripcionPage = () => {
   const [file, setFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
-  const [rawText, setRawText] = useState<string>(""); // texto original sin reemplazos
+  const [rawText, setRawText] = useState<string>("");
   const [speakerMap, setSpeakerMap] = useState<{ [key: string]: string }>({});
   const [buttonText, setButtonText] = useState("Transcribir");
   const [dotCount, setDotCount] = useState(0);
@@ -28,8 +28,7 @@ const TranscripcionPage = () => {
       });
       const data = await response.json();
       if (data.conversacion) {
-        const raw = data.conversacion.join("\n\n");
-        setRawText(raw);
+        setRawText(data.conversacion); // ✅ ya es string
       }
     } catch (error) {
       alert("Error al transcribir el archivo");
@@ -83,7 +82,6 @@ const TranscripcionPage = () => {
     doc.save("transcripcion.pdf");
   };
 
-  // animación de puntos del botón
   useEffect(() => {
     if (!loading) {
       setButtonText("Transcribir");

@@ -1,3 +1,4 @@
+/* MasterPage.css */
 body, html, #root {
   height: 100%;
   margin: 0;
@@ -15,43 +16,94 @@ body, html, #root {
   width: 300px;
   min-width: 250px;
   background: linear-gradient(180deg, #030C2C 0%, #061859 75.13%, #0A2892 100%);
-  color: white;
   display: flex;
   flex-direction: column;
   padding-top: 2rem;
   gap: 1.5rem;
+  position: relative;
+  overflow-y: auto;
 }
 
-.nav-item {
+/* Nav items INSIDE the sidebar */
+.sidebar .nav-item {
   display: flex;
   align-items: center;
   padding: 0.75rem 1rem;
   font-size: 1.1rem;
   cursor: pointer;
   transition: background 0.3s;
+  user-select: none;
+  color: white;               /* texto en blanco */
+  text-decoration: none;      /* elimina subrayado */
 }
 
-.nav-item:hover {
+.sidebar .nav-item:hover {
   background-color: rgba(255, 255, 255, 0.1);
   border-radius: 5px;
 }
 
-.icon {
+.sidebar .icon {
   margin-right: 0.75rem;
   font-size: 1.2rem;
+  color: white;               /* iconos en blanco */
 }
 
-.label {
+.sidebar .label {
   white-space: nowrap;
+  color: white;               /* labels en blanco */
+}
+
+/* Dropdown “Administración” */
+.sidebar .admin-dropdown {
+  position: relative;
+}
+
+.sidebar .admin-dropdown .arrow {
+  margin-left: auto;
+  font-size: 0.8rem;
+  transition: transform 0.2s;
+  color: white;               /* flecha en blanco */
+}
+
+/* Menú desplegable */
+.sidebar .admin-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: #061859;
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 4px;
+  margin-top: 4px;
+  min-width: 100%;
+  z-index: 20;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar .admin-menu .admin-link {
+  color: white;               /* texto del dropdown en blanco */
+  padding: 0.6rem 1rem;
+  text-decoration: none;
+  font-size: 1rem;
+  transition: background 0.2s;
+}
+
+.sidebar .admin-menu .admin-link:hover {
+  background: rgba(255,255,255,0.1);
 }
 
 /* Content */
 .content {
   flex: 1;
-background: radial-gradient(circle at top left, #F0F4FF, #D0E3FF);
-
+  background: radial-gradient(circle at top left, #F0F4FF, #D0E3FF);
   padding: 2rem;
   overflow-y: auto;
+}
+
+/* Ensure .nav-item outside sidebar inherits normal text color */
+.nav-item {
+  color: inherit;
 }
 
 /* Responsive */
@@ -69,17 +121,26 @@ background: radial-gradient(circle at top left, #F0F4FF, #D0E3FF);
     justify-content: space-around;
   }
 
-  .nav-item {
+  .sidebar .nav-item {
     flex-direction: column;
     align-items: center;
     font-size: 0.9rem;
   }
 
-  .icon {
+  .sidebar .icon {
     margin: 0;
   }
 
   .content {
     padding: 1rem;
+  }
+
+  /* Dropdown en móvil: menú ocupa ancho completo */
+  .sidebar .admin-menu {
+    position: static;
+    border: none;
+    box-shadow: none;
+    background: inherit;
+    margin-top: 0.5rem;
   }
 }
