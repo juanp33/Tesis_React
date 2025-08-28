@@ -1,0 +1,118 @@
+.cliente-detalle-layout {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+  background: #e6f2ff;
+  min-height: 100vh; /* ocupa toda la pantalla */
+  box-sizing: border-box;
+}
+
+/* 📂 Casos */
+.casos-section {
+  flex: 2; /* ocupa más espacio */
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  overflow-y: auto; /* permite scroll si hay muchos casos */
+  max-height: calc(100vh - 40px);
+  padding-right: 10px;
+}
+
+.casos-section h2 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.casos-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.caso-card {
+  background: white;
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.caso-card h3 {
+  margin: 0 0 10px;
+  color: #333;
+}
+
+.caso-card p {
+  margin: 5px 0;
+}
+
+.caso-card a {
+  display: inline-block;
+  margin: 5px 10px 0 0;
+  color: #6a5acd;
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.caso-card a:hover {
+  text-decoration: underline;
+}
+
+/* Botón de nuevo caso */
+.nuevo-caso-btn {
+  margin-top: 15px;
+  padding: 10px;
+  background: #6a5acd;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.nuevo-caso-btn:hover {
+  background: #5848c2;
+}
+
+/* 👤 Info Cliente */
+.cliente-info-section {
+  flex: 1; /* más chica que casos */
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  position: sticky; /* siempre visible en scroll */
+  top: 20px;
+  height: fit-content;
+}
+
+.cliente-info-section h2 {
+  font-size: 1.3rem;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.perfil-card p {
+  margin: 6px 0;
+}
+
+/* 📱 Responsive */
+@media (max-width: 900px) {
+  .cliente-detalle-layout {
+    flex-direction: column;
+  }
+
+  .casos-section {
+    max-height: none;
+    overflow-y: visible;
+  }
+
+  .cliente-info-section {
+    position: relative;
+    top: auto;
+  }
+}

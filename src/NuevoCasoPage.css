@@ -1,0 +1,118 @@
+.nuevocaso-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 2rem;
+  gap: 2rem;
+}
+
+.nuevocaso-form {
+  flex: 1;
+  max-width: 600px;
+  background: #fff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.nuevocaso-form h2 {
+  margin-bottom: 1rem;
+  color: #333;
+  font-size: 1.5rem;
+}
+
+.nuevocaso-form label {
+  display: block;
+  margin-top: 1rem;
+  font-weight: 600;
+  color: #444;
+}
+
+.nuevocaso-form input,
+.nuevocaso-form select,
+.nuevocaso-form textarea {
+  width: 100%;
+  margin-top: 0.3rem;
+  padding: 0.6rem 0.8rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.2s ease;
+}
+
+.nuevocaso-form input:focus,
+.nuevocaso-form select:focus,
+.nuevocaso-form textarea:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+.nuevocaso-form textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.archivo-upload {
+  margin-top: 1rem;
+  padding: 1rem;
+  border: 2px dashed #ccc;
+  border-radius: 8px;
+  text-align: center;
+  color: #666;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.archivo-upload:hover {
+  background: #f9f9f9;
+  border-color: #007bff;
+}
+
+.archivo-list {
+  margin-top: 0.5rem;
+  list-style: none;
+  padding: 0;
+}
+
+.archivo-list li {
+  background: #f1f1f1;
+  margin-bottom: 0.5rem;
+  padding: 0.5rem 0.8rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  color: #333;
+}
+
+.nuevocaso-actions {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+.nuevocaso-actions button {
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background 0.2s ease;
+}
+
+.nuevocaso-actions .btn-guardar {
+  background: #007bff;
+  color: #fff;
+}
+
+.nuevocaso-actions .btn-guardar:hover {
+  background: #0056b3;
+}
+
+.nuevocaso-actions .btn-cancelar {
+  background: #ddd;
+  color: #333;
+}
+
+.nuevocaso-actions .btn-cancelar:hover {
+  background: #bbb;
+}

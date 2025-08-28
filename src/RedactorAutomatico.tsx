@@ -1,51 +1,27 @@
-import React, { useCallback, useMemo, useState } from "react";
-import { jsPDF } from "jspdf";
+import React, { useCallback, useMemo, useRef, useState, useEffect } from "react";
 import "./RedaccionAutomatica.css";
 import MasterPage from "./MasterPage";
 
-const API_BASE: string =
-  import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000";
+const API_BASE: string = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000";
 
-type DropZoneSingleProps = {
-  label: string;
-  accept?: string;
-  id: string;
-  onFile: (file: File | null) => void;
-};
-
-type DropZoneMultiProps = {
-  label: string;
-  accept?: string;
-  id: string;
-  onFiles: (files: File[]) => void;
-};
+type DropZoneSingleProps = { label: string; accept?: string; id: string; onFile: (file: File | null) => void; };
+type DropZoneMultiProps = { label: string; accept?: string; id: string; onFiles: (files: File[]) => void; };
+type ChatMsg = { role: "user" | "assistant"; text: string };
 
 function DropZoneSingle({ label, accept, id, onFile }: DropZoneSingleProps) {
   const [dragOver, setDragOver] = useState(false);
   const onDrop = useCallback((e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    setDragOver(false);
-    const f = e.dataTransfer.files?.[0] ?? null;
-    onFile(f);
+    e.preventDefault(); setDragOver(false);
+    const f = e.dataTransfer.files?.[0] ?? null; onFile(f);
   }, [onFile]);
   return (
     <div className="ra-dropzone">
       <label htmlFor={id} className="ra-sr-only">{label}</label>
-      <div
-        onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
-        onDragLeave={() => setDragOver(false)}
-        onDrop={onDrop}
-        className={`ra-drop ${dragOver ? "ra-drop--active" : ""}`}
-      >
+      <div onDragOver={(e)=>{e.preventDefault();setDragOver(true);}} onDragLeave={()=>setDragOver(false)} onDrop={onDrop} className={`ra-drop ${dragOver?"ra-drop--active":""}`}>
         <div className="ra-drop__content">
           <div className="ra-drop__title">{label}</div>
           <div className="ra-drop__hint">Arrastrá un archivo o hacé clic para seleccionar</div>
-          <input
-            id={id}
-            type="file"
-            accept={accept}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => onFile(e.target.files?.[0] ?? null)}
-          />
+          <input id={id} type="file" accept={accept} onChange={(e)=>onFile(e.target.files?.[0] ?? null)} />
         </div>
       </div>
     </div>
@@ -61,37 +37,17 @@ function DropZoneMulti({ label, accept, id, onFiles }: DropZoneMultiProps) {
     onFiles(arr);
   };
   const onDrop = useCallback((e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    setDragOver(false);
-    handleFiles(e.dataTransfer.files);
+    e.preventDefault(); setDragOver(false); handleFiles(e.dataTransfer.files);
   }, []);
   return (
     <div className="ra-dropzone">
       <label htmlFor={id} className="ra-sr-only">{label}</label>
-      <div
-        onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
-        onDragLeave={() => setDragOver(false)}
-        onDrop={onDrop}
-        className={`ra-drop ${dragOver ? "ra-drop--active" : ""}`}
-      >
+      <div onDragOver={(e)=>{e.preventDefault();setDragOver(true);}} onDragLeave={()=>setDragOver(false)} onDrop={onDrop} className={`ra-drop ${dragOver?"ra-drop--active":""}`}>
         <div className="ra-drop__content">
           <div className="ra-drop__title">{label}</div>
           <div className="ra-drop__hint">Arrastrá varios PDFs o hacé clic para seleccionar</div>
-          <input
-            id={id}
-            type="file"
-            accept={accept}
-            multiple
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleFiles(e.target.files)}
-          />
-          {names.length > 0 && (
-            <div className="ra-filelist" aria-live="polite">
-              {names.slice(0, 5).map((n, i) => (
-                <div key={i} className="ra-fileitem">{n}</div>
-              ))}
-              {names.length > 5 && <div className="ra-fileitem">+{names.length - 5} más…</div>}
-            </div>
-          )}
+          <input id={id} type="file" accept={accept} multiple onChange={(e)=>handleFiles(e.target.files)} />
+          {names.length>0 && (<div className="ra-filelist" aria-live="polite">{names.slice(0,5).map((n,i)=>(<div key={i} className="ra-fileitem">{n}</div>))}{names.length>5 && <div className="ra-fileitem">+{names.length-5} más…</div>}</div>)}
         </div>
       </div>
     </div>
@@ -103,18 +59,29 @@ export default function RedaccionAutomatica() {
   const [instructions, setInstructions] = useState<string>("");
   const [templateFile, setTemplateFile] = useState<File | null>(null);
   const [evidenceFiles, setEvidenceFiles] = useState<File[]>([]);
+
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
-  const [result, setResult] = useState<string>("");
 
-  const docTypeOptions = useMemo(
-    () => ["demanda", "contestación", "escrito simple", "testamento", "contrato"],
-    []
-  );
+  const [chatId, setChatId] = useState<string>("");
+  const [chatLoading, setChatLoading] = useState<boolean>(false);
+  const [chatError, setChatError] = useState<string>("");
+  const [chatInput, setChatInput] = useState<string>("");
+  const [chatMsgs, setChatMsgs] = useState<ChatMsg[]>([]);
+  const [chatRespuesta, setChatRespuesta] = useState<string>("");
+
+  const [pdfSrc, setPdfSrc] = useState<string>("");
+  const [evidenceId, setEvidenceId] = useState<string>("");
+
+  const messagesRef = useRef<HTMLDivElement | null>(null);
+  useEffect(() => {
+    messagesRef.current?.scrollTo({ top: messagesRef.current.scrollHeight, behavior: "smooth" });
+  }, [chatMsgs, chatRespuesta]);
+
+  const docTypeOptions = useMemo(() => ["Demanda","Poder","Escrito","Testamento","Declaración Jurada"], []);
 
   const handleGenerate = async () => {
-    setError("");
-    setResult("");
+    setError(""); setChatId(""); setChatMsgs([]); setChatRespuesta(""); setChatError(""); setPdfSrc(""); setEvidenceId("");
     setLoading(true);
     try {
       const fd = new FormData();
@@ -122,127 +89,153 @@ export default function RedaccionAutomatica() {
       fd.append("instructions", instructions);
       if (templateFile) fd.append("template_file", templateFile);
       evidenceFiles.forEach((f) => fd.append("evidence_files", f));
+
       const res = await fetch(`${API_BASE}/redaccion_documento/`, { method: "POST", body: fd });
-      if (!res.ok) {
-        const t = await res.text();
-        throw new Error(t || `HTTP ${res.status}`);
-      }
-      const json: { generated_text?: string } = await res.json();
-      setResult(json.generated_text || "");
-    } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : "Error desconocido";
-      setError(msg);
+      if (!res.ok) throw new Error(await res.text() || `HTTP ${res.status}`);
+
+      const json: { generated_text?: string; evidence_id?: string } = await res.json();
+      const inicial = json.generated_text || "";
+      const evidId = json.evidence_id || "";
+      setEvidenceId(evidId);
+
+      await startChat(inicial, evidId);
+    } catch (e: any) {
+      setError(e?.message || "Error desconocido");
     } finally {
       setLoading(false);
     }
   };
 
-  const downloadTxt = () => {
-    if (!result) return;
-    const blob = new Blob([result], { type: "text/plain;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `${documentType || "documento"}.txt`;
-    a.click();
-    URL.revokeObjectURL(url);
+  const startChat = async (documentoInicial: string, evidId: string) => {
+    setChatLoading(true); setChatError("");
+    try {
+      const r = await fetch(`${API_BASE}/chatbot/start/`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          documento_inicial: documentoInicial,
+          objetivos: "",
+          estilo: "juridico_formal",
+          mantener_pruebas: true,
+          longitud_maxima: null,
+          evidence_id: evidId,   // << enlaza evidencias
+        }),
+      });
+      if (!r.ok) throw new Error(await r.text() || `HTTP ${r.status}`);
+      const data: { chat_id: string; respuesta: string } = await r.json();
+      setChatId(data.chat_id);
+      setChatRespuesta(data.respuesta || "");
+      setPdfSrc(`${API_BASE}/chatbot/pdf/${data.chat_id}?t=${Date.now()}&r=${Math.random()}`);
+      if (data.respuesta) setChatMsgs([{ role: "assistant", text: data.respuesta }]);
+    } catch (e: any) {
+      setChatError(e?.message || "Failed to fetch");
+    } finally {
+      setChatLoading(false);
+    }
   };
 
-  const downloadPDF = () => {
-    if (!result) return;
-    const doc = new jsPDF({ unit: "pt", format: "a4" });
-    const margin = 48;
-    const maxWidth = doc.internal.pageSize.getWidth() - margin * 2;
-    const pageH = doc.internal.pageSize.getHeight();
-    const lineHeight = 16;
-    doc.setFont("courier", "normal");
-    doc.setFontSize(12);
-    const text = result.replace(/\r\n/g, "\n");
-    const paragraphs = text.split("\n");
-    let y = margin;
-    paragraphs.forEach((p) => {
-      const content = p === "" ? " " : p;
-      const wrapped = doc.splitTextToSize(content, maxWidth);
-      for (const line of wrapped) {
-        if (y + lineHeight > pageH - margin) {
-          doc.addPage();
-          y = margin;
-        }
-        doc.text(line, margin, y);
-        y += lineHeight;
-      }
-    });
-    doc.save(`${documentType || "documento"}.pdf`);
+  const sendChat = async () => {
+    if (!chatId || !chatInput.trim()) return;
+    const msg = chatInput.trim();
+    setChatMsgs((m) => [...m, { role: "user", text: msg }]);
+    setChatInput(""); setChatLoading(true); setChatError("");
+    try {
+      const r = await fetch(`${API_BASE}/chatbot/message/`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ chat_id: chatId, mensaje_usuario: msg }),
+      });
+      if (!r.ok) throw new Error(await r.text() || `HTTP ${r.status}`);
+      const data: { respuesta: string } = await r.json();
+      if (data.respuesta) setChatMsgs((m) => [...m, { role: "assistant", text: data.respuesta }]);
+
+      // Forza refresh del visor PDF
+      setPdfSrc(`${API_BASE}/chatbot/pdf/${chatId}?t=${Date.now()}&r=${Math.random()}`);
+    } catch (e: any) {
+      setChatError(e?.message || "Failed to fetch");
+    } finally {
+      setChatLoading(false);
+    }
+  };
+
+  const copyLink = async () => {
+    if (!pdfSrc) return;
+    try { await navigator.clipboard.writeText(pdfSrc); } catch {}
   };
 
   return (
     <MasterPage>
-      <div className="ra-page">
+      <div className="ra-page ra-only-chat">
+        {/* Izquierda: inputs y archivos */}
         <div className="ra-left">
           <div className="ra-row">
             <div className="ra-selectWrap">
-              <select
-                className="ra-select"
-                value={documentType}
-                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setDocumentType(e.target.value)}
-              >
+              <select className="ra-select" value={documentType} onChange={(e)=>setDocumentType(e.target.value)}>
                 <option value="">Tipo de doc.</option>
-                {docTypeOptions.map((opt) => (
-                  <option key={opt} value={opt}>{opt}</option>
-                ))}
+                {docTypeOptions.map((opt)=>(<option key={opt} value={opt}>{opt}</option>))}
               </select>
             </div>
-            <input
-              className="ra-input"
-              placeholder="o escribí un tipo personalizado"
-              value={documentType}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setDocumentType(e.target.value)}
-            />
+            <input className="ra-input" placeholder="o escribí un tipo personalizado" value={documentType} onChange={(e)=>setDocumentType(e.target.value)} />
           </div>
 
-          <DropZoneSingle
-            id="tpl"
-            label="Subir tu archivo de ejemplo aquí"
-            accept=".txt,.md,.doc,.docx,.rtf,.pdf,.html,.htm"
-            onFile={setTemplateFile}
-          />
+          <DropZoneSingle id="tpl" label="Subir tu archivo de ejemplo aquí" accept=".txt,.md,.doc,.docx,.rtf,.pdf,.html,.htm" onFile={setTemplateFile} />
+          <DropZoneMulti id="evid" label="Subir evidencias (PDFs)" accept="application/pdf,.pdf" onFiles={setEvidenceFiles} />
 
-          <DropZoneMulti
-            id="evid"
-            label="Subir evidencias (PDFs)"
-            accept="application/pdf,.pdf"
-            onFiles={setEvidenceFiles}
-          />
+          <textarea className="ra-textarea ra-textarea--small" placeholder="Instrucciones" value={instructions} onChange={(e)=>setInstructions(e.target.value)} />
 
-          <div className="ra-actions">
-            <button onClick={downloadPDF} className="ra-btn ra-btn--primary">Exportar (PDF)</button>
-            <button onClick={downloadTxt} className="ra-btn">Exportar (.txt)</button>
-          </div>
-        </div>
-
-        <div className="ra-right">
-          <textarea
-            className="ra-textarea ra-textarea--small"
-            placeholder="Instrucciones"
-            value={instructions}
-            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setInstructions(e.target.value)}
-          />
           <div className="ra-right__actions">
             <button onClick={handleGenerate} disabled={loading || !documentType} className="ra-btn">
-              {loading ? "Generando…" : "Generar texto"}
+              {loading ? "Generando…" : "Generar y abrir chat"}
             </button>
           </div>
-          <div className="ra-result">
-            {error ? (
-              <div className="ra-error">{error}</div>
+
+          {error && <div className="ra-error">{error}</div>}
+        </div>
+
+        {/* Derecha: visor PDF + chat */}
+        <div className="ra-right">
+          <div className="ra-pdfWrap">
+            {pdfSrc ? (
+              <iframe key={pdfSrc} title="Documento PDF" className="ra-pdf" src={pdfSrc} />
             ) : (
-              <textarea
-                className="ra-textarea"
-                value={result}
-                readOnly
-                placeholder="El texto generado aparecerá aquí…"
-              />
+              <div className="ra-pdfPlaceholder">El PDF aparecerá aquí…</div>
             )}
+            <div className="ra-pdfActions">
+              <button className="ra-btn ra-btn--ghost" onClick={copyLink} disabled={!pdfSrc}>Copiar enlace del PDF</button>
+              {evidenceId && <span className="ra-evidenceTag" title="Evidencias cargadas">Evidencias vinculadas</span>}
+            </div>
+          </div>
+
+          <div className="ra-chat">
+            <div className="ra-chat__header">
+              <div className="ra-chat__title">Chat de mejora del documento</div>
+              <div className="ra-chat__status">{chatLoading ? "Procesando…" : chatId ? "Listo" : "Inicializando…"}</div>
+            </div>
+
+            {chatError && <div className="ra-error ra-error--chat">{chatError}</div>}
+
+            <div className="ra-chat__messages" ref={messagesRef}>
+              {chatMsgs.map((m, i) => (
+                <div key={i} className={`ra-chat__bubble ${m.role === "user" ? "ra-chat__bubble--user" : "ra-chat__bubble--bot"}`}>
+                  {m.text}
+                </div>
+              ))}
+              {!chatMsgs.length && chatRespuesta && <div className="ra-chat__bubble ra-chat__bubble--bot">{chatRespuesta}</div>}
+            </div>
+
+            <div className="ra-chat__form">
+              <input
+                className="ra-input ra-chat__input"
+                placeholder="Escribí qué querés mejorar…"
+                value={chatInput}
+                onChange={(e)=>setChatInput(e.target.value)}
+                onKeyDown={(e)=>{ if (e.key === "Enter") sendChat(); }}
+                disabled={!chatId || chatLoading}
+              />
+              <button className="ra-btn ra-btn--primary ra-chat__send" onClick={sendChat} disabled={!chatId || chatLoading || !chatInput.trim()}>
+                Enviar
+              </button>
+            </div>
           </div>
         </div>
       </div>

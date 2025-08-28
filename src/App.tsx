@@ -6,15 +6,16 @@ import TranscripcionPage from './TranscripcionPage';
 import OCRPage from './OcrPage';
 import RedaccionAutomatica from './RedactorAutomatico';
 import AuthGuard from "./components/AuthGuard";
-
+import ChatPage from './ChatPage';
 // CRUDs y utilidades
 import AbogadoCRUD from "./crudes/AbogadoCrud";
 import PermisoCRUD from "./crudes/PermisoCrud";
 import RolCRUD from "./crudes/RolCrud";
 import UsuarioCRUD from "./crudes/UsuarioCrud";
-
+import AgregarClientePage from './AgregarClientePage';
 import AsignarPermisosPorRol from "./crudes/AsignarPermisosPorRol";
-
+import ClienteDetallePage from "./ClienteDetallePage";
+import NuevoCasoPage from "./NuevoCasoPage";
 function App() {
   return (
     <Router>
@@ -34,15 +35,15 @@ function App() {
                   <Route path="/redactorautomatico" element={<RedaccionAutomatica />} />
                   <Route path="/transcripcion" element={<TranscripcionPage />} />
                   <Route path="/ocr" element={<OCRPage />} />
-
-                  {/* CRUDs y administración */}
+                  <Route path="/chatbot" element={<ChatPage />} />
+                  <Route path="/agregar-cliente" element={<AgregarClientePage />} />
                   <Route path="/abogados" element={<AbogadoCRUD />} />
                   <Route path="/permisos" element={<PermisoCRUD />} />
                   <Route path="/roles" element={<RolCRUD />} />
                   <Route path="/usuarios" element={<UsuarioCRUD />} />
-                 
+                  <Route path="/clientes/:id" element={<ClienteDetallePage />} />
                   <Route path="/asignar-permisos" element={<AsignarPermisosPorRol />} />
-
+                   <Route path="/clientes/:id/nuevo-caso" element={<NuevoCasoPage />} />
                   {/* Página por defecto (dashboard) */}
                   <Route path="*" element={<div>Bienvenido al sistema</div>} />
                 </Routes>
