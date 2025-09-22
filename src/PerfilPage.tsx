@@ -65,6 +65,14 @@ const PerfilPage = () => {
         <div className="clientes-section">
           <h2>👥 Clientes</h2>
 
+          {/* 🔹 Botón para agregar cliente */}
+          <button
+            className="nuevo-cliente-btn"
+            onClick={() => navigate("/agregar-cliente")}
+          >
+            ➕ Agregar Cliente
+          </button>
+
           {loading ? (
             <p>Cargando...</p>
           ) : Array.isArray(clientes) && clientes.length > 0 ? (

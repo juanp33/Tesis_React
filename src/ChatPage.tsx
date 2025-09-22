@@ -9,47 +9,40 @@ interface Message {
   content: string;
 }
 
-const ChatPage = () => {
+const ChatPage: React.FC = () => {
   const [chatId, setChatId] = useState<string | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
-  const [file, setFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
 
-  // Inicia el chat
+  // Inicia el chat automáticamente al cargar la primera vez
   const startChat = async () => {
     const res = await fetch(`${API_BASE}/chatbot/start/`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ documento_inicial: "Hola, ¿en qué puedo ayudarte?" }),
+      body: JSON.stringify({ documento_inicial: "" }),
     });
     const data = await res.json();
     setChatId(data.chat_id);
-    setMessages([{ role: "assistant", content: data.respuesta }]);
   };
 
-  // Envía mensaje + archivo (si hay)
+  React.useEffect(() => {
+    startChat();
+  }, []);
+
+  // Envía mensaje
   const sendMessage = async () => {
-    if (!chatId || (!input.trim() && !file)) return;
+    if (!chatId || !input.trim()) return;
 
-    const formData = new FormData();
-    formData.append("chat_id", chatId);
-    formData.append("mensaje_usuario", input);
-    if (file) formData.append("archivo", file);
-
-    // Mostrar mensaje del usuario en el chat
-    setMessages((prev) => [
-      ...prev,
-      { role: "user", content: input + (file ? `\n📎 ${file.name}` : "") },
-    ]);
-
+    const userMsg = input.trim();
+    setMessages((prev) => [...prev, { role: "user", content: userMsg }]);
     setInput("");
-    setFile(null);
     setLoading(true);
 
-    const res = await fetch(`${API_BASE}/chatbot/send/`, {
+    const res = await fetch(`${API_BASE}/chatbot/message/`, {
       method: "POST",
-      body: formData,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ chat_id: chatId, mensaje_usuario: userMsg }),
     });
 
     const data = await res.json();
@@ -60,57 +53,38 @@ const ChatPage = () => {
   return (
     <MasterPage>
       <div className="chat-page">
-        {!chatId ? (
-          <div className="chat-start">
-            <button onClick={startChat}>Iniciar Chat Legal</button>
-          </div>
-        ) : (
-          <>
-            <div className="chat-messages">
-              {messages.map((msg, i) => (
-                <div key={i} className={`chat-message ${msg.role}`}>
-                  <strong>{msg.role === "user" ? "Tú" : "Asistente"}</strong>:{" "}
-                  <span
-                    dangerouslySetInnerHTML={{
-                      __html: msg.content.replace(/\n/g, "<br/>"),
-                    }}
-                  />
-                </div>
-              ))}
-              {loading && <div className="chat-message assistant">Escribiendo...</div>}
+        {/* Header fijo arriba */}
+        <header className="chat-header">
+          <div className="chat-logo">⚖️</div>
+          <h1>Asistente Jurídico Uruguayo</h1>
+          <p className="chat-subtitle">
+            Responde consultas jurídicas en estilo formal y redacta documentos legales.
+          </p>
+        </header>
+
+        {/* Mensajes */}
+        <div className="chat-messages">
+          {messages.map((msg, i) => (
+            <div key={i} className={`chat-message ${msg.role}`}>
+              <div className="chat-bubble">{msg.content}</div>
             </div>
+          ))}
+          {loading && <div className="chat-message assistant">Escribiendo...</div>}
+        </div>
 
-            <div className="chat-input-area">
-              {/* Clip para adjuntar archivo */}
-              <label className="file-attach">
-                📎
-                <input
-                  type="file"
-                  onChange={(e) => setFile(e.target.files?.[0] || null)}
-                />
-              </label>
-
-              {/* Input de texto */}
-              <input
-                type="text"
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                placeholder="Escribe tu consulta legal..."
-              />
-
-              {/* Botón enviar */}
-              <button
-                onClick={sendMessage}
-                disabled={(!input.trim() && !file) || loading}
-              >
-                Enviar
-              </button>
-            </div>
-
-            {/* Vista previa de archivo adjunto */}
-            {file && <div className="file-preview">📎 {file.name}</div>}
-          </>
-        )}
+        {/* Input */}
+        <div className="chat-input-area">
+          <input
+            type="text"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            placeholder="Escribe tu consulta legal..."
+            onKeyDown={(e) => e.key === "Enter" && sendMessage()}
+          />
+          <button onClick={sendMessage} disabled={!input.trim() || loading}>
+            ➤
+          </button>
+        </div>
       </div>
     </MasterPage>
   );

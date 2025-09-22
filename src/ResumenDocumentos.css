@@ -1,0 +1,120 @@
+:root {
+  --rd-primary: #0a2892;
+  --rd-border: #d1d5db;
+  
+  --rd-bg-soft: #ffffff;
+  --rd-text: #111827;
+  --rd-muted: #6b7280;
+}
+
+/* Layout */
+.resumen-page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 24px;
+  font-family: "Segoe UI", sans-serif;
+  background: var(--rd-bg);
+  color: var(--rd-text);
+}
+
+@media (min-width: 1024px) {
+  .resumen-page {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+}
+
+.resumen-left {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background: var(--rd-bg-soft);
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+}
+
+.resumen-right {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Inputs */
+.resumen-left input[type="file"] {
+  font-size: 14px;
+}
+
+.resumen-filelist {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 13px;
+  color: var(--rd-muted);
+}
+
+.resumen-filelist li {
+  padding: 4px 0;
+}
+
+/* Botón */
+.resumen-btn {
+  background: var(--rd-primary);
+  color: #fff;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 600;
+  transition: opacity 0.2s ease;
+}
+
+.resumen-btn:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+}
+
+.resumen-btn:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+/* Errores */
+.resumen-error {
+  color: #dc2626;
+  font-size: 14px;
+}
+
+/* Resúmenes */
+.resumen-card {
+  border: 1px solid var(--rd-border);
+  border-radius: 8px;
+  background: #fff;
+  padding: 12px 16px;
+  margin-bottom: 8px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.resumen-card strong {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--rd-primary);
+}
+
+/* Informe final */
+.resumen-informe {
+  border-top: 2px solid var(--rd-primary);
+  padding-top: 16px;
+}
+
+.resumen-informe pre {
+  background: #f3f4f6;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}

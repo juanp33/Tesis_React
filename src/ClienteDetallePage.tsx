@@ -34,6 +34,7 @@ const ClienteDetallePage = () => {
   const { id } = useParams<{ id: string }>();
   const [cliente, setCliente] = useState<Cliente | null>(null);
   const [casos, setCasos] = useState<Caso[]>([]);
+  const [archivosUrls, setArchivosUrls] = useState<Record<number, string>>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const navigate = useNavigate();
@@ -60,24 +61,45 @@ const ClienteDetallePage = () => {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => {
-        console.log("Respuesta de casos:", res.data);
-
         let data = res.data;
-
-        // 🔹 Normalizar posibles formatos
         if (Array.isArray(data) && Array.isArray(data[0])) {
-          // si viene [[{...}]]
           data = data[0];
         } else if (data.casos && Array.isArray(data.casos)) {
-          // si backend devuelve { casos: [...] }
           data = data.casos;
         }
-
         setCasos(Array.isArray(data) ? data : []);
       })
       .catch(() => setError("Error al cargar los casos"))
       .finally(() => setLoading(false));
   }, [id]);
+
+  // 🔹 Descarga de archivo con token
+  const fetchArchivo = async (casoId: number, archivo: ArchivoCaso) => {
+    const token = localStorage.getItem("jwt");
+    try {
+      const res = await axios.get(
+        `http://localhost:8080/api/archivos/${casoId}/${archivo.nombreArchivo}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+          responseType: "blob",
+        }
+      );
+      const url = URL.createObjectURL(res.data);
+      setArchivosUrls((prev) => ({ ...prev, [archivo.id]: url }));
+    } catch {
+      setError("No se pudo cargar un archivo");
+    }
+  };
+
+  useEffect(() => {
+    casos.forEach((caso) => {
+      caso.archivos?.forEach((archivo) => {
+        if (!archivosUrls[archivo.id]) {
+          fetchArchivo(caso.id, archivo);
+        }
+      });
+    });
+  }, [casos]);
 
   return (
     <MasterPage>
@@ -93,7 +115,12 @@ const ClienteDetallePage = () => {
           ) : (
             <div className="casos-grid">
               {casos.map((caso) => (
-                <div key={caso.id} className="caso-card">
+                <div
+                  key={caso.id}
+                  className="caso-card"
+                  onClick={() => navigate(`/casos/${caso.id}`)}
+                  style={{ cursor: "pointer" }}
+                >
                   <h3>{caso.titulo}</h3>
                   <p><b>Tipo:</b> {caso.tipo}</p>
                   <p><b>Estado:</b> {caso.estado}</p>
@@ -107,13 +134,19 @@ const ClienteDetallePage = () => {
                     <ul>
                       {caso.archivos.map((a) => (
                         <li key={a.id}>
-                          <a
-                            href={`http://localhost:8080/${a.rutaArchivo}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            {a.nombreArchivo}
-                          </a>
+                          {archivosUrls[a.id] ? (
+                            <a
+                              href={archivosUrls[a.id]}
+                              download={a.nombreArchivo}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              onClick={(e) => e.stopPropagation()} // no dispara navigate
+                            >
+                              {a.nombreArchivo}
+                            </a>
+                          ) : (
+                            <span>Cargando {a.nombreArchivo}...</span>
+                          )}
                         </li>
                       ))}
                     </ul>

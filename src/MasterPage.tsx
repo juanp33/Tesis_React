@@ -8,7 +8,8 @@ import MicLogo from "./logos/MicLogo-removebg-preview.png";
 import PencilLogo from "./logos/PencilLogo-removebg-preview.png";
 import ChatLogo from "./logos/ChatLogo-removebg-preview.png";
 import ZoomLogo from "./logos/ZoomLogo-removebg-preview.png";
-
+import Resumidor from "./logos/resumido2r.png";
+import Transformar from "./logos/transforma2.png";
 interface MasterPageProps {
   children: ReactNode;
 }
@@ -24,8 +25,9 @@ const ITEMS: Item[] = [
   { to: "/transcripcion", label: "Transcripcion", icon: MicLogo },
   { to: "/redactorautomatico", label: "Redaccion Asistida", icon: PencilLogo },
   { to: "/chatbot", label: "ChatBot Juridico", icon: ChatLogo },
-  { to: "/busqueda", label: "Busqueda Normativa", icon: ZoomLogo },
+  { to: "/resumidor", label: "Resumidor", icon: Resumidor },
   { to: "/ocr", label: "OCR", icon: ZoomLogo },
+  {to: "/transformardocumento", label: "Transformar Documento", icon: Transformar }
 ];
 
 const MasterPage = ({ children }: MasterPageProps) => {

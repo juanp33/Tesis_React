@@ -2,7 +2,9 @@ import React, { useState } from "react";
 import MasterPage from "./MasterPage";
 import "./OCRPage.css";
 
-const OCRPage = () => {
+const API_BASE: string = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000";
+
+const OCRPage: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
   const [ocrUrl, setOcrUrl] = useState<string | null>(null);
@@ -21,7 +23,7 @@ const OCRPage = () => {
     formData.append("archivo", file);
 
     try {
-      const response = await fetch("http://localhost:8000/ocr_archivo_con_texto/", {
+      const response = await fetch(`${API_BASE}/ocr_archivo_con_texto/`, {
         method: "POST",
         body: formData,
       });
@@ -41,21 +43,44 @@ const OCRPage = () => {
   return (
     <MasterPage>
       <div className="ocr-page">
-        <div className="ocr-controls">
-          <input type="file" accept=".pdf,.jpg,.jpeg,.png" onChange={handleFileChange} />
-          <button onClick={handleOCR} disabled={loading || !file}>
-            {loading ? "Procesando..." : "Convertir OCR"}
-          </button>
-        </div>
+        <div className="ocr-card">
+          <h2>Conversión OCR</h2>
+          <p>Subí un PDF o imagen y conviértelo a texto editable (PDF OCR).</p>
 
-        {ocrUrl && (
-          <div className="ocr-result">
-            <iframe src={ocrUrl} title="Resultado OCR" />
-            <a href={ocrUrl} download="archivo_ocr.pdf">
-              Descargar PDF
-            </a>
+          <div className="ocr-dropzone">
+            <div className="ocr-drop__content">
+              <div className="ocr-drop__icon">📄</div>
+              <div className="ocr-drop__title">Subir archivo</div>
+              <div className="ocr-drop__hint">Arrastrá un archivo aquí o</div>
+              <label className="ocr-btn-upload">
+                Seleccionar desde el dispositivo
+                <input
+                  type="file"
+                  accept=".pdf,.jpg,.jpeg,.png"
+                  onChange={handleFileChange}
+                  hidden
+                />
+              </label>
+            </div>
           </div>
-        )}
+
+          <button
+            className="ocr-btn"
+            onClick={handleOCR}
+            disabled={loading || !file}
+          >
+            {loading ? "Procesando…" : "Convertir OCR"}
+          </button>
+
+          {ocrUrl && (
+            <div className="ocr-result">
+              <iframe src={ocrUrl} title="Resultado OCR" className="ocr-iframe" />
+              <a href={ocrUrl} download="archivo_ocr.pdf" className="ocr-download">
+                Descargar PDF
+              </a>
+            </div>
+          )}
+        </div>
       </div>
     </MasterPage>
   );

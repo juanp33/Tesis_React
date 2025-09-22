@@ -7,6 +7,10 @@ import OCRPage from './OcrPage';
 import RedaccionAutomatica from './RedactorAutomatico';
 import AuthGuard from "./components/AuthGuard";
 import ChatPage from './ChatPage';
+
+import CasoDetallePage from './CasoDetallePage';
+import TransformarDocumento from './TransformarDocumento';
+import ResumenDocumentos from './ResumenDocumentos';
 // CRUDs y utilidades
 import AbogadoCRUD from "./crudes/AbogadoCrud";
 import PermisoCRUD from "./crudes/PermisoCrud";
@@ -20,17 +24,19 @@ function App() {
   return (
     <Router>
       <Routes>
-        {/* Rutas públicas */}
+       
         <Route path="/" element={<LoginPage />} />
         <Route path="/registro" element={<RegistroPage />} />
 
-        {/* Rutas privadas: */}
+        
         <Route
           path="/*"
           element={
             <AuthGuard>
            
                 <Routes>
+                      <Route path="/casos/:id" element={<CasoDetallePage />} />
+
                   <Route path="/perfil" element={<PerfilPage />} />
                   <Route path="/redactorautomatico" element={<RedaccionAutomatica />} />
                   <Route path="/transcripcion" element={<TranscripcionPage />} />
@@ -44,8 +50,10 @@ function App() {
                   <Route path="/clientes/:id" element={<ClienteDetallePage />} />
                   <Route path="/asignar-permisos" element={<AsignarPermisosPorRol />} />
                    <Route path="/clientes/:id/nuevo-caso" element={<NuevoCasoPage />} />
+                   <Route path="/transformardocumento" element={<TransformarDocumento />} />
+                  <Route path="/resumidor" element={<ResumenDocumentos />} />
                   {/* Página por defecto (dashboard) */}
-                  <Route path="*" element={<div>Bienvenido al sistema</div>} />
+                  <Route path="/*" element={<PerfilPage />} />
                 </Routes>
               
             </AuthGuard>

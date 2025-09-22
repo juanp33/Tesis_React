@@ -19,9 +19,13 @@ function DropZoneSingle({ label, accept, id, onFile }: DropZoneSingleProps) {
       <label htmlFor={id} className="ra-sr-only">{label}</label>
       <div onDragOver={(e)=>{e.preventDefault();setDragOver(true);}} onDragLeave={()=>setDragOver(false)} onDrop={onDrop} className={`ra-drop ${dragOver?"ra-drop--active":""}`}>
         <div className="ra-drop__content">
+          <div className="ra-drop__icon">📄</div>
           <div className="ra-drop__title">{label}</div>
-          <div className="ra-drop__hint">Arrastrá un archivo o hacé clic para seleccionar</div>
-          <input id={id} type="file" accept={accept} onChange={(e)=>onFile(e.target.files?.[0] ?? null)} />
+          <div className="ra-drop__hint">Arrastrá un archivo aquí o</div>
+          <label className="ra-btn-upload">
+            Seleccionar desde el dispositivo
+            <input id={id} type="file" accept={accept} onChange={(e)=>onFile(e.target.files?.[0] ?? null)} hidden />
+          </label>
         </div>
       </div>
     </div>
@@ -44,9 +48,13 @@ function DropZoneMulti({ label, accept, id, onFiles }: DropZoneMultiProps) {
       <label htmlFor={id} className="ra-sr-only">{label}</label>
       <div onDragOver={(e)=>{e.preventDefault();setDragOver(true);}} onDragLeave={()=>setDragOver(false)} onDrop={onDrop} className={`ra-drop ${dragOver?"ra-drop--active":""}`}>
         <div className="ra-drop__content">
+          <div className="ra-drop__icon">📄</div>
           <div className="ra-drop__title">{label}</div>
-          <div className="ra-drop__hint">Arrastrá varios PDFs o hacé clic para seleccionar</div>
-          <input id={id} type="file" accept={accept} multiple onChange={(e)=>handleFiles(e.target.files)} />
+          <div className="ra-drop__hint">Arrastrá varios PDFs aquí o</div>
+          <label className="ra-btn-upload">
+            Seleccionar desde el dispositivo
+            <input id={id} type="file" accept={accept} multiple onChange={(e)=>handleFiles(e.target.files)} hidden />
+          </label>
           {names.length>0 && (<div className="ra-filelist" aria-live="polite">{names.slice(0,5).map((n,i)=>(<div key={i} className="ra-fileitem">{n}</div>))}{names.length>5 && <div className="ra-fileitem">+{names.length-5} más…</div>}</div>)}
         </div>
       </div>
@@ -118,7 +126,7 @@ export default function RedaccionAutomatica() {
           estilo: "juridico_formal",
           mantener_pruebas: true,
           longitud_maxima: null,
-          evidence_id: evidId,   // << enlaza evidencias
+          evidence_id: evidId,
         }),
       });
       if (!r.ok) throw new Error(await r.text() || `HTTP ${r.status}`);
@@ -149,7 +157,6 @@ export default function RedaccionAutomatica() {
       const data: { respuesta: string } = await r.json();
       if (data.respuesta) setChatMsgs((m) => [...m, { role: "assistant", text: data.respuesta }]);
 
-      // Forza refresh del visor PDF
       setPdfSrc(`${API_BASE}/chatbot/pdf/${chatId}?t=${Date.now()}&r=${Math.random()}`);
     } catch (e: any) {
       setChatError(e?.message || "Failed to fetch");
@@ -166,7 +173,7 @@ export default function RedaccionAutomatica() {
   return (
     <MasterPage>
       <div className="ra-page ra-only-chat">
-        {/* Izquierda: inputs y archivos */}
+        {/* Izquierda */}
         <div className="ra-left">
           <div className="ra-row">
             <div className="ra-selectWrap">
@@ -178,7 +185,7 @@ export default function RedaccionAutomatica() {
             <input className="ra-input" placeholder="o escribí un tipo personalizado" value={documentType} onChange={(e)=>setDocumentType(e.target.value)} />
           </div>
 
-          <DropZoneSingle id="tpl" label="Subir tu archivo de ejemplo aquí" accept=".txt,.md,.doc,.docx,.rtf,.pdf,.html,.htm" onFile={setTemplateFile} />
+          <DropZoneSingle id="tpl" label="Subir tu archivo de ejemplo" accept=".txt,.md,.doc,.docx,.rtf,.pdf,.html,.htm" onFile={setTemplateFile} />
           <DropZoneMulti id="evid" label="Subir evidencias (PDFs)" accept="application/pdf,.pdf" onFiles={setEvidenceFiles} />
 
           <textarea className="ra-textarea ra-textarea--small" placeholder="Instrucciones" value={instructions} onChange={(e)=>setInstructions(e.target.value)} />
@@ -192,7 +199,7 @@ export default function RedaccionAutomatica() {
           {error && <div className="ra-error">{error}</div>}
         </div>
 
-        {/* Derecha: visor PDF + chat */}
+        {/* Derecha */}
         <div className="ra-right">
           <div className="ra-pdfWrap">
             {pdfSrc ? (
@@ -211,30 +218,16 @@ export default function RedaccionAutomatica() {
               <div className="ra-chat__title">Chat de mejora del documento</div>
               <div className="ra-chat__status">{chatLoading ? "Procesando…" : chatId ? "Listo" : "Inicializando…"}</div>
             </div>
-
             {chatError && <div className="ra-error ra-error--chat">{chatError}</div>}
-
             <div className="ra-chat__messages" ref={messagesRef}>
               {chatMsgs.map((m, i) => (
-                <div key={i} className={`ra-chat__bubble ${m.role === "user" ? "ra-chat__bubble--user" : "ra-chat__bubble--bot"}`}>
-                  {m.text}
-                </div>
+                <div key={i} className={`ra-chat__bubble ${m.role === "user" ? "ra-chat__bubble--user" : "ra-chat__bubble--bot"}`}>{m.text}</div>
               ))}
               {!chatMsgs.length && chatRespuesta && <div className="ra-chat__bubble ra-chat__bubble--bot">{chatRespuesta}</div>}
             </div>
-
             <div className="ra-chat__form">
-              <input
-                className="ra-input ra-chat__input"
-                placeholder="Escribí qué querés mejorar…"
-                value={chatInput}
-                onChange={(e)=>setChatInput(e.target.value)}
-                onKeyDown={(e)=>{ if (e.key === "Enter") sendChat(); }}
-                disabled={!chatId || chatLoading}
-              />
-              <button className="ra-btn ra-btn--primary ra-chat__send" onClick={sendChat} disabled={!chatId || chatLoading || !chatInput.trim()}>
-                Enviar
-              </button>
+              <input className="ra-input ra-chat__input" placeholder="Escribí qué querés mejorar…" value={chatInput} onChange={(e)=>setChatInput(e.target.value)} onKeyDown={(e)=>{ if (e.key === "Enter") sendChat(); }} disabled={!chatId || chatLoading} />
+              <button className="ra-btn ra-btn--primary ra-chat__send" onClick={sendChat} disabled={!chatId || chatLoading || !chatInput.trim()}>Enviar</button>
             </div>
           </div>
         </div>

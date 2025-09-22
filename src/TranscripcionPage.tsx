@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import MasterPage from "./MasterPage";
 import "./TranscripcionPage.css";
 import { jsPDF } from "jspdf";
@@ -9,9 +9,11 @@ const TranscripcionPage = () => {
   const [rawText, setRawText] = useState<string>("");
   const [buttonText, setButtonText] = useState("Transcribir");
   const [dotCount, setDotCount] = useState(0);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files?.[0]) setFile(e.target.files[0]);
+  const handleFileChange = (f: File | null) => {
+    setFile(f);
+    setRawText("");
   };
 
   const handleTranscribe = async () => {
@@ -28,7 +30,7 @@ const TranscripcionPage = () => {
 
       const data = await response.json();
       if (data.conversacion) {
-        setRawText(data.conversacion); // ✅ viene diarizado desde el backend
+        setRawText(data.conversacion);
       }
     } catch (error) {
       alert("Error al transcribir el archivo");
@@ -43,15 +45,14 @@ const TranscripcionPage = () => {
     let y = 10;
 
     const lines = rawText.split("\n");
-
     lines.forEach((line) => {
-      const wrappedLines: string[] = doc.splitTextToSize(line, 180);
-      wrappedLines.forEach((wrappedLine: string) => {
+      const wrapped = doc.splitTextToSize(line, 180);
+      wrapped.forEach((ln: string) => {
         if (y > pageHeight - 10) {
           doc.addPage();
           y = 10;
         }
-        doc.text(wrappedLine, 10, y);
+        doc.text(ln, 10, y);
         y += 10;
       });
     });
@@ -59,7 +60,7 @@ const TranscripcionPage = () => {
     doc.save("transcripcion.pdf");
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!loading) {
       setButtonText("Transcribir");
       return;
@@ -70,7 +71,7 @@ const TranscripcionPage = () => {
     return () => clearInterval(interval);
   }, [loading]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (loading) {
       setButtonText("Transcribiendo" + ".".repeat(dotCount));
     }
@@ -79,27 +80,56 @@ const TranscripcionPage = () => {
   return (
     <MasterPage>
       <div className="transcripcion-layout">
+        {/* Panel izquierdo */}
         <div className="panel-contenedor">
-          <div className="transcripcion-controls">
-            <input type="file" accept="audio/*" onChange={handleFileChange} />
-            <button onClick={handleTranscribe} disabled={loading}>
-              {buttonText}
+          <h2 className="titulo">Transcripción de Audio</h2>
+          <p className="descripcion">
+            Subí un archivo de audio para generar la transcripción diarizada.
+          </p>
+
+          {/* Caja de subida tipo botón */}
+          <div
+            className="upload-box"
+            onClick={() => fileInputRef.current?.click()}
+          >
+            <div className="upload-icon">🎤</div>
+            <div className="upload-text">Subí tu archivo de audio aquí</div>
+            <div className="upload-hint">Arrastrá un archivo de audio o</div>
+            <button type="button" className="upload-btn">
+              Seleccionar desde el dispositivo
             </button>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="audio/*"
+              className="upload-input"
+              onChange={(e) => handleFileChange(e.target.files?.[0] || null)}
+            />
           </div>
 
-          <div className="transcripcion-output">
-            <textarea
-              className="transcripcion-textarea"
-              value={rawText}
-              readOnly
-            ></textarea>
+          <button
+            className="transcribir-btn"
+            onClick={handleTranscribe}
+            disabled={loading || !file}
+          >
+            {buttonText}
+          </button>
+        </div>
 
-            {rawText && (
-              <button className="exportar-btn" onClick={handleExportPDF}>
-                EXPORTAR
-              </button>
-            )}
-          </div>
+        {/* Panel derecho */}
+        <div className="transcripcion-output">
+          <textarea
+            className="transcripcion-textarea"
+            value={rawText}
+            readOnly
+            placeholder="La transcripción aparecerá aquí…"
+          ></textarea>
+
+          {rawText && (
+            <button className="exportar-btn" onClick={handleExportPDF}>
+              EXPORTAR
+            </button>
+          )}
         </div>
       </div>
     </MasterPage>

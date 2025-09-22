@@ -1,0 +1,141 @@
+/* Fondo general */
+.td-page {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  /* tono pastel como pdfFiller */
+  padding: 40px 20px;
+}
+
+/* Tarjeta central */
+.td-card {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  padding: 40px;
+  max-width: 700px;
+  width: 100%;
+  text-align: center;
+}
+
+/* Títulos */
+.td-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #222;
+  margin-bottom: 10px;
+}
+
+.td-subtitle {
+  font-size: 16px;
+  color: #555;
+  margin-bottom: 30px;
+}
+
+/* Zona drag & drop */
+.td-dropzone {
+  border: 2px dashed #ccc;
+  border-radius: 10px;
+  padding: 40px;
+  margin-bottom: 20px;
+  background: #fafafa;
+  transition: border-color 0.3s ease, background 0.3s ease;
+}
+
+.td-dropzone:hover {
+  border-color: #08173f;
+  background: #fff7f0;
+}
+
+.td-drop-icon {
+  font-size: 40px;
+  margin-bottom: 15px;
+}
+
+.td-drop-text {
+  font-size: 16px;
+  color: #555;
+  margin-bottom: 15px;
+}
+
+/* Botón de upload */
+.td-btn-upload {
+  display: inline-block;
+  background: #081735;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  padding: 12px 24px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.td-btn-upload:hover {
+  background: #081735;
+}
+
+.td-btn-upload input {
+  display: none;
+}
+
+/* Info del archivo */
+.td-file-info {
+  margin-bottom: 20px;
+  font-size: 14px;
+  color: #444;
+}
+
+/* Select formato */
+.td-select {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  margin-bottom: 20px;
+  font-size: 16px;
+}
+
+/* Botón principal de conversión */
+.td-btn {
+  background: #081735;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 600;
+  padding: 14px 28px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  width: 100%;
+}
+
+.td-btn:hover {
+  background: #081735;
+}
+
+/* Errores */
+.td-error {
+  margin-top: 20px;
+  color: #c62828;
+  font-weight: 500;
+}
+
+/* Botón de descarga */
+.td-download {
+  display: inline-block;
+  margin-top: 20px;
+  color: #fff;
+  background: #081735;
+  padding: 12px 20px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: background 0.3s ease;
+}
+
+.td-download:hover {
+  background: #1b5e20;
+}
