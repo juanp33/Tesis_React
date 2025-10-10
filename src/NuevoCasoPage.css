@@ -116,3 +116,26 @@
 .nuevocaso-actions .btn-cancelar:hover {
   background: #bbb;
 }
+.mp-header {
+  position: fixed;
+  top: 0;
+  left: var(--sidebar-w);
+  right: 0;
+  height: 80px;
+  background: linear-gradient(180deg,#0c1a3a 0%, #081735 35%, #06132e 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+}
+
+.mp-header-logo {
+  height: 180px;  /* ajustá según tu imagen */
+  object-fit: contain;
+}
+
+.mp-body {
+  margin-top: 100px; /* deja espacio debajo del header fijo */
+  padding: 20px;
+}

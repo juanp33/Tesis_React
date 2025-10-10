@@ -21,7 +21,7 @@ body {
   gap: 20px;
   background: white;
   padding: 20px;
-  border-radius: 12px;
+  border: 2px solid #0a1a3f;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
@@ -41,7 +41,7 @@ body {
 /* Caja de subida */
 .upload-box {
   border: 2px dashed #0a1a3f;
-  border-radius: 12px;
+  
   padding: 30px;
   background-color: #f8faff;
   text-align: center;
@@ -75,7 +75,7 @@ body {
   background-color: #0a1a3f;
   color: white;
   border: none;
-  border-radius: 6px;
+  border: 2px dashed #0a1a3f;
   padding: 10px 18px;
   font-size: 14px;
   font-weight: 500;
@@ -98,7 +98,7 @@ body {
   padding: 12px;
   font-size: 15px;
   border: none;
-  border-radius: 8px;
+  border: 2px dashed #0a1a3f;
   cursor: pointer;
   transition: opacity 0.2s;
 }
@@ -126,8 +126,8 @@ body {
   font-family: 'Courier New', monospace;
   font-size: 14px;
   background-color: white;
-  border: 1px solid #ccc;
-  border-radius: 12px;
+  
+  border: 2px dashed #0a1a3f;
   resize: vertical;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
   white-space: pre-wrap;
@@ -141,7 +141,7 @@ body {
   padding: 12px 20px;
   font-size: 15px;
   border: none;
-  border-radius: 6px;
+  border: 2px dashed #0a1a3f;
   cursor: pointer;
   transition: opacity 0.2s;
   width: 200px;

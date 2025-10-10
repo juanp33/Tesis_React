@@ -8,10 +8,28 @@
   flex: 2;
 }
 
+/* Botón agregar cliente */
+.nuevo-cliente-btn {
+  display: inline-block;
+  width: 100%;
+  background: #081735; /* azul más oscuro */
+  color: #fff;
+  font-weight: 600;
+  padding: 12px 20px;
+  margin-bottom: 20px; /* 👈 separa del grid */
+  border: none;
+  border-radius: 0; /* recto */
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+.nuevo-cliente-btn:hover {
+  background: #0a2892; /* azul más vivo */
+}
+
 .usuario-section {
   flex: 1;
   background: #f9f9f9;
-  border-radius: 10px;
+  border: 2px solid #081735;
   padding: 15px;
   box-shadow: 0px 2px 5px rgba(0,0,0,0.1);
 }
@@ -24,13 +42,12 @@
 
 .perfil-card {
   background: white;
-  border-radius: 10px;
+ border: 2px solid #081735;
   padding: 15px;
   cursor: pointer;
   box-shadow: 0px 2px 4px rgba(0,0,0,0.1);
   transition: transform 0.2s ease;
 }
-
 .perfil-card:hover {
   transform: translateY(-3px);
 }
@@ -39,8 +56,25 @@
   font-weight: bold;
 }
 
+/* Botones de perfil (derecha) */
 .perfil-actions {
   display: flex;
-  justify-content: space-between;
-  margin-top: 10px;
+  justify-content: center;
+  gap: 12px; /* 👈 separación entre botones */
+  margin-top: 15px;
+}
+.perfil-actions button {
+  flex: 1;
+  background: #081735;
+  color: #fff;
+  border: none;
+  padding: 12px 18px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 0; /* 👈 rectos */
+  transition: background 0.2s ease;
+}
+.perfil-actions button:hover {
+  background: #0a2892;
 }

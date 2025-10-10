@@ -10,6 +10,7 @@ import ChatLogo from "./logos/ChatLogo-removebg-preview.png";
 import ZoomLogo from "./logos/ZoomLogo-removebg-preview.png";
 import Resumidor from "./logos/resumido2r.png";
 import Transformar from "./logos/transforma2.png";
+import AbogadoInteligenteLogo from "./logos/AbogadoInteligenteLogo.png"; 
 interface MasterPageProps {
   children: ReactNode;
 }
@@ -27,7 +28,7 @@ const ITEMS: Item[] = [
   { to: "/chatbot", label: "ChatBot Juridico", icon: ChatLogo },
   { to: "/resumidor", label: "Resumidor", icon: Resumidor },
   { to: "/ocr", label: "OCR", icon: ZoomLogo },
-  {to: "/transformardocumento", label: "Transformar Documento", icon: Transformar }
+  { to: "/transformardocumento", label: "Transformar Documento", icon: Transformar }
 ];
 
 const MasterPage = ({ children }: MasterPageProps) => {
@@ -84,7 +85,16 @@ const MasterPage = ({ children }: MasterPageProps) => {
         </div>
       </aside>
 
-      <main className="mp-content">{children}</main>
+     <main className="mp-content">
+  <header className="mp-header">
+    <img
+      src={AbogadoInteligenteLogo}
+      alt="Abogado Inteligente"
+      className="mp-header-logo"
+    />
+  </header>
+  <div className="mp-body">{children}</div>
+</main>
     </div>
   );
 };
