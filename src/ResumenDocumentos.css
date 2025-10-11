@@ -1,13 +1,12 @@
 :root {
-  --rd-primary: #4D8BFF; /* celeste principal */
-  --rd-primary-hover: #3973E6; /* hover más oscuro */
-  --rd-border: #000; /* 🔲 bordes negros */
-  --rd-bg-soft: #ffffff;
+  --rd-primary: #4D8BFF;
+  --rd-primary-hover: #3973E6;
   --rd-text: #000;
   --rd-muted: #444;
+  --rd-bg-soft: #ffffff;
 }
 
-/* ====== LAYOUT ====== */
+/* ====== LAYOUT GENERAL ====== */
 .resumen-page {
   display: flex;
   flex-direction: column;
@@ -25,7 +24,7 @@
   }
 }
 
-/* Panel izquierdo */
+/* ====== PANEL IZQUIERDO ====== */
 .resumen-left {
   flex: 1;
   display: flex;
@@ -33,12 +32,12 @@
   gap: 16px;
   background: #fff;
   padding: 20px;
-  border: 1px solid var(--rd-border); /* 🔲 borde negro fino */
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
-  border-radius: 6px;
+  border: none;
+  border-radius: 0;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.35); /* 🌑 sombra fuerte */
 }
 
-/* Panel derecho */
+/* ====== PANEL DERECHO ====== */
 .resumen-right {
   flex: 2;
   display: flex;
@@ -49,10 +48,12 @@
 /* ====== INPUTS ====== */
 .resumen-left input[type="file"] {
   font-size: 14px;
-  border: 1px solid var(--rd-border);
-  border-radius: 6px;
+  border: none;
+  border-radius: 0;
   padding: 6px;
   cursor: pointer;
+  background: #fff;
+  box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.35);
 }
 
 .resumen-filelist {
@@ -71,23 +72,26 @@
 .resumen-btn {
   background: var(--rd-primary);
   color: #fff;
-  border: 1px solid var(--rd-border); /* 🔲 borde negro fino */
+  border: none;
+  border-radius: 0;
   padding: 10px 16px;
   cursor: pointer;
   font-size: 15px;
   font-weight: 600;
-  border-radius: 6px;
   transition: background 0.2s ease, transform 0.2s ease;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.35);
 }
 
 .resumen-btn:disabled {
   background: #9ca3af;
   cursor: not-allowed;
+  box-shadow: none;
 }
 
 .resumen-btn:hover:not(:disabled) {
   background: var(--rd-primary-hover);
-  transform: scale(1.02);
+  transform: translateY(-2px);
+  box-shadow: 0px 6px 14px rgba(0, 0, 0, 0.45);
 }
 
 /* ====== ERRORES ====== */
@@ -99,12 +103,18 @@
 
 /* ====== TARJETAS DE RESUMEN ====== */
 .resumen-card {
-  border: 1px solid var(--rd-border); /* 🔲 borde negro fino */
   background: #fff;
+  border: none;
+  border-radius: 0;
   padding: 12px 16px;
   margin-bottom: 8px;
-  border-radius: 6px;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.35);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.resumen-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0px 6px 14px rgba(0, 0, 0, 0.45);
 }
 
 .resumen-card strong {
@@ -116,17 +126,18 @@
 
 /* ====== INFORME FINAL ====== */
 .resumen-informe {
-  border-top: 1px solid var(--rd-border); /* 🔲 borde negro fino */
+  border-top: none;
   padding-top: 16px;
 }
 
 .resumen-informe pre {
-  background: #f3f4f6;
+  background: #f8faff;
   padding: 12px;
-  border: 1px solid var(--rd-border);
-  border-radius: 8px;
+  border: none;
+  border-radius: 0;
   font-size: 14px;
   line-height: 1.5;
   white-space: pre-wrap;
   color: #000;
+  box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.35);
 }

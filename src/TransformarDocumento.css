@@ -13,13 +13,13 @@
 /* ======== TARJETA CENTRAL ======== */
 .td-card {
   background: #fff;
-  border-radius: 10px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: none;
+  border-radius: 0; /* ⬛ recto */
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.35); /* 🌑 sombra fuerte */
   padding: 40px;
   max-width: 700px;
   width: 100%;
   text-align: center;
-  border: 1px solid #000; /* 🔲 borde negro fino */
 }
 
 /* ======== TÍTULOS ======== */
@@ -38,17 +38,19 @@
 
 /* ======== ZONA DRAG & DROP ======== */
 .td-dropzone {
-  border: 1px dashed #000; /* 🔲 borde negro fino */
-  border-radius: 10px;
+  border: none;
+  border-radius: 0;
   padding: 40px;
   margin-bottom: 20px;
   background: #fafafa;
-  transition: border-color 0.3s ease, background 0.3s ease;
+  transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.35);
 }
 
 .td-dropzone:hover {
-  border-color: #4D8BFF;
   background: #f0f7ff;
+  transform: translateY(-3px);
+  box-shadow: 0px 6px 14px rgba(0, 0, 0, 0.45);
 }
 
 .td-drop-icon {
@@ -66,20 +68,22 @@
 /* ======== BOTÓN DE UPLOAD ======== */
 .td-btn-upload {
   display: inline-block;
-  background: #4D8BFF; /* celeste principal */
+  background: #4D8BFF;
   color: #fff;
   font-size: 16px;
   font-weight: 600;
   padding: 12px 24px;
-  border-radius: 6px;
-  border: 1px solid #000; /* 🔲 borde negro fino */
+  border: none;
+  border-radius: 0;
   cursor: pointer;
   transition: background 0.3s ease, transform 0.2s ease;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.35);
 }
 
 .td-btn-upload:hover {
-  background: #3973E6; /* hover más oscuro */
-  transform: scale(1.02);
+  background: #3973E6;
+  transform: translateY(-2px);
+  box-shadow: 0px 6px 14px rgba(0, 0, 0, 0.45);
 }
 
 .td-btn-upload input {
@@ -99,11 +103,12 @@
   color: #000;
   width: 100%;
   padding: 12px;
-  border: 1px solid #000; /* 🔲 borde negro fino */
-  border-radius: 6px;
+  border: none;
+  border-radius: 0;
   margin-bottom: 20px;
   font-size: 16px;
   background: #fff;
+  box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.35);
 }
 
 /* ======== BOTÓN PRINCIPAL ======== */
@@ -113,16 +118,18 @@
   font-size: 18px;
   font-weight: 600;
   padding: 14px 28px;
-  border: 1px solid #000; /* 🔲 borde negro fino */
-  border-radius: 6px;
+  border: none;
+  border-radius: 0;
   cursor: pointer;
-  transition: background 0.3s ease, transform 0.2s ease;
   width: 100%;
+  transition: background 0.3s ease, transform 0.2s ease;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.35);
 }
 
 .td-btn:hover {
   background: #3973E6;
-  transform: scale(1.02);
+  transform: translateY(-2px);
+  box-shadow: 0px 6px 14px rgba(0, 0, 0, 0.45);
 }
 
 /* ======== BOTÓN DE DESCARGA ======== */
@@ -131,17 +138,19 @@
   margin-top: 20px;
   color: #fff;
   background: #4D8BFF;
-  border: 1px solid #000; /* 🔲 borde negro fino */
   padding: 12px 20px;
-  border-radius: 6px;
+  border: none;
+  border-radius: 0;
   text-decoration: none;
   font-weight: 600;
   transition: background 0.3s ease, transform 0.2s ease;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.35);
 }
 
 .td-download:hover {
   background: #3973E6;
-  transform: scale(1.02);
+  transform: translateY(-2px);
+  box-shadow: 0px 6px 14px rgba(0, 0, 0, 0.45);
 }
 
 /* ======== ERRORES ======== */

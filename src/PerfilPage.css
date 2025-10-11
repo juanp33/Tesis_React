@@ -4,73 +4,82 @@
   padding: 20px;
 }
 
+/* ===== SECCIONES ===== */
 .clientes-section {
   flex: 2;
 }
 
-/* TÍTULOS PRINCIPALES (Cliente / Abogado) */
+/* ===== TÍTULOS ===== */
 .clientes-section h2,
 .usuario-section h2,
 .clientes-section h3,
 .usuario-section h3 {
-  color: #000; /* 🔲 títulos en negro */
+  color: #000;
   font-weight: 700;
   margin-bottom: 15px;
 }
 
-/* Botón agregar cliente */
+/* ===== BOTÓN AGREGAR CLIENTE ===== */
 .nuevo-cliente-btn {
   display: inline-block;
   width: 100%;
-  background: #4D8BFF; /* celeste principal */
+  background: #4D8BFF;
   color: #fff;
   font-weight: 600;
   padding: 12px 20px;
   margin-bottom: 20px;
-  border: 1px solid #000; /* 🔲 borde negro fino */
-  border-radius: 0;
+  border: none;
+  border-radius: 0; /* ⬛ sin bordes redondeados */
   cursor: pointer;
-  transition: background 0.3s ease;
-}
-.nuevo-cliente-btn:hover {
-  background: #3973e6; /* más oscuro */
+  transition: background 0.3s ease, transform 0.2s ease;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.35); /* 🌑 sombra fuerte */
 }
 
-/* Panel lateral del usuario */
+.nuevo-cliente-btn:hover {
+  background: #3973E6;
+  transform: translateY(-2px);
+  box-shadow: 0px 6px 14px rgba(0, 0, 0, 0.45);
+}
+
+/* ===== PANEL LATERAL ===== */
 .usuario-section {
   flex: 1;
-  background: #f9f9f9;
-  border: 1px solid #000; /* 🔲 borde negro fino */
+  background: #ffffff;
   padding: 15px;
-  box-shadow: 0px 2px 5px rgba(0,0,0,0.1);
+  border: none;
+  border-radius: 0; /* ⬛ sin bordes redondeados */
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.35);
 }
 
-/* Grid de clientes */
+/* ===== GRID ===== */
 .clientes-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   gap: 15px;
 }
 
-/* Tarjetas de perfil */
+/* ===== TARJETAS DE PERFIL ===== */
 .perfil-card {
-  background: white;
-  border: 1px solid #000; /* 🔲 borde negro fino */
+  background: #fff;
+  border: none;
+  border-radius: 0; /* ⬛ sin bordes redondeados */
   padding: 15px;
   cursor: pointer;
-  box-shadow: 0px 2px 4px rgba(0,0,0,0.1);
-  transition: transform 0.2s ease;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.35);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
+
 .perfil-card:hover {
-  transform: translateY(-3px);
+  transform: translateY(-4px);
+  box-shadow: 0px 6px 16px rgba(0, 0, 0, 0.45);
 }
 
 .label {
   font-weight: bold;
-  color: #000; /* también en negro */
+  color: #000;
 }
 
-/* Contenedor de botones */
+/* ===== BOTONES DE PERFIL ===== */
 .perfil-actions {
   display: flex;
   justify-content: center;
@@ -78,27 +87,30 @@
   margin-top: 15px;
 }
 
-/* Botones de acción */
 .perfil-actions button {
   flex: 1;
   background: #4D8BFF;
   color: #fff;
-  border: 1px solid #000; /* 🔲 borde negro fino */
+  border: none;
+  border-radius: 0; /* ⬛ sin bordes redondeados */
   padding: 12px 18px;
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
-  border-radius: 0;
-  transition: background 0.2s ease;
-}
-.perfil-actions button:hover {
-  background: #3973e6;
+  transition: background 0.2s ease, transform 0.2s ease;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.35);
 }
 
-/* Sombras suaves opcionales */
+.perfil-actions button:hover {
+  background: #3973E6;
+  transform: translateY(-2px);
+  box-shadow: 0px 6px 14px rgba(0, 0, 0, 0.45);
+}
+
+/* ===== TRANSICIONES SUAVES ===== */
 .perfil-card,
 .usuario-section,
 .nuevo-cliente-btn,
 .perfil-actions button {
-  box-shadow: 1px 1px 0px rgba(0, 0, 0, 0.15);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
 }

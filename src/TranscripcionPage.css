@@ -11,7 +11,7 @@ body {
   text-align: center;
   font-size: 28px;
   font-weight: 700;
-  color: #000; /* 🔲 título en negro */
+  color: #000;
   margin-top: 40px;
   margin-bottom: 20px;
 }
@@ -32,32 +32,33 @@ body {
   gap: 20px;
   background: white;
   padding: 20px;
-  border: 1px solid #000; /* 🔲 borde negro fino */
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  border-radius: 6px;
+  border: none; /* ❌ sin borde */
+  border-radius: 0; /* ⬛ recto */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35); /* 🌑 sombra fuerte */
 }
 
 .descripcion {
   font-size: 14px;
-  color: #000; /* negro por consistencia */
+  color: #000;
   margin: 0 0 10px 0;
 }
 
 /* ======== CAJA DE SUBIDA ======== */
 .upload-box {
-  border: 1px dashed #000; /* 🔲 borde negro fino */
+  border: none; /* ❌ sin borde visible */
+  border-radius: 0;
   padding: 30px;
   background-color: #f8faff;
   text-align: center;
   cursor: pointer;
-  transition: border-color 0.25s, background-color 0.25s, transform 0.2s;
-  border-radius: 6px;
+  transition: background-color 0.25s, transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35);
 }
 
 .upload-box:hover {
-  border-color: #4D8BFF;
   background-color: #f0f5ff;
   transform: scale(1.02);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.45);
 }
 
 /* Imagen del micrófono */
@@ -66,7 +67,7 @@ body {
   height: 60px;
   margin-bottom: 12px;
   object-fit: contain;
-  filter: drop-shadow(0 0 2px #ccc);
+  filter: drop-shadow(0 0 2px #000);
   transition: transform 0.3s ease, filter 0.3s ease;
 }
 
@@ -87,21 +88,24 @@ body {
   margin: 6px 0 12px 0;
 }
 
-/* Botón seleccionar */
+/* ======== BOTÓN SELECCIONAR ======== */
 .upload-btn {
-  background-color: #4D8BFF; /* celeste principal */
+  background-color: #4D8BFF;
   color: white;
-  border: 1px solid #000; /* 🔲 borde negro */
+  border: none;
+  border-radius: 0;
   padding: 10px 18px;
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
-  border-radius: 4px;
-  transition: all 0.2s ease-in-out;
+  transition: background 0.2s ease, transform 0.2s ease;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.35);
 }
 
 .upload-btn:hover {
-  background-color: #3973E6; /* más oscuro */
+  background-color: #3973E6;
+  transform: translateY(-2px);
+  box-shadow: 0px 6px 14px rgba(0, 0, 0, 0.45);
 }
 
 .upload-input {
@@ -110,24 +114,27 @@ body {
 
 /* ======== BOTÓN TRANSCRIBIR ======== */
 .transcribir-btn {
-  background: #4D8BFF; /* celeste principal */
+  background: #4D8BFF;
   color: white;
   padding: 12px;
   font-size: 15px;
-  border: 1px solid #000; /* 🔲 borde negro fino */
-  border-radius: 6px;
+  border: none;
+  border-radius: 0;
   cursor: pointer;
-  transition: background 0.2s, transform 0.2s;
+  transition: background 0.2s ease, transform 0.2s ease;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.35);
 }
 
 .transcribir-btn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+  box-shadow: none;
 }
 
 .transcribir-btn:hover:not(:disabled) {
-  background: #3973E6; /* azul más oscuro */
-  transform: scale(1.02);
+  background: #3973E6;
+  transform: translateY(-2px);
+  box-shadow: 0px 6px 14px rgba(0, 0, 0, 0.45);
 }
 
 /* ======== PANEL DERECHO ======== */
@@ -144,30 +151,32 @@ body {
   font-family: 'Courier New', monospace;
   font-size: 14px;
   background-color: white;
-  border: 1px dashed #000; /* 🔲 borde negro fino */
+  border: none;
+  border-radius: 0;
   resize: vertical;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  white-space: pre-wrap;
   color: black;
-  border-radius: 6px;
+  white-space: pre-wrap;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35);
 }
 
 /* ======== BOTÓN EXPORTAR ======== */
 .exportar-btn {
   margin-top: 20px;
-  background: #4D8BFF; /* celeste principal */
+  background: #4D8BFF;
   color: white;
   padding: 12px 20px;
   font-size: 15px;
-  border: 1px solid #000; /* 🔲 borde negro fino */
-  border-radius: 6px;
+  border: none;
+  border-radius: 0;
   cursor: pointer;
-  transition: background 0.2s, transform 0.2s;
+  transition: background 0.2s ease, transform 0.2s ease;
   width: 200px;
   align-self: flex-end;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.35);
 }
 
 .exportar-btn:hover {
-  background: #3973E6; /* más oscuro */
-  transform: scale(1.02);
+  background: #3973E6;
+  transform: translateY(-2px);
+  box-shadow: 0px 6px 14px rgba(0, 0, 0, 0.45);
 }
