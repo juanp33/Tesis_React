@@ -6,14 +6,25 @@ body {
   background-color: #eaf4fc;
 }
 
-/* Layout */
+/* ======== TÍTULO PRINCIPAL ======== */
+.titulo-principal {
+  text-align: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: #000; /* 🔲 título en negro */
+  margin-top: 40px;
+  margin-bottom: 20px;
+}
+
+/* ======== LAYOUT ======== */
 .transcripcion-layout {
   display: flex;
   gap: 30px;
   justify-content: center;
-  padding: 40px 20px;
+  padding: 20px;
 }
 
+/* ======== PANEL IZQUIERDO ======== */
 .panel-contenedor {
   flex: 0 0 320px;
   display: flex;
@@ -21,86 +32,92 @@ body {
   gap: 20px;
   background: white;
   padding: 20px;
-  border: 2px solid #0a1a3f;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-}
-
-.titulo {
-  margin: 0;
-  font-size: 20px;
-  font-weight: 700;
-  color: #0a1a3f;
+  border: 1px solid #000; /* 🔲 borde negro fino */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 6px;
 }
 
 .descripcion {
   font-size: 14px;
-  color: #444;
+  color: #000; /* negro por consistencia */
   margin: 0 0 10px 0;
 }
 
-/* Caja de subida */
+/* ======== CAJA DE SUBIDA ======== */
 .upload-box {
-  border: 2px dashed #0a1a3f;
-  
+  border: 1px dashed #000; /* 🔲 borde negro fino */
   padding: 30px;
   background-color: #f8faff;
   text-align: center;
   cursor: pointer;
-  transition: border-color 0.2s, background-color 0.2s;
+  transition: border-color 0.25s, background-color 0.25s, transform 0.2s;
+  border-radius: 6px;
 }
 
 .upload-box:hover {
-  border-color: #0a2892;
+  border-color: #4D8BFF;
   background-color: #f0f5ff;
+  transform: scale(1.02);
 }
 
-.upload-icon {
-  font-size: 40px;
+/* Imagen del micrófono */
+.upload-img {
+  width: 60px;
+  height: 60px;
   margin-bottom: 12px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 2px #ccc);
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.upload-box:hover .upload-img {
+  transform: scale(1.1);
+  filter: drop-shadow(0 0 6px #4D8BFF);
 }
 
 .upload-text {
   font-size: 16px;
   font-weight: 600;
-  color: #0a1a3f;
+  color: #000;
 }
 
 .upload-hint {
   font-size: 13px;
-  color: #555;
+  color: #333;
   margin: 6px 0 12px 0;
 }
 
+/* Botón seleccionar */
 .upload-btn {
-  background-color: #0a1a3f;
+  background-color: #4D8BFF; /* celeste principal */
   color: white;
-  border: none;
-  border: 2px dashed #0a1a3f;
+  border: 1px solid #000; /* 🔲 borde negro */
   padding: 10px 18px;
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
-  transition: opacity 0.2s ease-in-out;
+  border-radius: 4px;
+  transition: all 0.2s ease-in-out;
 }
 
 .upload-btn:hover {
-  opacity: 0.9;
+  background-color: #3973E6; /* más oscuro */
 }
 
 .upload-input {
   display: none;
 }
 
-/* Botón transcribir */
+/* ======== BOTÓN TRANSCRIBIR ======== */
 .transcribir-btn {
-  background: linear-gradient(180deg, #030C2C 0%, #061859 75%, #0A2892 100%);
+  background: #4D8BFF; /* celeste principal */
   color: white;
   padding: 12px;
   font-size: 15px;
-  border: none;
-  border: 2px dashed #0a1a3f;
+  border: 1px solid #000; /* 🔲 borde negro fino */
+  border-radius: 6px;
   cursor: pointer;
-  transition: opacity 0.2s;
+  transition: background 0.2s, transform 0.2s;
 }
 
 .transcribir-btn:disabled {
@@ -109,10 +126,11 @@ body {
 }
 
 .transcribir-btn:hover:not(:disabled) {
-  opacity: 0.9;
+  background: #3973E6; /* azul más oscuro */
+  transform: scale(1.02);
 }
 
-/* Panel derecho */
+/* ======== PANEL DERECHO ======== */
 .transcripcion-output {
   flex: 1;
   display: flex;
@@ -126,28 +144,30 @@ body {
   font-family: 'Courier New', monospace;
   font-size: 14px;
   background-color: white;
-  
-  border: 2px dashed #0a1a3f;
+  border: 1px dashed #000; /* 🔲 borde negro fino */
   resize: vertical;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   white-space: pre-wrap;
   color: black;
+  border-radius: 6px;
 }
 
+/* ======== BOTÓN EXPORTAR ======== */
 .exportar-btn {
   margin-top: 20px;
-  background: linear-gradient(180deg, #030C2C 0%, #061859 75%, #0A2892 100%);
+  background: #4D8BFF; /* celeste principal */
   color: white;
   padding: 12px 20px;
   font-size: 15px;
-  border: none;
-  border: 2px dashed #0a1a3f;
+  border: 1px solid #000; /* 🔲 borde negro fino */
+  border-radius: 6px;
   cursor: pointer;
-  transition: opacity 0.2s;
+  transition: background 0.2s, transform 0.2s;
   width: 200px;
   align-self: flex-end;
 }
 
 .exportar-btn:hover {
-  opacity: 0.9;
+  background: #3973E6; /* más oscuro */
+  transform: scale(1.02);
 }

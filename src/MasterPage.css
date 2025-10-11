@@ -1,6 +1,6 @@
 /* ===== VARIABLES GLOBALES ===== */
 :root {
-  --ra-bg: #ffffff;
+  --ra-bg: #e3f2fd; /* 🩵 Celeste claro (nuevo fondo) */
   --ra-bg-soft: #fafafa;
   --ra-text: #111827;
   --ra-text-muted: #6b7280;
@@ -8,12 +8,9 @@
   --ra-border-strong: #9ca3af;
   --ra-primary: #0a66ff;
   --ra-primary-weak: rgba(10,102,255,.18);
-  --ra-focus: 0 0 0 3px rgba(10,102,255,.18);
+  --ra-focus: 0 0 0 3px rgba(86, 118, 168, 0.18);
   --ra-shadow-sm: 0 1px 2px rgba(0,0,0,.06);
   --ra-shadow-md: 0 4px 12px rgba(0,0,0,.12);
-
-  /* 🎨 Degradado azul más realista y suave — como el cuadro */
-  --ra-panel-gradient: linear-gradient(90deg, #030C2C 0%, #073285 35%, #0D52E8 70%, #3B7BFF 100%);
 }
 
 /* ===== RESET ===== */
@@ -23,9 +20,12 @@ html, body, #root {
   margin: 0;
   padding: 0;
   overflow-x: hidden;
-  background: var(--ra-bg);
   font-family: "Inter", "Segoe UI", sans-serif;
   box-sizing: border-box;
+
+  /* 🩵 Fondo celeste forzado */
+  background-color: #e3f2fd !important;
+  background: #e3f2fd !important;
 }
 
 /* ===== LAYOUT PRINCIPAL ===== */
@@ -34,7 +34,7 @@ html, body, #root {
   flex-direction: column;
   min-height: 100vh;
   width: 100%;
-  background: var(--ra-bg);
+  background-color: #e3f2fd !important; /* 🩵 fondo forzado */
 }
 
 /* ===== HEADER (BARRA SUPERIOR) ===== */
@@ -54,8 +54,8 @@ html, body, #root {
   color: #ffffff;
   box-shadow: 0 2px 6px rgba(0,0,0,0.18);
 
-  /* 🌈 Degradado fijo mejorado (oscuro → brillante) */
-  background: var(--ra-panel-gradient);
+  /* 🔵 Degradado celeste */
+  background: linear-gradient(90deg, #4d8bff 0%, #4d8bff 60%, #4d8bff 100%) !important;
 }
 
 /* ===== LOGO ===== */
@@ -181,7 +181,7 @@ html, body, #root {
   flex: 1 1 auto;
   width: 100%;
   overflow-y: auto;
-  background: var(--ra-bg);
+  background: transparent !important;
   color: var(--ra-text);
   display: flex;
   justify-content: center;
@@ -192,8 +192,10 @@ html, body, #root {
   width: min(100%, 1200px);
   margin-top: 90px;
   padding: clamp(16px, 2vw, 28px);
-  background: var(--ra-bg);
+  background: #ffffffb3; /* blanco translúcido sobre el celeste */
   box-sizing: border-box;
+  border-radius: 10px;
+  box-shadow: var(--ra-shadow-md);
 }
 
 /* ===== RESPONSIVE ===== */

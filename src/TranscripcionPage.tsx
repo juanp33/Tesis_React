@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from "react";
 import MasterPage from "./MasterPage";
 import "./TranscripcionPage.css";
 import { jsPDF } from "jspdf";
+import micIcon from "./assets/mic-icon.png"; // o la ruta correcta si estás en /pages/
+
 
 const TranscripcionPage = () => {
   const [file, setFile] = useState<File | null>(null);
@@ -79,20 +81,27 @@ const TranscripcionPage = () => {
 
   return (
     <MasterPage>
+      <h1 className="titulo-principal">Transcripción de Audio</h1>
+
       <div className="transcripcion-layout">
         {/* Panel izquierdo */}
         <div className="panel-contenedor">
-          <h2 className="titulo">Transcripción de Audio</h2>
           <p className="descripcion">
             Subí un archivo de audio para generar la transcripción diarizada.
           </p>
 
-          {/* Caja de subida tipo botón */}
+          {/* Caja de subida */}
           <div
             className="upload-box"
             onClick={() => fileInputRef.current?.click()}
           >
-            <div className="upload-icon">🎤</div>
+            {/* 🔹 Reemplazo del emoji por la imagen */}
+            <img
+  src={micIcon}
+  alt="Icono micrófono"
+  className="upload-img"
+/>
+
             <div className="upload-text">Subí tu archivo de audio aquí</div>
             <div className="upload-hint">Arrastrá un archivo de audio o</div>
             <button type="button" className="upload-btn">
@@ -108,7 +117,7 @@ const TranscripcionPage = () => {
           </div>
 
           <button
-            className="transcribir-btn"
+            className="transcribir-btn" 
             onClick={handleTranscribe}
             disabled={loading || !file}
           >

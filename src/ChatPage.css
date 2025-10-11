@@ -6,6 +6,9 @@
   border-radius: 10px;
   overflow: hidden;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+
+  /* 🟩 Borde negro visible */
+  border: 2px solid #000000;
 }
 
 .chat-box {
@@ -73,6 +76,7 @@
   min-height: 50px;
   max-height: 120px;
   overflow-y: auto;
+  color: #000; /* Texto negro */
 }
 
 .actions {
@@ -102,17 +106,4 @@
 .attach-btn:hover,
 .send-btn:hover {
   filter: brightness(0.9);
-}
-.chat-input-bar textarea {
-  flex: 1;
-  resize: none;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 10px;
-  font-size: 0.95em;
-  font-family: inherit;
-  min-height: 50px;
-  max-height: 120px;
-  overflow-y: auto;
-  color: #000; /* 🟩 TEXTO NEGRO */
 }

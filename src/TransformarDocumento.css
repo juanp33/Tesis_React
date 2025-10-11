@@ -1,14 +1,16 @@
-/* Fondo general */
+/* ======== FONDO GENERAL ======== */
 .td-page {
   display: flex;
   justify-content: center;
   align-items: flex-start;
   min-height: 100vh;
-  /* tono pastel como pdfFiller */
   padding: 40px 20px;
+  background-color: #ffffff;
+  color: #000;
+  font-family: "Segoe UI", sans-serif;
 }
 
-/* Tarjeta central */
+/* ======== TARJETA CENTRAL ======== */
 .td-card {
   background: #fff;
   border-radius: 10px;
@@ -17,25 +19,26 @@
   max-width: 700px;
   width: 100%;
   text-align: center;
+  border: 1px solid #000; /* 🔲 borde negro fino */
 }
 
-/* Títulos */
+/* ======== TÍTULOS ======== */
 .td-title {
   font-size: 28px;
   font-weight: 700;
-  color: #222;
+  color: #000;
   margin-bottom: 10px;
 }
 
 .td-subtitle {
   font-size: 16px;
-  color: #555;
+  color: #333;
   margin-bottom: 30px;
 }
 
-/* Zona drag & drop */
+/* ======== ZONA DRAG & DROP ======== */
 .td-dropzone {
-  border: 2px dashed #ccc;
+  border: 1px dashed #000; /* 🔲 borde negro fino */
   border-radius: 10px;
   padding: 40px;
   margin-bottom: 20px;
@@ -44,99 +47,106 @@
 }
 
 .td-dropzone:hover {
-  border-color: #08173f;
-  background: #fff7f0;
+  border-color: #4D8BFF;
+  background: #f0f7ff;
 }
 
 .td-drop-icon {
   font-size: 40px;
   margin-bottom: 15px;
+  color: #000;
 }
 
 .td-drop-text {
   font-size: 16px;
-  color: #555;
+  color: #000;
   margin-bottom: 15px;
 }
 
-/* Botón de upload */
+/* ======== BOTÓN DE UPLOAD ======== */
 .td-btn-upload {
   display: inline-block;
-  background: #081735;
+  background: #4D8BFF; /* celeste principal */
   color: #fff;
   font-size: 16px;
   font-weight: 600;
   padding: 12px 24px;
   border-radius: 6px;
+  border: 1px solid #000; /* 🔲 borde negro fino */
   cursor: pointer;
-  transition: background 0.3s ease;
+  transition: background 0.3s ease, transform 0.2s ease;
 }
 
 .td-btn-upload:hover {
-  background: #081735;
+  background: #3973E6; /* hover más oscuro */
+  transform: scale(1.02);
 }
 
 .td-btn-upload input {
   display: none;
 }
 
-/* Info del archivo */
+/* ======== INFO DEL ARCHIVO ======== */
 .td-file-info {
   margin-bottom: 20px;
   font-size: 14px;
-  color: #444;
+  color: #000;
 }
 
-/* Select formato */
+/* ======== SELECT DE FORMATO ======== */
 .td-select {
   display: block;
-  color:black;
+  color: #000;
   width: 100%;
   padding: 12px;
-  border: 1px solid #ccc;
+  border: 1px solid #000; /* 🔲 borde negro fino */
   border-radius: 6px;
   margin-bottom: 20px;
   font-size: 16px;
+  background: #fff;
 }
 
-/* Botón principal de conversión */
+/* ======== BOTÓN PRINCIPAL ======== */
 .td-btn {
-  background: #081735;
+  background: #4D8BFF;
   color: #fff;
   font-size: 18px;
   font-weight: 600;
   padding: 14px 28px;
-  border: none;
+  border: 1px solid #000; /* 🔲 borde negro fino */
   border-radius: 6px;
   cursor: pointer;
-  transition: background 0.3s ease;
+  transition: background 0.3s ease, transform 0.2s ease;
   width: 100%;
 }
 
 .td-btn:hover {
-  background: #081735;
+  background: #3973E6;
+  transform: scale(1.02);
 }
 
-/* Errores */
-.td-error {
-  margin-top: 20px;
-  color: #c62828;
-  font-weight: 500;
-}
-
-/* Botón de descarga */
+/* ======== BOTÓN DE DESCARGA ======== */
 .td-download {
   display: inline-block;
   margin-top: 20px;
   color: #fff;
-  background: #081735;
+  background: #4D8BFF;
+  border: 1px solid #000; /* 🔲 borde negro fino */
   padding: 12px 20px;
   border-radius: 6px;
   text-decoration: none;
   font-weight: 600;
-  transition: background 0.3s ease;
+  transition: background 0.3s ease, transform 0.2s ease;
 }
 
 .td-download:hover {
-  background: #1b5e20;
+  background: #3973E6;
+  transform: scale(1.02);
+}
+
+/* ======== ERRORES ======== */
+.td-error {
+  margin-top: 20px;
+  color: #dc2626;
+  font-weight: 500;
 }

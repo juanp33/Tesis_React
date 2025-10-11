@@ -8,41 +8,54 @@
   flex: 2;
 }
 
+/* TÍTULOS PRINCIPALES (Cliente / Abogado) */
+.clientes-section h2,
+.usuario-section h2,
+.clientes-section h3,
+.usuario-section h3 {
+  color: #000; /* 🔲 títulos en negro */
+  font-weight: 700;
+  margin-bottom: 15px;
+}
+
 /* Botón agregar cliente */
 .nuevo-cliente-btn {
   display: inline-block;
   width: 100%;
-  background: #081735; /* azul más oscuro */
+  background: #4D8BFF; /* celeste principal */
   color: #fff;
   font-weight: 600;
   padding: 12px 20px;
-  margin-bottom: 20px; /* 👈 separa del grid */
-  border: none;
-  border-radius: 0; /* recto */
+  margin-bottom: 20px;
+  border: 1px solid #000; /* 🔲 borde negro fino */
+  border-radius: 0;
   cursor: pointer;
   transition: background 0.3s ease;
 }
 .nuevo-cliente-btn:hover {
-  background: #0a2892; /* azul más vivo */
+  background: #3973e6; /* más oscuro */
 }
 
+/* Panel lateral del usuario */
 .usuario-section {
   flex: 1;
   background: #f9f9f9;
-  border: 2px solid #081735;
+  border: 1px solid #000; /* 🔲 borde negro fino */
   padding: 15px;
   box-shadow: 0px 2px 5px rgba(0,0,0,0.1);
 }
 
+/* Grid de clientes */
 .clientes-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   gap: 15px;
 }
 
+/* Tarjetas de perfil */
 .perfil-card {
   background: white;
- border: 2px solid #081735;
+  border: 1px solid #000; /* 🔲 borde negro fino */
   padding: 15px;
   cursor: pointer;
   box-shadow: 0px 2px 4px rgba(0,0,0,0.1);
@@ -54,27 +67,38 @@
 
 .label {
   font-weight: bold;
+  color: #000; /* también en negro */
 }
 
-/* Botones de perfil (derecha) */
+/* Contenedor de botones */
 .perfil-actions {
   display: flex;
   justify-content: center;
-  gap: 12px; /* 👈 separación entre botones */
+  gap: 12px;
   margin-top: 15px;
 }
+
+/* Botones de acción */
 .perfil-actions button {
   flex: 1;
-  background: #081735;
+  background: #4D8BFF;
   color: #fff;
-  border: none;
+  border: 1px solid #000; /* 🔲 borde negro fino */
   padding: 12px 18px;
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
-  border-radius: 0; /* 👈 rectos */
+  border-radius: 0;
   transition: background 0.2s ease;
 }
 .perfil-actions button:hover {
-  background: #0a2892;
+  background: #3973e6;
+}
+
+/* Sombras suaves opcionales */
+.perfil-card,
+.usuario-section,
+.nuevo-cliente-btn,
+.perfil-actions button {
+  box-shadow: 1px 1px 0px rgba(0, 0, 0, 0.15);
 }

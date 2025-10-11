@@ -1,13 +1,16 @@
-/* Fondo general OCR */
+/* ======== FONDO GENERAL ======== */
 .ocr-page {
   display: flex;
   justify-content: center;
   align-items: flex-start;
   min-height: 100vh;
   padding: 40px 20px;
+  background-color: #ffffff;
+  color: #000;
+  font-family: "Segoe UI", sans-serif;
 }
 
-/* Tarjeta central OCR */
+/* ======== TARJETA CENTRAL ======== */
 .ocr-card {
   background: #fff;
   border-radius: 10px;
@@ -16,25 +19,26 @@
   max-width: 700px;
   width: 100%;
   text-align: center;
+  border: 1px solid #000; /* 🔲 borde negro fino */
 }
 
-/* Títulos OCR */
+/* ======== TÍTULOS ======== */
 .ocr-card h2 {
   font-size: 28px;
   font-weight: 700;
-  color: #222;
+  color: #000; /* negro fuerte */
   margin-bottom: 10px;
 }
 
 .ocr-card p {
   font-size: 16px;
-  color: #555;
+  color: #333;
   margin-bottom: 30px;
 }
 
-/* Dropzone OCR */
+/* ======== DROPZONE ======== */
 .ocr-dropzone {
-  border: 2px dashed #ccc;
+  border: 1px dashed #000; /* 🔲 borde negro fino */
   border-radius: 10px;
   padding: 40px;
   margin-bottom: 20px;
@@ -44,66 +48,69 @@
 }
 
 .ocr-dropzone:hover {
-  border-color: #08173f;
-  background: #fff7f0;
+  border-color: #4D8BFF;
+  background: #f0f7ff;
 }
 
 .ocr-drop__icon {
   font-size: 40px;
   margin-bottom: 15px;
-  color: #555;
+  color: #000;
 }
 
 .ocr-drop__title {
   font-size: 16px;
   font-weight: 600;
-  color: #555;
+  color: #000;
   margin-bottom: 15px;
 }
 
 .ocr-drop__hint {
   font-size: 14px;
-  color: #777;
+  color: #333;
   margin-bottom: 10px;
 }
 
-/* Botón de upload OCR */
+/* ======== BOTÓN DE SUBIDA ======== */
 .ocr-btn-upload {
   display: inline-block;
-  background: #081735;
+  background: #4D8BFF; /* celeste principal */
   color: #fff;
   font-size: 16px;
   font-weight: 600;
   padding: 12px 24px;
   border-radius: 6px;
+  border: 1px solid #000; /* 🔲 borde negro fino */
   cursor: pointer;
-  transition: background 0.3s ease;
+  transition: background 0.3s ease, transform 0.2s ease;
 }
 
 .ocr-btn-upload:hover {
-  background: #081735;
+  background: #3973E6; /* hover más oscuro */
+  transform: scale(1.02);
 }
 
 .ocr-btn-upload input {
   display: none;
 }
 
-/* Botón principal OCR */
+/* ======== BOTÓN PRINCIPAL ======== */
 .ocr-btn {
-  background: #081735;
+  background: #4D8BFF;
   color: #fff;
   font-size: 18px;
   font-weight: 600;
   padding: 14px 28px;
-  border: none;
+  border: 1px solid #000; /* 🔲 borde negro fino */
   border-radius: 6px;
   cursor: pointer;
-  transition: background 0.3s ease;
+  transition: background 0.3s ease, transform 0.2s ease;
   width: 100%;
 }
 
 .ocr-btn:hover {
-  background: #081735;
+  background: #3973E6;
+  transform: scale(1.02);
 }
 
 .ocr-btn:disabled {
@@ -111,26 +118,28 @@
   cursor: not-allowed;
 }
 
-/* Descarga OCR */
+/* ======== BOTÓN DESCARGAR ======== */
 .ocr-download {
   display: inline-block;
   margin-top: 20px;
   color: #fff;
-  background: #081735;
+  background: #4D8BFF;
+  border: 1px solid #000; /* 🔲 borde negro fino */
   padding: 12px 20px;
   border-radius: 6px;
   text-decoration: none;
   font-weight: 600;
-  transition: background 0.3s ease;
+  transition: background 0.3s ease, transform 0.2s ease;
 }
 
 .ocr-download:hover {
-  background: #1b5e20;
+  background: #3973E6;
+  transform: scale(1.02);
 }
 
-/* Errores OCR */
+/* ======== ERRORES ======== */
 .ocr-error {
   margin-top: 20px;
-  color: #c62828;
+  color: #dc2626;
   font-weight: 500;
 }

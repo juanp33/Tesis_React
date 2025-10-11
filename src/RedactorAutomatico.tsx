@@ -20,8 +20,10 @@ type DropZoneMultiProps = {
 
 type ChatMsg = { role: "user" | "assistant"; text: string };
 
-function DropZoneSingle({ label, accept, id, onFile }: DropZoneSingleProps) {
+// 🔹 DropZone simple (1 archivo)
+function DropZoneSingle({ accept, id, onFile }: DropZoneSingleProps) {
   const [dragOver, setDragOver] = useState(false);
+
   const onDrop = useCallback(
     (e: React.DragEvent<HTMLDivElement>) => {
       e.preventDefault();
@@ -34,7 +36,6 @@ function DropZoneSingle({ label, accept, id, onFile }: DropZoneSingleProps) {
 
   return (
     <div className="ra-dropzone">
-      <label htmlFor={id} className="ra-sr-only">{label}</label>
       <div
         onDragOver={(e) => {
           e.preventDefault();
@@ -46,7 +47,7 @@ function DropZoneSingle({ label, accept, id, onFile }: DropZoneSingleProps) {
       >
         <div className="ra-drop__content">
           <div className="ra-drop__icon">📄</div>
-          <div className="ra-drop__title">{label}</div>
+          <div className="ra-drop__title">Subir tu archivo de ejemplo (opcional)</div>
           <div className="ra-drop__hint">Arrastrá un archivo aquí o</div>
           <label className="ra-btn-upload">
             Seleccionar desde el dispositivo
@@ -64,7 +65,8 @@ function DropZoneSingle({ label, accept, id, onFile }: DropZoneSingleProps) {
   );
 }
 
-function DropZoneMulti({ label, accept, id, onFiles }: DropZoneMultiProps) {
+// 🔹 DropZone múltiple (varios archivos)
+function DropZoneMulti({ accept, id, onFiles }: DropZoneMultiProps) {
   const [dragOver, setDragOver] = useState(false);
   const [names, setNames] = useState<string[]>([]);
 
@@ -82,7 +84,6 @@ function DropZoneMulti({ label, accept, id, onFiles }: DropZoneMultiProps) {
 
   return (
     <div className="ra-dropzone">
-      <label htmlFor={id} className="ra-sr-only">{label}</label>
       <div
         onDragOver={(e) => {
           e.preventDefault();
@@ -94,7 +95,7 @@ function DropZoneMulti({ label, accept, id, onFiles }: DropZoneMultiProps) {
       >
         <div className="ra-drop__content">
           <div className="ra-drop__icon">📄</div>
-          <div className="ra-drop__title">{label}</div>
+          <div className="ra-drop__title">Subir evidencias (PDFs)</div>
           <div className="ra-drop__hint">Arrastrá varios PDFs aquí o</div>
           <label className="ra-btn-upload">
             Seleccionar desde el dispositivo
@@ -107,6 +108,7 @@ function DropZoneMulti({ label, accept, id, onFiles }: DropZoneMultiProps) {
               hidden
             />
           </label>
+
           {names.length > 0 && (
             <div className="ra-filelist" aria-live="polite">
               {names.slice(0, 5).map((n, i) => (
@@ -139,6 +141,7 @@ export default function RedaccionAutomatica() {
   const [error, setError] = useState<string>("");
 
   const messagesRef = useRef<HTMLDivElement | null>(null);
+
   useEffect(() => {
     messagesRef.current?.scrollTo({
       top: messagesRef.current.scrollHeight,
@@ -151,6 +154,7 @@ export default function RedaccionAutomatica() {
     []
   );
 
+  // ======= GENERAR DOCUMENTO =======
   const handleGenerate = async () => {
     setError("");
     setChatId("");
@@ -198,6 +202,7 @@ export default function RedaccionAutomatica() {
     setChatMsgs([{ role: "assistant", text: json.respuesta }]);
   };
 
+  // ======= CHAT =======
   const sendChat = async () => {
     if (!chatId || !chatInput.trim()) return;
     const msg = chatInput.trim();
@@ -213,7 +218,6 @@ export default function RedaccionAutomatica() {
       if (!r.ok) throw new Error(await r.text());
       const data = await r.json();
 
-      // ✅ Mostrar respuesta textual del asistente
       setChatMsgs((m) => [...m, { role: "assistant", text: data.respuesta }]);
       setPdfSrc(`${data.pdf_url}?t=${Date.now()}`);
     } catch (err: any) {
@@ -224,6 +228,7 @@ export default function RedaccionAutomatica() {
     }
   };
 
+  // ======= COPIAR ENLACE PDF =======
   const copyLink = async () => {
     if (!pdfSrc) return;
     try {
@@ -231,48 +236,54 @@ export default function RedaccionAutomatica() {
     } catch {}
   };
 
+  // ======= UI =======
   return (
     <MasterPage>
-      <div className="ra-page ra-only-chat">
-        {/* Izquierda */}
-        <div className="ra-left">
-          <div className="ra-row">
-            <div className="ra-selectWrap">
-              <select
-                className="ra-select"
-                value={documentType}
-                onChange={(e) => setDocumentType(e.target.value)}
-              >
-                <option value="">Tipo de documento</option>
-                {docTypeOptions.map((opt) => (
-                  <option key={opt} value={opt}>
-                    {opt}
-                  </option>
-                ))}
-              </select>
-            </div>
+      <div className="ra-page">
+        <div className="ra-top">
+          {/* Selector de tipo de documento */}
+          <div className="ra-selectWrap">
+            <select
+              className="ra-select"
+              value={documentType}
+              onChange={(e) => setDocumentType(e.target.value)}
+            >
+              <option value="">Tipo de documento</option>
+              {docTypeOptions.map((opt) => (
+                <option key={opt} value={opt}>
+                  {opt}
+                </option>
+              ))}
+            </select>
           </div>
 
-          <DropZoneSingle
-            id="tpl"
-            label="Subir tu archivo de ejemplo (opcional)"
-            accept=".txt,.md,.doc,.docx,.rtf,.pdf,.html,.htm"
-            onFile={setTemplateFile}
-          />
-          <DropZoneMulti
-            id="evid"
-            label="Subir evidencias (PDFs)"
-            accept="application/pdf,.pdf"
-            onFiles={setEvidenceFiles}
-          />
+          {/* Dropzones lado a lado */}
+          <div className="ra-dropzones">
+            <div className="ra-dropzones">
+  <DropZoneMulti
+    id="evid"
+    label=""
+    accept="application/pdf,.pdf"
+    onFiles={setEvidenceFiles}
+  />
+  <DropZoneSingle
+    id="tpl"
+    label=""
+    accept=".txt,.md,.doc,.docx,.rtf,.pdf,.html,.htm"
+    onFile={setTemplateFile}
+  />
+</div>
+          </div>
 
+          {/* Instrucciones */}
           <textarea
-            className="ra-textarea ra-textarea--small"
+            className="ra-textarea"
             placeholder="Instrucciones"
             value={instructions}
             onChange={(e) => setInstructions(e.target.value)}
           />
 
+          {/* Botón */}
           <div className="ra-right__actions">
             <button
               onClick={handleGenerate}
@@ -286,46 +297,26 @@ export default function RedaccionAutomatica() {
           {error && <div className="ra-error">{error}</div>}
         </div>
 
-        {/* Derecha */}
-        <div className="ra-right">
+        {/* PDF y Chat */}
+        <div className="ra-bottom">
           <div className="ra-pdfWrap">
             {pdfSrc ? (
-              <iframe
-                key={pdfSrc}
-                title="Documento PDF"
-                className="ra-pdf"
-                src={pdfSrc}
-              />
+              <iframe key={pdfSrc} title="Documento PDF" className="ra-pdf" src={pdfSrc} />
             ) : (
-              <div className="ra-pdfPlaceholder">
-                El PDF aparecerá aquí…
-              </div>
+              <div className="ra-pdfPlaceholder">El PDF aparecerá aquí…</div>
             )}
             <div className="ra-pdfActions">
-              <button
-                className="ra-btn ra-btn--ghost"
-                onClick={copyLink}
-                disabled={!pdfSrc}
-              >
+              <button className="ra-btn" onClick={copyLink} disabled={!pdfSrc}>
                 Copiar enlace del PDF
               </button>
-              {evidenceId && (
-                <span
-                  className="ra-evidenceTag"
-                  title="Evidencias cargadas"
-                >
-                  Evidencias vinculadas
-                </span>
-              )}
+              {evidenceId && <span className="ra-evidenceTag">Evidencias vinculadas</span>}
             </div>
           </div>
 
           <div className="ra-chat">
             <div className="ra-chat__header">
               <div className="ra-chat__title">Chat de mejora del documento</div>
-              <div className="ra-chat__status">
-                {chatId ? "Listo" : "Esperando inicio…"}
-              </div>
+              <div className="ra-chat__status">{chatId ? "Listo" : "Esperando inicio…"}</div>
             </div>
 
             <div className="ra-chat__messages" ref={messagesRef}>
@@ -333,9 +324,7 @@ export default function RedaccionAutomatica() {
                 <div
                   key={i}
                   className={`ra-chat__bubble ${
-                    m.role === "user"
-                      ? "ra-chat__bubble--user"
-                      : "ra-chat__bubble--bot"
+                    m.role === "user" ? "ra-chat__bubble--user" : "ra-chat__bubble--bot"
                   }`}
                 >
                   {m.text}
@@ -345,17 +334,15 @@ export default function RedaccionAutomatica() {
 
             <div className="ra-chat__form">
               <input
-                className="ra-input ra-chat__input"
+                className="ra-input"
                 placeholder="Escribí qué querés mejorar…"
                 value={chatInput}
                 onChange={(e) => setChatInput(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") sendChat();
-                }}
+                onKeyDown={(e) => e.key === "Enter" && sendChat()}
                 disabled={!chatId || loading}
               />
               <button
-                className="ra-btn ra-btn--primary ra-chat__send"
+                className="ra-btn ra-btn--primary"
                 onClick={sendChat}
                 disabled={!chatId || loading || !chatInput.trim()}
               >
