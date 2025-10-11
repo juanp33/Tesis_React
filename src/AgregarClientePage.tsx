@@ -108,7 +108,7 @@ const AgregarClientePage = () => {
   return (
     <MasterPage>
       <div className="agregar-cliente-container">
-        <h2>➕ Agregar Cliente</h2>
+        <h2> Agregar Cliente</h2>
         {mensaje && <p className="mensaje">{mensaje}</p>}
 
         {/* Formulario nuevo cliente */}
@@ -129,7 +129,7 @@ const AgregarClientePage = () => {
         </form>
 
         {/* Clientes disponibles para vincular */}
-        <h3>👥 Vincular Cliente Existente</h3>
+        <h3> Vincular Cliente Existente</h3>
         {clientesDisponibles.length > 0 ? (
           <div className="clientes-lista">
             {clientesDisponibles.map((c) => (

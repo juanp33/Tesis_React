@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import type { ReactNode } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import "./MasterPage.css";
 
 import HomeLogo from "./logos/HomeLogo-removebg-preview.png";
@@ -10,26 +10,11 @@ import ChatLogo from "./logos/ChatLogo-removebg-preview.png";
 import ZoomLogo from "./logos/ZoomLogo-removebg-preview.png";
 import Resumidor from "./logos/resumido2r.png";
 import Transformar from "./logos/transforma2.png";
-import AbogadoInteligenteLogo from "./logos/AbogadoInteligenteLogo.png"; 
+import AbogadoInteligenteLogo from "./logos/AbogadoInteligenteLogo.png";
+
 interface MasterPageProps {
   children: ReactNode;
 }
-
-type Item = {
-  to: string;
-  label: string;
-  icon: string;
-};
-
-const ITEMS: Item[] = [
-  { to: "/perfil", label: "Dashboard", icon: HomeLogo },
-  { to: "/transcripcion", label: "Transcripcion", icon: MicLogo },
-  { to: "/redactorautomatico", label: "Redaccion Asistida", icon: PencilLogo },
-  { to: "/chatbot", label: "ChatBot Juridico", icon: ChatLogo },
-  { to: "/resumidor", label: "Resumidor", icon: Resumidor },
-  { to: "/ocr", label: "OCR", icon: ZoomLogo },
-  { to: "/transformardocumento", label: "Transformar Documento", icon: Transformar }
-];
 
 const MasterPage = ({ children }: MasterPageProps) => {
   const [adminOpen, setAdminOpen] = useState(false);
@@ -38,7 +23,8 @@ const MasterPage = ({ children }: MasterPageProps) => {
 
   useEffect(() => {
     const handle = (e: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) setAdminOpen(false);
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node))
+        setAdminOpen(false);
     };
     document.addEventListener("mousedown", handle);
     return () => document.removeEventListener("mousedown", handle);
@@ -48,53 +34,69 @@ const MasterPage = ({ children }: MasterPageProps) => {
     setAdminOpen(false);
   }, [location]);
 
-  const isActive = (to: string) =>
-    location.pathname === to || location.pathname.startsWith(to + "/");
-
   return (
     <div className="mp-container">
-      <aside className="mp-sidebar">
-        {ITEMS.map((it) => (
-          <Link key={it.to} to={it.to} className={`mp-item ${isActive(it.to) ? "active" : ""}`}>
-            <img src={it.icon} alt="" className="mp-icon" />
-            <span className="mp-label">{it.label}</span>
-          </Link>
-        ))}
-
-        <div
-          className={`mp-item mp-admin ${adminOpen ? "open" : ""}`}
-          ref={dropdownRef}
-          onClick={() => setAdminOpen((v) => !v)}
-        >
-          <div className="mp-admin-row">
-            <span className="mp-gear">⚙️</span>
-            <span className="mp-label">Administración</span>
-            <span className="mp-arrow">{adminOpen ? "▲" : "▼"}</span>
-          </div>
-
-          {adminOpen && (
-            <div className="mp-admin-menu">
-              <Link to="/abogados" className="mp-admin-link">Abogados</Link>
-              <Link to="/usuarios" className="mp-admin-link">Usuarios</Link>
-              <Link to="/roles" className="mp-admin-link">Roles</Link>
-              <Link to="/permisos" className="mp-admin-link">Permisos</Link>
-              <Link to="/rolpermisos" className="mp-admin-link">RolPermisos</Link>
-              <Link to="/asignar-permisos" className="mp-admin-link">Asignar Permisos a Rol</Link>
-            </div>
-          )}
+      {/* Header principal tipo UruguAi Legal */}
+      <header className="mp-header mp-topbar">
+        {/* Logo */}
+        <div className="mp-brand">
+          <img src={AbogadoInteligenteLogo} alt="" className="mp-brand-img" />
+          
         </div>
-      </aside>
 
-     <main className="mp-content">
-  <header className="mp-header">
-    <img
-      src={AbogadoInteligenteLogo}
-      alt="Abogado Inteligente"
-      className="mp-header-logo"
-    />
-  </header>
-  <div className="mp-body">{children}</div>
-</main>
+        {/* Navegación completa */}
+        <nav className="mp-topnav">
+          <NavLink to="/perfil" className={({ isActive }) => "mp-toplink" + (isActive ? " active" : "")}>
+            <img src={HomeLogo} alt="" className="mp-topicon" /> Dashboard
+          </NavLink>
+
+          <NavLink to="/transcripcion" className={({ isActive }) => "mp-toplink" + (isActive ? " active" : "")}>
+            <img src={MicLogo} alt="" className="mp-topicon" /> Transcripción
+          </NavLink>
+
+          <NavLink to="/redactorautomatico" className={({ isActive }) => "mp-toplink" + (isActive ? " active" : "")}>
+            <img src={PencilLogo} alt="" className="mp-topicon" /> Redacción Asistida
+          </NavLink>
+
+          <NavLink to="/chatbot" className={({ isActive }) => "mp-toplink" + (isActive ? " active" : "")}>
+            <img src={ChatLogo} alt="" className="mp-topicon" /> ChatBot Jurídico
+          </NavLink>
+
+          <NavLink to="/resumidor" className={({ isActive }) => "mp-toplink" + (isActive ? " active" : "")}>
+            <img src={Resumidor} alt="" className="mp-topicon" /> Resumidor
+          </NavLink>
+
+          <NavLink to="/ocr" className={({ isActive }) => "mp-toplink" + (isActive ? " active" : "")}>
+            <img src={ZoomLogo} alt="" className="mp-topicon" /> OCR
+          </NavLink>
+
+          <NavLink to="/transformardocumento" className={({ isActive }) => "mp-toplink" + (isActive ? " active" : "")}>
+            <img src={Transformar} alt="" className="mp-topicon" /> Transformar Documento
+          </NavLink>
+
+          {/* Dropdown administración */}
+          <div className="mp-admin-top" ref={dropdownRef}>
+            <button className="mp-toplink mp-admin-btn" onClick={() => setAdminOpen((v) => !v)}>
+              ⚙️ Administración <span className="mp-arrow">{adminOpen ? "▲" : "▼"}</span>
+            </button>
+            {adminOpen && (
+              <div className="mp-admin-dropdown">
+                <NavLink to="/abogados" className="mp-admin-link">Abogados</NavLink>
+                <NavLink to="/usuarios" className="mp-admin-link">Usuarios</NavLink>
+                <NavLink to="/roles" className="mp-admin-link">Roles</NavLink>
+                <NavLink to="/permisos" className="mp-admin-link">Permisos</NavLink>
+                <NavLink to="/rolpermisos" className="mp-admin-link">RolPermisos</NavLink>
+                <NavLink to="/asignar-permisos" className="mp-admin-link">Asignar Permisos a Rol</NavLink>
+              </div>
+            )}
+          </div>
+        </nav>
+      </header>
+
+      {/* Contenido principal */}
+      <main className="mp-content">
+        <div className="mp-body">{children}</div>
+      </main>
     </div>
   );
 };

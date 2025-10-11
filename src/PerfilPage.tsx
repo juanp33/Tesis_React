@@ -63,7 +63,7 @@ const PerfilPage = () => {
       <div className="clientes-layout">
         {/* Izquierda: Clientes */}
         <div className="clientes-section">
-          <h2>👥 Clientes</h2>
+          <h2>Clientes</h2>
 
           {/* 🔹 Botón para agregar cliente */}
           <button
@@ -102,7 +102,7 @@ const PerfilPage = () => {
 
         {/* Derecha: Abogado logueado */}
         <div className="usuario-section">
-          <h2>👤 Abogado</h2>
+          <h2>Abogado</h2>
           {error && <p className="error-msg">{error}</p>}
           {usuario && (
             <div className="perfil-card">
