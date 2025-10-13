@@ -32,9 +32,9 @@ body {
   gap: 20px;
   background: white;
   padding: 20px;
-  border: none; /* ❌ sin borde */
-  border-radius: 0; /* ⬛ recto */
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35); /* 🌑 sombra fuerte */
+  border: none;
+  border-radius: 0;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35);
 }
 
 .descripcion {
@@ -45,7 +45,7 @@ body {
 
 /* ======== CAJA DE SUBIDA ======== */
 .upload-box {
-  border: none; /* ❌ sin borde visible */
+  border: none;
   border-radius: 0;
   padding: 30px;
   background-color: #f8faff;
@@ -110,6 +110,30 @@ body {
 
 .upload-input {
   display: none;
+}
+
+/* ======== ARCHIVO SELECCIONADO ======== */
+.archivo-seleccionado {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #000;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  flex-wrap: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.archivo-seleccionado strong {
+  color: #0a66ff;
+  display: inline-block;
+  max-width: 190px; /* 🔹 se corta aprox. después de “Epstein” */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: bottom;
 }
 
 /* ======== BOTÓN TRANSCRIBIR ======== */
@@ -179,4 +203,25 @@ body {
   background: #3973E6;
   transform: translateY(-2px);
   box-shadow: 0px 6px 14px rgba(0, 0, 0, 0.45);
+}
+
+/* ======== RESPONSIVE ======== */
+@media (max-width: 900px) {
+  .transcripcion-layout {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .panel-contenedor {
+    width: 100%;
+    max-width: 500px;
+  }
+
+  .transcripcion-output {
+    width: 100%;
+  }
+
+  .transcripcion-textarea {
+    height: 300px;
+  }
 }

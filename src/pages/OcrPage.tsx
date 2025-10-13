@@ -29,7 +29,7 @@ const OCRPage: React.FC = () => {
     formData.append("archivo", file);
 
     try {
-      const response = await fetch(`${API_BASE}/ocr_archivo_con_texto/`, {
+      const response = await fetch(`${API_BASE}/ocr/`, {
         method: "POST",
         body: formData,
       });

@@ -1,0 +1,72 @@
+.config-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px;
+}
+
+.config-card {
+  background: #ffffff;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  padding: 30px;
+  width: 420px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.config-card label {
+  font-weight: 600;
+  color: #222;
+}
+
+.config-card input {
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 15px;
+  color: #000;
+  background-color: #fdfdfd;
+}
+
+.config-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.config-buttons button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  background-color: #4D8BFF;
+  color: white;
+  font-weight: 500;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.config-buttons button:hover {
+  background-color: #3973e6;
+}
+
+.error-msg {
+  color: #d32f2f;
+  font-weight: 500;
+}
+
+.success-msg {
+  color: #2e7d32;
+  font-weight: 500;
+}
+
+.ci-valid {
+  color: #2e7d32;
+  font-size: 0.9rem;
+}
+
+.ci-invalid {
+  color: #d32f2f;
+  font-size: 0.9rem;
+}
