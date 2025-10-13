@@ -1,48 +1,54 @@
 .sidebar {
   width: 280px;
-  background-color: #045c78;
+  background-color: #12a4c8; /* celeste más claro */
   color: white;
   display: flex;
   flex-direction: column;
   border-radius: 8px 0 0 8px;
   overflow: hidden;
+  font-family: "Segoe UI", sans-serif;
 }
 
 .sidebar-header {
   padding: 15px;
   text-align: center;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+  background: #14b0d9;
 }
 
 .new-chat-btn {
-  background-color: #0bb3a8;
-  color: white;
+  background-color: #ffffff;
+  color: #0f7fa8;
   border: none;
   border-radius: 6px;
   padding: 10px;
   width: 100%;
   cursor: pointer;
   font-weight: 600;
+  transition: all 0.2s ease-in-out;
+}
+
+.new-chat-btn:hover {
+  background-color: #eaf8fc;
+  transform: scale(1.03);
 }
 
 .limit-info {
   margin-top: 8px;
   font-size: 0.85rem;
-  opacity: 0.8;
+  opacity: 0.9;
 }
 
-.sidebar-section {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
+.chat-section-title {
+  margin: 15px 0 8px 15px;
+  font-size: 0.95rem;
+  font-weight: 600;
 }
 
-/* 🔸 Scroll interno para muchos chats */
 .chat-list {
   flex: 1;
   overflow-y: auto;
-  padding: 10px 15px;
+  padding: 0 12px 12px;
 }
 
 .chat-list::-webkit-scrollbar {
@@ -58,40 +64,56 @@
   background-color: rgba(255, 255, 255, 0.45);
 }
 
-/* 🔸 Chats individuales */
+/* 🔹 Cada chat */
 .chat-item {
-  padding: 8px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 8px;
   border-radius: 6px;
-  margin-bottom: 6px;
   cursor: pointer;
   transition: background 0.2s;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.25); /* línea divisoria */
+  position: relative;
 }
 
 .chat-item:hover {
   background-color: rgba(255, 255, 255, 0.15);
 }
 
-/* 🔹 Chat activo (seleccionado) */
 .chat-item.active {
-  background-color: #0bb3a8;
+  background-color: rgba(255, 255, 255, 0.25);
   font-weight: 600;
 }
 
-.sidebar-footer {
-  border-top: 1px solid rgba(255, 255, 255, 0.2);
-  padding: 10px;
-  text-align: center;
-}
-
-.sidebar-footer button {
-  background: none;
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  color: white;
-  padding: 8px 12px;
-  border-radius: 6px;
+/* 🔸 X para eliminar */
+.delete-x {
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: bold;
+  font-size: 1rem;
   cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.2s ease, color 0.2s ease;
 }
 
-.sidebar-footer button:hover {
-  background-color: rgba(255, 255, 255, 0.15);
+.chat-item:hover .delete-x {
+  opacity: 1;
+}
+
+.delete-x:hover {
+  color: #fff;
+}
+
+/* Texto del chat */
+.chat-title {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.empty-msg {
+  text-align: center;
+  opacity: 0.8;
+  margin-top: 20px;
 }

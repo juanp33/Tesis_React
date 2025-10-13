@@ -9,10 +9,13 @@ interface Chat {
 
 interface ChatSideBarProps {
   onSelectChat: (chatId: string) => void;
-   selectedChatId?: string | null; //
+  selectedChatId?: string | null;
 }
 
-export default function ChatSideBar({ onSelectChat }: ChatSideBarProps) {
+export default function ChatSideBar({
+  onSelectChat,
+  selectedChatId,
+}: ChatSideBarProps) {
   const [chats, setChats] = useState<Chat[]>([]);
   const token = localStorage.getItem("jwt");
 
@@ -26,7 +29,6 @@ export default function ChatSideBar({ onSelectChat }: ChatSideBarProps) {
       .catch(() => setChats([]));
   }, []);
 
-  // ➕ Crear un nuevo chat con nombre
   const newChat = async () => {
     const title = prompt("📝 Ingrese un nombre para el nuevo chat:")?.trim();
     if (!title) return;
@@ -42,14 +44,21 @@ export default function ChatSideBar({ onSelectChat }: ChatSideBarProps) {
         title,
       }),
     });
+
     const created = await res.json();
     setChats((prev) => [created, ...prev]);
     onSelectChat(created.chatId);
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    window.location.href = "/login";
+  const deleteChat = async (chatId: string) => {
+    if (!window.confirm("¿Eliminar este chat definitivamente?")) return;
+
+    await fetch(`http://localhost:8080/api/chats/${chatId}`, {
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    setChats((prev) => prev.filter((c) => c.chatId !== chatId));
   };
 
   return (
@@ -61,25 +70,32 @@ export default function ChatSideBar({ onSelectChat }: ChatSideBarProps) {
         <p className="limit-info">{chats.length} chats guardados</p>
       </div>
 
-      <div className="sidebar-section">
-        <h4>Mis chats</h4>
+      <div className="chat-list">
+        <h4 className="chat-section-title">Mis chats</h4>
         {chats.length === 0 ? (
-          <p>No hay chats guardados</p>
+          <p className="empty-msg">No hay chats guardados</p>
         ) : (
           chats.map((chat) => (
             <div
               key={chat.chatId}
-              className="chat-item"
+              className={`chat-item ${
+                selectedChatId === chat.chatId ? "active" : ""
+              }`}
               onClick={() => onSelectChat(chat.chatId)}
             >
-              💬 {chat.title}
+              <span className="chat-title">💬 {chat.title}</span>
+              <span
+                className="delete-x"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  deleteChat(chat.chatId);
+                }}
+              >
+                ✕
+              </span>
             </div>
           ))
         )}
-      </div>
-
-      <div className="sidebar-footer">
-        <button onClick={handleLogout}>Cerrar sesión</button>
       </div>
     </div>
   );

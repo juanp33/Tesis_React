@@ -1,9 +1,16 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./ChatArea.css";
+import clipIcon from "../logos/clip.png";
+import sendIcon from "../logos/enviar.png";
+
+interface ChatFile {
+  name: string;
+}
 
 interface ChatMessage {
   role: "user" | "assistant";
   content: string;
+  files?: ChatFile[];
 }
 
 interface ChatAreaProps {
@@ -21,7 +28,7 @@ export default function ChatArea({ chatId }: ChatAreaProps) {
   useEffect(() => {
     if (!chatId) return;
     const token = localStorage.getItem("jwt");
-    setMessages([]); // limpia mientras carga
+    setMessages([]);
 
     fetch(`http://localhost:8080/api/messages/${chatId}`, {
       headers: { Authorization: `Bearer ${token || ""}` },
@@ -40,6 +47,11 @@ export default function ChatArea({ chatId }: ChatAreaProps) {
       );
   }, [chatId]);
 
+  // 🔸 Eliminar un archivo antes de enviar
+  const removeFile = (index: number) => {
+    setAttachedFiles((prev) => prev.filter((_, i) => i !== index));
+  };
+
   // 🔸 Enviar mensaje y placeholder
   const sendMessage = async () => {
     if (!chatId || (!message.trim() && attachedFiles.length === 0)) return;
@@ -47,7 +59,11 @@ export default function ChatArea({ chatId }: ChatAreaProps) {
 
     const newMessages: ChatMessage[] = [
       ...messages,
-      { role: "user", content: message || "[Archivo enviado]" },
+      {
+        role: "user",
+        content: message || "[Archivo enviado]",
+        files: attachedFiles.map((f) => ({ name: f.name })),
+      },
       { role: "assistant", content: "💭 El asistente está redactando..." },
     ];
     setMessages(newMessages);
@@ -72,10 +88,11 @@ export default function ChatArea({ chatId }: ChatAreaProps) {
       const assistantResponse =
         data.response || "❌ No se recibió respuesta del servidor.";
 
-      // reemplaza placeholder
       setMessages((prev) => {
         const updated = [...prev];
-        const lastIndex = [...updated].reverse().findIndex((m) => m.role === "assistant");
+        const lastIndex = [...updated]
+          .reverse()
+          .findIndex((m) => m.role === "assistant");
         const realIndex =
           lastIndex === -1 ? -1 : updated.length - 1 - lastIndex;
 
@@ -106,46 +123,73 @@ export default function ChatArea({ chatId }: ChatAreaProps) {
             <div className="msg-content" style={{ whiteSpace: "pre-line" }}>
               {msg.content}
             </div>
+
+            {/* Archivos adjuntos dentro del mensaje */}
+            {msg.files && msg.files.length > 0 && (
+              <div className="attached-preview" style={{ marginTop: "5px" }}>
+                {msg.files.map((file, idx) => (
+                  <span key={idx} className="file-chip">
+                    📎 {file.name}
+                  </span>
+                ))}
+              </div>
+            )}
           </div>
         ))}
         <div ref={chatEndRef}></div>
       </div>
 
       <div className="input-bar">
-        <label className="file-label" title="Adjuntar archivos">
-          📎
-          <input
-            type="file"
-            multiple
-            onChange={(e) =>
-              setAttachedFiles(Array.from(e.target.files || []))
+        <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
+          {/* ✅ Vista previa con opción de eliminar */}
+          {attachedFiles.length > 0 && (
+            <div className="attached-preview">
+              {attachedFiles.map((file, idx) => (
+                <span key={idx} className="file-chip">
+                  {file.name}
+                  <span
+                    style={{
+                      marginLeft: "6px",
+                      cursor: "pointer",
+                      color: "#888",
+                      fontWeight: "bold",
+                    }}
+                    onClick={() => removeFile(idx)}
+                  >
+                    ❌
+                  </span>
+                </span>
+              ))}
+            </div>
+          )}
+
+          <textarea
+            placeholder="Escribe tu consulta legal..."
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            onKeyDown={(e) =>
+              e.key === "Enter" && !e.shiftKey && (e.preventDefault(), sendMessage())
             }
-            style={{ display: "none" }}
           />
-        </label>
+        </div>
 
-        {attachedFiles.length > 0 && (
-          <div className="attached-preview">
-            {attachedFiles.map((file, idx) => (
-              <span key={idx} className="file-chip">
-                {file.name}
-              </span>
-            ))}
-          </div>
-        )}
+        <div className="right-icons">
+          <label className="file-label" title="Adjuntar archivo">
+            <img src={clipIcon} alt="Adjuntar" className="icon-btn" />
+            <input
+              type="file"
+              multiple
+              onChange={(e) =>
+                setAttachedFiles(Array.from(e.target.files || []))
+              }
+              style={{ display: "none" }}
+            />
+          </label>
 
-        <textarea
-          placeholder="Escribe tu consulta legal..."
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          onKeyDown={(e) =>
-            e.key === "Enter" && !e.shiftKey && (e.preventDefault(), sendMessage())
-          }
-        />
-
-        <button className="send-btn" onClick={sendMessage}>
-          {isLoading ? "..." : "Enviar"}
-        </button>
+          <button className="send-btn" onClick={sendMessage} title="Enviar">
+            <img src={sendIcon} alt="Enviar" className="icon-btn" />
+          </button>
+        </div>
       </div>
     </div>
   );

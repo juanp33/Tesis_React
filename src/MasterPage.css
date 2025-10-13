@@ -1,0 +1,230 @@
+/* ===== VARIABLES GLOBALES ===== */
+:root {
+  --ra-bg: #ffffff;
+  --ra-bg-soft: #fafafa;
+  --ra-text: #111827;
+  --ra-text-muted: #6b7280;
+  --ra-border: #d1d5db;
+  --ra-border-strong: #9ca3af;
+  --ra-primary: #0a66ff;
+  --ra-primary-weak: rgba(10,102,255,.18);
+  --ra-focus: 0 0 0 3px rgba(10,102,255,.18);
+  --ra-shadow-sm: 0 1px 2px rgba(0,0,0,.06);
+  --ra-shadow-md: 0 4px 12px rgba(0,0,0,.12);
+}
+
+html, body, #root {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  background: var(--ra-bg);
+  font-family: "Inter", "Segoe UI", sans-serif;
+  box-sizing: border-box;
+}
+
+
+.mp-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100%;
+  background: var(--ra-bg);
+}
+
+
+.mp-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  z-index: 100;
+  color: #ffffff;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.18);
+
+  background: #4271cf;
+}
+
+.mp-brand {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin: 0;
+  padding: 0 4px 0 12px;
+}
+
+.mp-brand-img {
+  width: clamp(95px, 9vw, 130px);
+  height: auto;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
+  margin-right: 12px;
+  transition: transform 0.2s ease;
+}
+
+.mp-brand-img:hover {
+  transform: scale(1.05);
+}
+
+.mp-topnav {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: clamp(8px, 1vw, 14px);
+  margin-left: 4px;
+}
+
+.mp-toplink {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  color: #eaf9fb;
+  font-weight: 600;
+  font-size: clamp(13px, 1vw, 15px);
+  text-decoration: none;
+  border-radius: 6px;
+  transition: background .2s ease, color .2s ease;
+  position: relative;
+}
+
+.mp-toplink:hover {
+  background: rgba(255,255,255,0.15);
+  color: #fff;
+}
+
+.mp-toplink.active::after {
+  content: "";
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  bottom: 0;
+  height: 3px;
+  border-radius: 3px 3px 0 0;
+  background: #fff;
+}
+
+.mp-topicon {
+  width: clamp(16px, 1.8vw, 20px);
+  height: auto;
+  filter: brightness(0) invert(1);
+}
+
+/* ===== DROPDOWN ADMINISTRACIÓN ===== */
+.mp-admin-top {
+  position: relative;
+  z-index: 1000;
+}
+
+.mp-admin-btn {
+  background: none;
+  border: 2px solid rgba(255,255,255,0.2);
+  color: #eaf9fb;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  transition: background .2s ease, border .2s ease;
+}
+
+.mp-admin-btn:hover {
+  background: rgba(255,255,255,0.15);
+  border-color: rgba(255,255,255,0.4);
+}
+
+.mp-admin-dropdown {
+  position: absolute;
+  top: 56px;
+  right: 0;
+  background: #0b1f3d;
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  min-width: 200px;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.35);
+  z-index: 2000 !important;
+}
+
+.mp-admin-link {
+  color: #eaf9fb;
+  padding: 10px 16px;
+  text-decoration: none;
+  font-size: 14px;
+  transition: background .2s ease;
+}
+
+.mp-admin-link:hover {
+  background: rgba(255,255,255,0.1);
+}
+
+/* ===== CONTENIDO PRINCIPAL ===== */
+.mp-content {
+  flex: 1 1 auto;
+  width: 100%;
+  overflow-y: auto;
+  background: var(--ra-bg);
+  color: var(--ra-text);
+  display: flex;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.mp-body {
+  width: min(100%, 1200px);
+  margin-top: 90px;
+  padding: clamp(16px, 2vw, 28px);
+  background: var(--ra-bg);
+  box-sizing: border-box;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 900px) {
+  .mp-header {
+    flex-wrap: wrap;
+    height: auto;
+    padding: 8px 6px;
+  }
+
+  .mp-brand-img {
+    width: clamp(80px, 20vw, 120px);
+  }
+
+  .mp-topnav {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 8px;
+    margin-top: 6px;
+  }
+
+  .mp-admin-btn {
+    font-size: 13px;
+    padding: 6px 10px;
+  }
+}
+
+@media (max-width: 600px) {
+  .mp-toplink span,
+  .mp-toplink::after {
+    display: none;
+  }
+
+  .mp-topicon {
+    width: 18px;
+  }
+
+  .mp-admin-btn {
+    font-size: 12px;
+  }
+}
