@@ -11,6 +11,7 @@ import ZoomLogo from "../logos/ZoomLogo-removebg-preview.png";
 import Resumidor from "../logos/resumido2r.png";
 import Transformar from "../logos/transforma2.png";
 import AbogadoInteligenteLogo from "../logos/AbogadoInteligenteLogo.png";
+import ConfigLogo from "../assets/configuracion.png"; // ⚙️ Imagen de configuración
 
 interface MasterPageProps {
   children: ReactNode;
@@ -36,15 +37,13 @@ const MasterPage = ({ children }: MasterPageProps) => {
 
   return (
     <div className="mp-container">
-      {/* Header principal tipo UruguAi Legal */}
+      {/* ===== HEADER SUPERIOR ===== */}
       <header className="mp-header mp-topbar">
-        {/* Logo */}
         <div className="mp-brand">
-          <img src={AbogadoInteligenteLogo} alt="" className="mp-brand-img" />
-          
+          <img src={AbogadoInteligenteLogo} alt="Logo Abogado Inteligente" className="mp-brand-img" />
         </div>
 
-        {/* Navegación completa */}
+        {/* ===== NAVEGACIÓN ===== */}
         <nav className="mp-topnav">
           <NavLink to="/perfil" className={({ isActive }) => "mp-toplink" + (isActive ? " active" : "")}>
             <img src={HomeLogo} alt="" className="mp-topicon" /> Inicio
@@ -74,11 +73,13 @@ const MasterPage = ({ children }: MasterPageProps) => {
             <img src={Transformar} alt="" className="mp-topicon" /> Transformar Documento
           </NavLink>
 
-          {/* Dropdown administración */}
+          {/* ===== ADMINISTRACIÓN ===== */}
           <div className="mp-admin-top" ref={dropdownRef}>
             <button className="mp-toplink mp-admin-btn" onClick={() => setAdminOpen((v) => !v)}>
-              ⚙️ Administración <span className="mp-arrow">{adminOpen ? "▲" : "▼"}</span>
+              <img src={ConfigLogo} alt="Administración" className="mp-config-icon" />
+              Administración <span className="mp-arrow">{adminOpen ? "▲" : "▼"}</span>
             </button>
+
             {adminOpen && (
               <div className="mp-admin-dropdown">
                 <NavLink to="/abogados" className="mp-admin-link">Abogados</NavLink>
@@ -93,7 +94,7 @@ const MasterPage = ({ children }: MasterPageProps) => {
         </nav>
       </header>
 
-      {/* Contenido principal */}
+      {/* ===== CONTENIDO PRINCIPAL ===== */}
       <main className="mp-content">
         <div className="mp-body">{children}</div>
       </main>
