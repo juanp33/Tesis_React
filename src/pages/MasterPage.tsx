@@ -1,16 +1,16 @@
 import React, { useState, useRef, useEffect } from "react";
 import type { ReactNode } from "react";
 import { NavLink, useLocation } from "react-router-dom";
-import "./MasterPage.css";
+import "../styles/MasterPage.css";
 
-import HomeLogo from "./logos/HomeLogo-removebg-preview.png";
-import MicLogo from "./logos/MicLogo-removebg-preview.png";
-import PencilLogo from "./logos/PencilLogo-removebg-preview.png";
-import ChatLogo from "./logos/ChatLogo-removebg-preview.png";
-import ZoomLogo from "./logos/ZoomLogo-removebg-preview.png";
-import Resumidor from "./logos/resumido2r.png";
-import Transformar from "./logos/transforma2.png";
-import AbogadoInteligenteLogo from "./logos/AbogadoInteligenteLogo.png";
+import HomeLogo from "../logos/HomeLogo-removebg-preview.png";
+import MicLogo from "../logos/MicLogo-removebg-preview.png";
+import PencilLogo from "../logos/PencilLogo-removebg-preview.png";
+import ChatLogo from "../logos/ChatLogo-removebg-preview.png";
+import ZoomLogo from "../logos/ZoomLogo-removebg-preview.png";
+import Resumidor from "../logos/resumido2r.png";
+import Transformar from "../logos/transforma2.png";
+import AbogadoInteligenteLogo from "../logos/AbogadoInteligenteLogo.png";
 
 interface MasterPageProps {
   children: ReactNode;
@@ -47,7 +47,7 @@ const MasterPage = ({ children }: MasterPageProps) => {
         {/* Navegación completa */}
         <nav className="mp-topnav">
           <NavLink to="/perfil" className={({ isActive }) => "mp-toplink" + (isActive ? " active" : "")}>
-            <img src={HomeLogo} alt="" className="mp-topicon" /> Dashboard
+            <img src={HomeLogo} alt="" className="mp-topicon" /> Inicio
           </NavLink>
 
           <NavLink to="/transcripcion" className={({ isActive }) => "mp-toplink" + (isActive ? " active" : "")}>

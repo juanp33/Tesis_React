@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import MasterPage from "./MasterPage";
-import "./ClienteDetallePage.css";
+import "../styles/ClienteDetallePage.css";
 
 interface ArchivoCaso {
   id: number;

@@ -21,7 +21,10 @@
 
 /* ===== BOTÓN AGREGAR CLIENTE ===== */
 .nuevo-cliente-btn {
-  display: inline-block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px; /* espacio entre el ícono y el texto */
   width: 100%;
   background: #4D8BFF;
   color: #fff;
@@ -41,7 +44,14 @@
   box-shadow: 0px 6px 14px rgba(0, 0, 0, 0.45);
 }
 
-/* ===== PANEL LATERAL ===== */
+/* ===== ICONO DENTRO DEL BOTÓN ===== */
+.icono-mas {
+  width: 22px;
+  height: 22px;
+  filter: brightness(0) invert(1); /* mantiene el ícono blanco sobre el fondo azul */
+}
+
+/* ===== PANEL LATERAL (ABOGADO) ===== */
 .usuario-section {
   flex: 1;
   background: #ffffff;
@@ -51,14 +61,14 @@
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.35);
 }
 
-/* ===== GRID ===== */
+/* ===== GRID DE CLIENTES ===== */
 .clientes-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   gap: 15px;
 }
 
-/* ===== TARJETAS DE PERFIL ===== */
+/* ===== TARJETAS DE CLIENTE / PERFIL ===== */
 .perfil-card {
   background: #fff;
   border: none;
@@ -74,12 +84,13 @@
   box-shadow: 0px 6px 16px rgba(0, 0, 0, 0.45);
 }
 
+/* ===== LABELS ===== */
 .label {
   font-weight: bold;
   color: #000;
 }
 
-/* ===== BOTONES DE PERFIL ===== */
+/* ===== BOTONES DE PERFIL (DERECHA) ===== */
 .perfil-actions {
   display: flex;
   justify-content: center;
@@ -107,10 +118,32 @@
   box-shadow: 0px 6px 14px rgba(0, 0, 0, 0.45);
 }
 
+/* ===== ERRORES ===== */
+.error-msg {
+  color: #dc2626;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
 /* ===== TRANSICIONES SUAVES ===== */
 .perfil-card,
 .usuario-section,
 .nuevo-cliente-btn,
 .perfil-actions button {
   transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+/* ===== RESPONSIVO ===== */
+@media (max-width: 900px) {
+  .clientes-layout {
+    flex-direction: column;
+  }
+
+  .usuario-section {
+    margin-top: 20px;
+  }
+
+  .nuevo-cliente-btn {
+    font-size: 15px;
+  }
 }

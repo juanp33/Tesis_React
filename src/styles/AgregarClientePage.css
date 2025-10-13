@@ -1,0 +1,147 @@
+.agregar-cliente-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 80px);
+  background: #eaf3ff;
+}
+
+/* ===== CONTENEDOR PRINCIPAL (formulario incluido) ===== */
+.agregar-cliente-container {
+  width: 100%;
+  max-width: 600px;
+  background: #ffffff;
+  padding: 40px;
+  border-radius: 0;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.35); /* 🔹 sombra principal */
+  font-family: "Segoe UI", sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.agregar-cliente-container h2 {
+  text-align: center;
+  margin-bottom: 24px;
+  color: #1b1b1b;
+  font-size: 1.8rem;
+  font-weight: 600;
+}
+
+/* ===== FORMULARIO ===== */
+.agregar-cliente-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background: #fff;
+  padding: 20px 24px;
+  border-radius: 0;
+  box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.25); /* 🔹 sombra interna del formulario */
+}
+
+.agregar-cliente-form label {
+  font-weight: 600;
+  color: #333;
+}
+
+.agregar-cliente-form input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 0;
+  font-size: 15px;
+  transition: all 0.2s ease;
+}
+
+.agregar-cliente-form input:focus {
+  border-color: #4D8BFF;
+  outline: none;
+  box-shadow: 0px 3px 8px rgba(77, 139, 255, 0.4);
+}
+
+/* ===== BOTÓN ===== */
+.agregar-cliente-form button {
+  margin-top: 12px;
+  padding: 12px;
+  background: #4D8BFF;
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  border-radius: 0;
+  cursor: pointer;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.35);
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.agregar-cliente-form button:hover {
+  background: #3973E6;
+  transform: translateY(-2px);
+  box-shadow: 0px 6px 14px rgba(0, 0, 0, 0.45);
+}
+
+/* ===== MENSAJES ===== */
+.mensaje {
+  text-align: center;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+.mensaje.success {
+  color: #28a745;
+}
+
+.mensaje.error {
+  color: #dc2626;
+}
+
+/* ===== CLIENTES EXISTENTES ===== */
+.vincular-clientes {
+  width: 100%;
+  text-align: center;
+  margin-top: 40px;
+}
+
+.vincular-clientes h3 {
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.clientes-lista {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 16px;
+  width: 100%;
+  margin-top: 16px;
+}
+
+.cliente-card {
+  background: #fff;
+  border: none;
+  border-radius: 0;
+  padding: 14px;
+  box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.35);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.cliente-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0px 6px 14px rgba(0, 0, 0, 0.45);
+}
+
+.cliente-card button {
+  margin-top: 10px;
+  padding: 8px 12px;
+  font-size: 14px;
+  border: none;
+  border-radius: 0;
+  background: #28a745;
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.35);
+  transition: background 0.2s ease;
+}
+
+.cliente-card button:hover {
+  background: #1e7e34;
+}

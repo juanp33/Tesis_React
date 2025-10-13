@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import MasterPage from "./MasterPage";
-import "./AgregarClientePage.css";
+import "../styles/AgregarClientePage.css";
 
 interface Cliente {
   id: number;
@@ -23,11 +23,9 @@ const AgregarClientePage = () => {
 
   const token = localStorage.getItem("jwt");
 
-  // 🔹 Cargar clientes totales y clientes del abogado logueado
   useEffect(() => {
     if (!token) return;
 
-    // Todos los clientes
     fetch("http://localhost:8080/clientes/all", {
       headers: { Authorization: `Bearer ${token}` },
     })
@@ -35,7 +33,6 @@ const AgregarClientePage = () => {
       .then((data) => setTodosClientes(data))
       .catch(() => setTodosClientes([]));
 
-    // Mis clientes (asociados al abogado actual)
     fetch("http://localhost:8080/clientes", {
       headers: { Authorization: `Bearer ${token}` },
     })
@@ -44,7 +41,6 @@ const AgregarClientePage = () => {
       .catch(() => setMisClientes([]));
   }, [token]);
 
-  // 🔹 Filtrar clientes disponibles (los que no son del abogado)
   useEffect(() => {
     if (todosClientes.length > 0) {
       const misIds = new Set(misClientes.map((c) => c.id));
@@ -53,7 +49,6 @@ const AgregarClientePage = () => {
     }
   }, [todosClientes, misClientes]);
 
-  // 🔹 Guardar cliente nuevo
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!token) {
@@ -83,7 +78,6 @@ const AgregarClientePage = () => {
     }
   };
 
-  // 🔹 Vincular cliente existente
   const vincularCliente = async (clienteId: number) => {
     if (!token) {
       setMensaje("⚠️ No estás autenticado");
@@ -107,43 +101,54 @@ const AgregarClientePage = () => {
 
   return (
     <MasterPage>
-      <div className="agregar-cliente-container">
-        <h2> Agregar Cliente</h2>
-        {mensaje && <p className="mensaje">{mensaje}</p>}
+      <div className="agregar-cliente-wrapper">
+        <div className="agregar-cliente-container">
+          <h2>Agregar Cliente</h2>
+          {mensaje && <p className="mensaje">{mensaje}</p>}
 
-        {/* Formulario nuevo cliente */}
-        <form className="agregar-cliente-form" onSubmit={handleSubmit}>
-          <label>Nombre</label>
-          <input value={nombre} onChange={(e) => setNombre(e.target.value)} required />
+          <form className="agregar-cliente-form" onSubmit={handleSubmit}>
+            <label>Nombre</label>
+            <input value={nombre} onChange={(e) => setNombre(e.target.value)} required />
 
-          <label>Apellido</label>
-          <input value={apellido} onChange={(e) => setApellido(e.target.value)} required />
+            <label>Apellido</label>
+            <input value={apellido} onChange={(e) => setApellido(e.target.value)} required />
 
-          <label>CI</label>
-          <input value={ci} onChange={(e) => setCi(e.target.value)} required />
+            <label>CI</label>
+            <input value={ci} onChange={(e) => setCi(e.target.value)} required />
 
-          <label>Email</label>
-          <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+            <label>Email</label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
 
-          <button type="submit">Guardar Cliente</button>
-        </form>
+            <button type="submit">Guardar Cliente</button>
+          </form>
 
-        {/* Clientes disponibles para vincular */}
-        <h3> Vincular Cliente Existente</h3>
-        {clientesDisponibles.length > 0 ? (
-          <div className="clientes-lista">
-            {clientesDisponibles.map((c) => (
-              <div key={c.id} className="cliente-card">
-                <p><b>{c.nombre} {c.apellido}</b></p>
-                <p>CI: {c.ci}</p>
-                <p>Email: {c.email}</p>
-                <button onClick={() => vincularCliente(c.id)}>Vincular</button>
+          <div className="vincular-clientes">
+            <h3>Vincular Cliente Existente</h3>
+            {clientesDisponibles.length > 0 ? (
+              <div className="clientes-lista">
+                {clientesDisponibles.map((c) => (
+                  <div key={c.id} className="cliente-card">
+                    <p>
+                      <b>
+                        {c.nombre} {c.apellido}
+                      </b>
+                    </p>
+                    <p>CI: {c.ci}</p>
+                    <p>Email: {c.email}</p>
+                    <button onClick={() => vincularCliente(c.id)}>Vincular</button>
+                  </div>
+                ))}
               </div>
-            ))}
+            ) : (
+              <p>No hay clientes disponibles para vincular.</p>
+            )}
           </div>
-        ) : (
-          <p>No hay clientes disponibles para vincular.</p>
-        )}
+        </div>
       </div>
     </MasterPage>
   );

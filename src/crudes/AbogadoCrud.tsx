@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import type { ChangeEvent, FormEvent } from "react";
-import MasterPage from "../MasterPage";
+import MasterPage from "../pages/MasterPage";
 import "./shared.css";
 import { fetchWithAuth } from "../utils/fetchWithAuth";
 

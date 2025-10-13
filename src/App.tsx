@@ -1,25 +1,25 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import LoginPage from './LoginPage';
-import RegistroPage from './RegistroPage';
-import PerfilPage from './PerfilPage';
-import TranscripcionPage from './TranscripcionPage';
-import OCRPage from './OcrPage';
-import RedaccionAutomatica from './RedactorAutomatico';
+import LoginPage from './pages/LoginPage';
+import RegistroPage from './pages/RegistroPage';
+import PerfilPage from './pages/PerfilPage';
+import TranscripcionPage from './pages/TranscripcionPage';
+import OCRPage from './pages/OcrPage';
+import RedaccionAutomatica from './pages/RedactorAutomatico';
 import AuthGuard from "./components/AuthGuard";
-import ChatPage from './ChatPage';
+import ChatPage from './pages/ChatPage';
 
-import CasoDetallePage from './CasoDetallePage';
-import TransformarDocumento from './TransformarDocumento';
-import ResumenDocumentos from './ResumenDocumentos';
+import CasoDetallePage from './pages/CasoDetallePage';
+import TransformarDocumento from './pages/TransformarDocumento';
+import ResumenDocumentos from './pages/ResumenDocumentos';
 // CRUDs y utilidades
 import AbogadoCRUD from "./crudes/AbogadoCrud";
 import PermisoCRUD from "./crudes/PermisoCrud";
 import RolCRUD from "./crudes/RolCrud";
 import UsuarioCRUD from "./crudes/UsuarioCrud";
-import AgregarClientePage from './AgregarClientePage';
+import AgregarClientePage from './pages/AgregarClientePage';
 import AsignarPermisosPorRol from "./crudes/AsignarPermisosPorRol";
-import ClienteDetallePage from "./ClienteDetallePage";
-import NuevoCasoPage from "./NuevoCasoPage";
+import ClienteDetallePage from "./pages/ClienteDetallePage";
+import NuevoCasoPage from "./pages/NuevoCasoPage";
 function App() {
   return (
     <Router>

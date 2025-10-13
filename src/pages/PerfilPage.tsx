@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import MasterPage from "./MasterPage";
-import "./PerfilPage.css";
+import "../styles/PerfilPage.css";
 import { useNavigate } from "react-router-dom";
+
+// 🆕 Importamos el icono de "más"
+import MasIcon from "../assets/mas.png";
 
 interface Cliente {
   id: number;
@@ -33,23 +36,22 @@ const PerfilPage = () => {
       return;
     }
 
-    // cargar clientes del abogado autenticado
+    // Cargar clientes
     axios
       .get("http://localhost:8080/clientes", {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => {
-        console.log("Respuesta clientes:", res.data);
         if (Array.isArray(res.data)) {
           setClientes(res.data);
         } else {
-          setClientes([]); // fallback seguro
+          setClientes([]);
         }
       })
       .catch(() => setError("No se pudieron cargar los clientes"))
       .finally(() => setLoading(false));
 
-    // cargar usuario autenticado desde JWT
+    // Cargar usuario autenticado
     axios
       .get("http://localhost:8080/api/usuario/me", {
         headers: { Authorization: `Bearer ${token}` },
@@ -61,16 +63,17 @@ const PerfilPage = () => {
   return (
     <MasterPage>
       <div className="clientes-layout">
-        {/* Izquierda: Clientes */}
+        {/* IZQUIERDA - CLIENTES */}
         <div className="clientes-section">
           <h2>Clientes</h2>
 
-          {/* 🔹 Botón para agregar cliente */}
+          {/* 🆕 Botón con ícono */}
           <button
             className="nuevo-cliente-btn"
             onClick={() => navigate("/agregar-cliente")}
           >
-            ➕ Agregar Cliente
+            <img src={MasIcon} alt="Agregar" className="icono-mas" />
+            Agregar Cliente
           </button>
 
           {loading ? (
@@ -100,7 +103,7 @@ const PerfilPage = () => {
           )}
         </div>
 
-        {/* Derecha: Abogado logueado */}
+        {/* DERECHA - USUARIO */}
         <div className="usuario-section">
           <h2>Abogado</h2>
           {error && <p className="error-msg">{error}</p>}

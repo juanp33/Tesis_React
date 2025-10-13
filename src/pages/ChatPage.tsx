@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import MasterPage from "./MasterPage";
-import ChatSideBar from "./components/ChatSideBar";
-import ChatArea from "./components/ChatArea";
-import "./chatpage.css";
+import ChatSideBar from "../components/ChatSideBar";
+import ChatArea from "../components/ChatArea";
+import "../styles/chatpage.css";
 
 export default function ChatPage() {
   // Estado compartido entre ambos componentes

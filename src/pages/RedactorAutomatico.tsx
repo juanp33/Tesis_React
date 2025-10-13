@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useRef, useState, useEffect } from "react";
-import "./RedaccionAutomatica.css";
+import "../styles/RedaccionAutomatica.css";
 import MasterPage from "./MasterPage";
 
 const API_BASE: string = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000";
@@ -23,16 +23,24 @@ type ChatMsg = { role: "user" | "assistant"; text: string };
 // 🔹 DropZone simple (1 archivo)
 function DropZoneSingle({ accept, id, onFile }: DropZoneSingleProps) {
   const [dragOver, setDragOver] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   const onDrop = useCallback(
     (e: React.DragEvent<HTMLDivElement>) => {
       e.preventDefault();
       setDragOver(false);
       const f = e.dataTransfer.files?.[0] ?? null;
+      setSelectedFile(f);
       onFile(f);
     },
     [onFile]
   );
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const f = e.target.files?.[0] ?? null;
+    setSelectedFile(f);
+    onFile(f);
+  };
 
   return (
     <div className="ra-dropzone">
@@ -55,10 +63,16 @@ function DropZoneSingle({ accept, id, onFile }: DropZoneSingleProps) {
               id={id}
               type="file"
               accept={accept}
-              onChange={(e) => onFile(e.target.files?.[0] ?? null)}
+              onChange={handleChange}
               hidden
             />
           </label>
+
+          {selectedFile && (
+            <div className="ra-fileinfo">
+              Archivo seleccionado: <strong>{selectedFile.name}</strong>
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -68,19 +82,26 @@ function DropZoneSingle({ accept, id, onFile }: DropZoneSingleProps) {
 // 🔹 DropZone múltiple (varios archivos)
 function DropZoneMulti({ accept, id, onFiles }: DropZoneMultiProps) {
   const [dragOver, setDragOver] = useState(false);
-  const [names, setNames] = useState<string[]>([]);
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
 
   const handleFiles = (fl: FileList | null) => {
     const arr = fl ? Array.from(fl) : [];
-    setNames(arr.map((f) => f.name));
+    setSelectedFiles(arr);
     onFiles(arr);
   };
 
-  const onDrop = useCallback((e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    setDragOver(false);
-    handleFiles(e.dataTransfer.files);
-  }, []);
+  const onDrop = useCallback(
+    (e: React.DragEvent<HTMLDivElement>) => {
+      e.preventDefault();
+      setDragOver(false);
+      handleFiles(e.dataTransfer.files);
+    },
+    [onFiles]
+  );
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    handleFiles(e.target.files);
+  };
 
   return (
     <div className="ra-dropzone">
@@ -104,20 +125,28 @@ function DropZoneMulti({ accept, id, onFiles }: DropZoneMultiProps) {
               type="file"
               accept={accept}
               multiple
-              onChange={(e) => handleFiles(e.target.files)}
+              onChange={handleChange}
               hidden
             />
           </label>
 
-          {names.length > 0 && (
-            <div className="ra-filelist" aria-live="polite">
-              {names.slice(0, 5).map((n, i) => (
-                <div key={i} className="ra-fileitem">
-                  {n}
-                </div>
-              ))}
-              {names.length > 5 && (
-                <div className="ra-fileitem">+{names.length - 5} más…</div>
+          {/* ✅ Mostrar nombres igual que el DropZoneSingle */}
+          {selectedFiles.length > 0 && (
+            <div className="ra-fileinfo">
+              {selectedFiles.length === 1 ? (
+                <>
+                  Archivo seleccionado: <strong>{selectedFiles[0].name}</strong>
+                </>
+              ) : (
+                <>
+                  Archivos seleccionados:
+                  <br />
+                  {selectedFiles.map((file, i) => (
+                    <div key={i}>
+                      <strong>{file.name}</strong>
+                    </div>
+                  ))}
+                </>
               )}
             </div>
           )}
@@ -259,20 +288,18 @@ export default function RedaccionAutomatica() {
 
           {/* Dropzones lado a lado */}
           <div className="ra-dropzones">
-            <div className="ra-dropzones">
-  <DropZoneMulti
-    id="evid"
-    label=""
-    accept="application/pdf,.pdf"
-    onFiles={setEvidenceFiles}
-  />
-  <DropZoneSingle
-    id="tpl"
-    label=""
-    accept=".txt,.md,.doc,.docx,.rtf,.pdf,.html,.htm"
-    onFile={setTemplateFile}
-  />
-</div>
+            <DropZoneMulti
+              id="evid"
+              label=""
+              accept="application/pdf,.pdf"
+              onFiles={setEvidenceFiles}
+            />
+            <DropZoneSingle
+              id="tpl"
+              label=""
+              accept=".txt,.md,.doc,.docx,.rtf,.pdf,.html,.htm"
+              onFile={setTemplateFile}
+            />
           </div>
 
           {/* Instrucciones */}

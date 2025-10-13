@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import MasterPage from "./MasterPage";
-import "./NuevoCasoPage.css";
+import "../styles/NuevoCasoPage.css";
 const NuevoCasoPage = () => {
   const { id } = useParams<{ id: string }>(); // id del cliente
   const navigate = useNavigate();

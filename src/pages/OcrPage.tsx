@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import MasterPage from "./MasterPage";
-import "./OCRPage.css";
+import "../styles/OCRPage.css";
 
 const API_BASE: string = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000";
 
@@ -8,16 +8,22 @@ const OCRPage: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
   const [ocrUrl, setOcrUrl] = useState<string | null>(null);
+  const [error, setError] = useState<string>("");
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files?.[0]) {
       setFile(e.target.files[0]);
       setOcrUrl(null);
+      setError("");
     }
   };
 
   const handleOCR = async () => {
-    if (!file) return;
+    if (!file) {
+      setError("Subí un archivo primero.");
+      return;
+    }
+
     setLoading(true);
     const formData = new FormData();
     formData.append("archivo", file);
@@ -34,7 +40,7 @@ const OCRPage: React.FC = () => {
       const url = URL.createObjectURL(blob);
       setOcrUrl(url);
     } catch (error) {
-      alert("Error procesando el archivo OCR");
+      setError("Error procesando el archivo OCR.");
     } finally {
       setLoading(false);
     }
@@ -64,6 +70,13 @@ const OCRPage: React.FC = () => {
             </div>
           </div>
 
+          {/* ✅ Mostrar nombre del archivo seleccionado */}
+          {file && (
+            <div className="ocr-file-info">
+              Archivo seleccionado: <strong>{file.name}</strong>
+            </div>
+          )}
+
           <button
             className="ocr-btn"
             onClick={handleOCR}
@@ -72,6 +85,10 @@ const OCRPage: React.FC = () => {
             {loading ? "Procesando…" : "Convertir OCR"}
           </button>
 
+          {/* ✅ Mensaje de error */}
+          {error && <div className="ocr-error">{error}</div>}
+
+          {/* ✅ Resultado y enlace de descarga */}
           {ocrUrl && (
             <div className="ocr-result">
               <iframe src={ocrUrl} title="Resultado OCR" className="ocr-iframe" />

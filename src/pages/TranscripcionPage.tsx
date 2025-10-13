@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import MasterPage from "./MasterPage";
-import "./TranscripcionPage.css";
+import "../styles/TranscripcionPage.css";
 import { jsPDF } from "jspdf";
-import micIcon from "./assets/mic-icon.png"; // o la ruta correcta si estás en /pages/
+import micIcon from "../assets/mic-icon.png"; // o la ruta correcta si estás en /pages/
 
 
 const TranscripcionPage = () => {

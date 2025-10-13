@@ -136,6 +136,27 @@
   box-shadow: 0px 6px 14px rgba(0, 0, 0, 0.45);
 }
 
+/* ======= ARCHIVOS SELECCIONADOS ======= */
+.ra-fileinfo {
+  margin-top: 12px;
+  font-size: 14px;
+  color: #000;
+  text-align: center;
+}
+
+.ra-filelist {
+  list-style: none;
+  padding: 0;
+  margin: 6px 0 0 0;
+  font-size: 13px;
+  color: #111;
+  text-align: center;
+}
+
+.ra-filelist li {
+  margin-bottom: 2px;
+}
+
 /* ======= TEXTAREA ======= */
 .ra-textarea {
   width: 100%;

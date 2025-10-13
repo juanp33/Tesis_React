@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import MasterPage from "./MasterPage";
-import "./ResumenDocumentos.css";
+import "../styles/ResumenDocumentos.css";
 import { jsPDF } from "jspdf";
 
 const API_BASE: string = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000";
