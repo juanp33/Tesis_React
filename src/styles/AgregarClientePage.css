@@ -6,14 +6,14 @@
   background: #eaf3ff;
 }
 
-/* ===== CONTENEDOR PRINCIPAL (formulario incluido) ===== */
+
 .agregar-cliente-container {
   width: 100%;
   max-width: 600px;
   background: #ffffff;
   padding: 40px;
   border-radius: 0;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.35); /* 🔹 sombra principal */
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.35); 
   font-family: "Segoe UI", sans-serif;
   display: flex;
   flex-direction: column;

@@ -47,7 +47,7 @@ const ClienteDetallePage = () => {
       return;
     }
 
-    // Cargar cliente
+
     axios
       .get(`http://localhost:8080/clientes/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
@@ -55,7 +55,7 @@ const ClienteDetallePage = () => {
       .then((res) => setCliente(res.data))
       .catch(() => setError("Error al cargar el cliente"));
 
-    // Cargar casos
+
     axios
       .get(`http://localhost:8080/clientes/${id}/casos`, {
         headers: { Authorization: `Bearer ${token}` },
@@ -73,7 +73,6 @@ const ClienteDetallePage = () => {
       .finally(() => setLoading(false));
   }, [id]);
 
-  // 🔹 Descarga de archivo con token
   const fetchArchivo = async (casoId: number, archivo: ArchivoCaso) => {
     const token = localStorage.getItem("jwt");
     try {
@@ -104,7 +103,6 @@ const ClienteDetallePage = () => {
   return (
     <MasterPage>
       <div className="cliente-detalle-layout">
-        {/* Casos */}
         <div className="casos-section">
           <h2>📂 Casos</h2>
 
@@ -128,7 +126,6 @@ const ClienteDetallePage = () => {
                   <p><b>Abogado:</b> {caso.abogado}</p>
                   <p><b>Fecha:</b> {new Date(caso.fechaCreacion).toLocaleString()}</p>
 
-                  {/* Archivos */}
                   <h4>Archivos:</h4>
                   {caso.archivos && caso.archivos.length > 0 ? (
                     <ul>
@@ -140,7 +137,7 @@ const ClienteDetallePage = () => {
                               download={a.nombreArchivo}
                               target="_blank"
                               rel="noopener noreferrer"
-                              onClick={(e) => e.stopPropagation()} // no dispara navigate
+                              onClick={(e) => e.stopPropagation()} 
                             >
                               {a.nombreArchivo}
                             </a>
@@ -166,7 +163,6 @@ const ClienteDetallePage = () => {
           </button>
         </div>
 
-        {/* Cliente info */}
         <div className="cliente-info-section">
           <h2>👤 Información del Cliente</h2>
           {cliente ? (

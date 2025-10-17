@@ -83,13 +83,12 @@ const TranscripcionPage = () => {
       <h1 className="titulo-principal">Transcripción de Audio</h1>
 
       <div className="transcripcion-layout">
-        {/* Panel izquierdo */}
         <div className="panel-contenedor">
           <p className="descripcion">
             Subí un archivo de audio para generar la transcripción diarizada.
           </p>
 
-          {/* Caja de subida */}
+
           <div
             className="upload-box"
             onClick={() => fileInputRef.current?.click()}
@@ -114,7 +113,6 @@ const TranscripcionPage = () => {
             />
           </div>
 
-          {/* Nombre del archivo seleccionado */}
           {file && (
             <p className="archivo-seleccionado">
               Archivo seleccionado:{" "}
@@ -131,7 +129,6 @@ const TranscripcionPage = () => {
           </button>
         </div>
 
-        {/* Panel derecho */}
         <div className="transcripcion-output">
           <textarea
             className="transcripcion-textarea"

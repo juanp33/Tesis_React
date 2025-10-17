@@ -20,7 +20,7 @@ const LoginPage = () => {
       const token = response.data.token;
       localStorage.setItem('jwt', token);
       alert('Inicio de sesión exitoso');
-      navigate("/perfil"); // ✅ redirección al perfil
+      navigate("/perfil"); 
 
     } catch (err) {
       console.log(err);

@@ -24,7 +24,7 @@ export default function ChatArea({ chatId }: ChatAreaProps) {
   const [isLoading, setIsLoading] = useState(false);
   const chatEndRef = useRef<HTMLDivElement | null>(null);
 
-  // 🔹 Cargar mensajes cuando se selecciona un chat
+
   useEffect(() => {
     if (!chatId) return;
     const token = localStorage.getItem("jwt");
@@ -47,12 +47,10 @@ export default function ChatArea({ chatId }: ChatAreaProps) {
       );
   }, [chatId]);
 
-  // 🔸 Eliminar un archivo antes de enviar
   const removeFile = (index: number) => {
     setAttachedFiles((prev) => prev.filter((_, i) => i !== index));
   };
 
-  // 🔸 Enviar mensaje y placeholder
   const sendMessage = async () => {
     if (!chatId || (!message.trim() && attachedFiles.length === 0)) return;
     setIsLoading(true);
@@ -124,7 +122,6 @@ export default function ChatArea({ chatId }: ChatAreaProps) {
               {msg.content}
             </div>
 
-            {/* Archivos adjuntos dentro del mensaje */}
             {msg.files && msg.files.length > 0 && (
               <div className="attached-preview" style={{ marginTop: "5px" }}>
                 {msg.files.map((file, idx) => (
@@ -141,7 +138,6 @@ export default function ChatArea({ chatId }: ChatAreaProps) {
 
       <div className="input-bar">
         <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
-          {/* ✅ Vista previa con opción de eliminar */}
           {attachedFiles.length > 0 && (
             <div className="attached-preview">
               {attachedFiles.map((file, idx) => (

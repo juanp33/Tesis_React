@@ -2,7 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import "../styles/RegistroPage.css";
 import { useNavigate } from "react-router-dom";
-import LogoNegro from "../assets/logo-negro.png"; // ✅ Ajustá la ruta según tu estructura
+import LogoNegro from "../assets/logo-negro.png"; 
 
 const RegistroPage = () => {
   const [username, setUsername] = useState("");

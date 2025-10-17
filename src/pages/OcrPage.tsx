@@ -70,7 +70,6 @@ const OCRPage: React.FC = () => {
             </div>
           </div>
 
-          {/* ✅ Mostrar nombre del archivo seleccionado */}
           {file && (
             <div className="ocr-file-info">
               Archivo seleccionado: <strong>{file.name}</strong>
@@ -85,10 +84,8 @@ const OCRPage: React.FC = () => {
             {loading ? "Procesando…" : "Convertir OCR"}
           </button>
 
-          {/* ✅ Mensaje de error */}
           {error && <div className="ocr-error">{error}</div>}
 
-          {/* ✅ Resultado y enlace de descarga */}
           {ocrUrl && (
             <div className="ocr-result">
               <iframe src={ocrUrl} title="Resultado OCR" className="ocr-iframe" />

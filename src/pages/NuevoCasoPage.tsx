@@ -4,7 +4,7 @@ import axios from "axios";
 import MasterPage from "./MasterPage";
 import "../styles/NuevoCasoPage.css";
 const NuevoCasoPage = () => {
-  const { id } = useParams<{ id: string }>(); // id del cliente
+  const { id } = useParams<{ id: string }>(); 
   const navigate = useNavigate();
 
   const [titulo, setTitulo] = useState("");
@@ -42,7 +42,7 @@ const NuevoCasoPage = () => {
         },
       });
 
-      navigate(`/clientes/${id}`); // volver al detalle del cliente
+      navigate(`/clientes/${id}`); 
     } catch {
       setError("No se pudo crear el caso");
     }

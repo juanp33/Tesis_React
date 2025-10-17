@@ -4,7 +4,7 @@ import MasterPage from "./MasterPage";
 import "../styles/PerfilPage.css";
 import { useNavigate } from "react-router-dom";
 
-// 🆕 Importamos el icono de "más"
+
 import MasIcon from "../assets/mas.png";
 
 interface Cliente {
@@ -63,11 +63,9 @@ const PerfilPage = () => {
   return (
     <MasterPage>
       <div className="clientes-layout">
-        {/* IZQUIERDA - CLIENTES */}
         <div className="clientes-section">
           <h2>Clientes</h2>
 
-          {/* 🆕 Botón con ícono */}
           <button
             className="nuevo-cliente-btn"
             onClick={() => navigate("/agregar-cliente")}
@@ -103,7 +101,6 @@ const PerfilPage = () => {
           )}
         </div>
 
-        {/* DERECHA - USUARIO */}
         <div className="usuario-section">
           <h2>Abogado</h2>
           {error && <p className="error-msg">{error}</p>}

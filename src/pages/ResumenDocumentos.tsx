@@ -93,12 +93,10 @@ const ResumenDocumentos = () => {
   return (
     <MasterPage>
       <div className="resumen-page">
-        {/* Izquierda */}
         <div className="resumen-left">
           <h2>Resumir Documentos</h2>
           <p className="descripcion">Subí tus documentos para generar resúmenes y un informe consolidado.</p>
 
-          {/* Caja de subida tipo botón */}
           <div className="upload-box" onClick={() => fileInputRef.current?.click()}>
             <div className="upload-icon">📄</div>
             <div className="upload-text">Arrastrá o seleccioná tus archivos</div>
@@ -130,7 +128,6 @@ const ResumenDocumentos = () => {
           {error && <div className="resumen-error">{error}</div>}
         </div>
 
-        {/* Derecha */}
         <div className="resumen-right">
           {resumenes.length > 0 && (
             <div>
@@ -151,7 +148,6 @@ const ResumenDocumentos = () => {
             </div>
           )}
 
-          {/* Botón Exportar PDF */}
           {(resumenes.length > 0 || informe) && (
             <button className="resumen-btn export-btn" onClick={handleExportPDF}>
               Exportar PDF

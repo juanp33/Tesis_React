@@ -20,7 +20,7 @@ type DropZoneMultiProps = {
 
 type ChatMsg = { role: "user" | "assistant"; text: string };
 
-// 🔹 DropZone simple (1 archivo)
+// DropZone simple (1 archivo)
 function DropZoneSingle({ accept, id, onFile }: DropZoneSingleProps) {
   const [dragOver, setDragOver] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -79,7 +79,7 @@ function DropZoneSingle({ accept, id, onFile }: DropZoneSingleProps) {
   );
 }
 
-// 🔹 DropZone múltiple (varios archivos)
+
 function DropZoneMulti({ accept, id, onFiles }: DropZoneMultiProps) {
   const [dragOver, setDragOver] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
@@ -130,7 +130,6 @@ function DropZoneMulti({ accept, id, onFiles }: DropZoneMultiProps) {
             />
           </label>
 
-          {/* ✅ Mostrar nombres igual que el DropZoneSingle */}
           {selectedFiles.length > 0 && (
             <div className="ra-fileinfo">
               {selectedFiles.length === 1 ? (
@@ -183,7 +182,6 @@ export default function RedaccionAutomatica() {
     []
   );
 
-  // ======= GENERAR DOCUMENTO =======
   const handleGenerate = async () => {
     setError("");
     setChatId("");
@@ -231,7 +229,6 @@ export default function RedaccionAutomatica() {
     setChatMsgs([{ role: "assistant", text: json.respuesta }]);
   };
 
-  // ======= CHAT =======
   const sendChat = async () => {
     if (!chatId || !chatInput.trim()) return;
     const msg = chatInput.trim();
@@ -257,7 +254,6 @@ export default function RedaccionAutomatica() {
     }
   };
 
-  // ======= COPIAR ENLACE PDF =======
   const copyLink = async () => {
     if (!pdfSrc) return;
     try {
@@ -265,12 +261,10 @@ export default function RedaccionAutomatica() {
     } catch {}
   };
 
-  // ======= UI =======
   return (
     <MasterPage>
       <div className="ra-page">
         <div className="ra-top">
-          {/* Selector de tipo de documento */}
           <div className="ra-selectWrap">
             <select
               className="ra-select"
@@ -286,7 +280,6 @@ export default function RedaccionAutomatica() {
             </select>
           </div>
 
-          {/* Dropzones lado a lado */}
           <div className="ra-dropzones">
             <DropZoneMulti
               id="evid"
@@ -302,7 +295,6 @@ export default function RedaccionAutomatica() {
             />
           </div>
 
-          {/* Instrucciones */}
           <textarea
             className="ra-textarea"
             placeholder="Instrucciones"
@@ -310,7 +302,6 @@ export default function RedaccionAutomatica() {
             onChange={(e) => setInstructions(e.target.value)}
           />
 
-          {/* Botón */}
           <div className="ra-right__actions">
             <button
               onClick={handleGenerate}
@@ -324,7 +315,6 @@ export default function RedaccionAutomatica() {
           {error && <div className="ra-error">{error}</div>}
         </div>
 
-        {/* PDF y Chat */}
         <div className="ra-bottom">
           <div className="ra-pdfWrap">
             {pdfSrc ? (

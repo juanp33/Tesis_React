@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "../styles/TransformarDocumento.css";
-import MasterPage from "./MasterPage";  // 🔑 importa el layout principal
+import MasterPage from "./MasterPage"; 
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000";
 

@@ -7,7 +7,7 @@ import { fetchWithAuth } from "../utils/FetchWithAuth";
 interface Usuario {
   id?: number;
   username: string;
-  password?: string; // ahora opcional para poder actualizar sin error
+  password?: string; 
   email: string;
   abogadoId?: number;
 }
@@ -52,7 +52,6 @@ const UsuarioCRUD: React.FC = () => {
       const method = editId ? "PUT" : "POST";
       const url = editId ? `${API_URL}/${editId}` : API_URL;
 
-      // si no se envía contraseña al editar, se elimina del body
       const payload = { ...form };
       if (editId && !payload.password) delete payload.password;
 
@@ -203,7 +202,6 @@ const UsuarioCRUD: React.FC = () => {
           )}
         </div>
 
-        {/* MODAL DE CONFIRMACIÓN */}
         {showModal && usuarioToDelete && (
           <div className="modal-overlay">
             <div className="modal">

@@ -58,9 +58,7 @@ const AbogadoCRUD: React.FC = () => {
     }
   };
 
-  /** Algoritmo válido para cédulas uruguayas (DNIC) */
   const validateUruguayanCI = (ci: string): boolean => {
-    // Limpiar y normalizar
     let digits = ci.replace(/\D/g, "");
     if (digits.length < 7 || digits.length > 8) return false;
     if (digits.length === 7) digits = "0" + digits;

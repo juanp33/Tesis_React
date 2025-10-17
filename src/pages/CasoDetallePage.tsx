@@ -48,7 +48,7 @@ const CasoDetallePage = () => {
       .finally(() => setLoading(false));
   }, [id]);
 
-  // 🔹 Actualizar caso
+  // Actualizar caso
   const actualizarCaso = () => {
     if (!caso) return;
     axios
@@ -63,7 +63,7 @@ const CasoDetallePage = () => {
       .catch(() => setError("Error al actualizar el caso"));
   };
 
-  // 🔹 Cambiar estado
+  // Cambiar estado
   const cambiarEstado = (estado: string) => {
     if (!caso) return;
     setCaso({ ...caso, estado });
@@ -81,7 +81,7 @@ const CasoDetallePage = () => {
       .catch(() => setError("Error al cambiar estado"));
   };
 
-  // 🔹 Subir archivo
+  // Subir archivo
   const subirArchivo = () => {
     if (!nuevoArchivo) return;
     const formData = new FormData();
@@ -102,7 +102,7 @@ const CasoDetallePage = () => {
       .catch(() => setError("Error al subir archivo"));
   };
 
-  // 🔹 Eliminar caso
+
   const eliminarCaso = () => {
     axios
       .delete(`http://localhost:8080/casos/${id}`, {
@@ -192,7 +192,7 @@ const CasoDetallePage = () => {
           <p>No se encontró el caso</p>
         )}
 
-        {/* Mensajes */}
+
         {error && <p className="error-msg">{error}</p>}
         {success && <p className="success-msg">{success}</p>}
       </div>
