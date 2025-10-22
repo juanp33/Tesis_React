@@ -16,6 +16,8 @@ const PermisoCRUD: React.FC = () => {
   const [permisos, setPermisos] = useState<Permiso[]>([]);
   const [form, setForm] = useState<Permiso>({ nombre: "", descripcion: "" });
   const [editId, setEditId] = useState<number | null>(null);
+  const [showModal, setShowModal] = useState(false);
+  const [permisoToDelete, setPermisoToDelete] = useState<Permiso | null>(null);
 
   useEffect(() => {
     fetchPermisos();
@@ -60,12 +62,20 @@ const PermisoCRUD: React.FC = () => {
     setEditId(permiso.id ?? null);
   };
 
-  const handleDelete = async (id?: number) => {
-    if (!id) return;
-    if (!window.confirm("¿Está seguro que desea eliminar este permiso?")) return;
+  const confirmDelete = (permiso: Permiso) => {
+    setPermisoToDelete(permiso);
+    setShowModal(true);
+  };
+
+  const handleDeleteConfirmed = async () => {
+    if (!permisoToDelete?.id) return;
     try {
-      const res = await fetchWithAuth(`${API_URL}/${id}`, { method: "DELETE" });
+      const res = await fetchWithAuth(`${API_URL}/${permisoToDelete.id}`, {
+        method: "DELETE",
+      });
       if (!res.ok) throw new Error(`Error DELETE: ${res.status}`);
+      setShowModal(false);
+      setPermisoToDelete(null);
       await fetchPermisos();
     } catch (err) {
       console.error(err);
@@ -137,7 +147,7 @@ const PermisoCRUD: React.FC = () => {
                       </button>
                       <button
                         className="btn-delete"
-                        onClick={() => handleDelete(permiso.id)}
+                        onClick={() => confirmDelete(permiso)}
                       >
                         Eliminar
                       </button>
@@ -148,6 +158,39 @@ const PermisoCRUD: React.FC = () => {
             </table>
           )}
         </div>
+
+        {/* 🔹 Modal elegante de confirmación */}
+        {showModal && permisoToDelete && (
+          <div className="modal-overlay">
+            <div className="modal">
+              <div className="modal-header">
+                <span className="modal-icon">⚠️</span>
+                <h3 className="modal-title">Confirmar eliminación</h3>
+              </div>
+              <p className="modal-text">
+                Esta acción eliminará el permiso de forma permanente.
+              </p>
+
+              <div className="modal-info">
+                <p><strong>ID:</strong> {permisoToDelete.id}</p>
+                <p><strong>Nombre:</strong> {permisoToDelete.nombre}</p>
+                <p><strong>Descripción:</strong> {permisoToDelete.descripcion}</p>
+              </div>
+
+              <div className="modal-buttons">
+                <button className="btn-danger" onClick={handleDeleteConfirmed}>
+                  Sí, eliminar
+                </button>
+                <button
+                  className="btn-secondary"
+                  onClick={() => setShowModal(false)}
+                >
+                  Cancelar
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </MasterPage>
   );

@@ -14,6 +14,8 @@ const RolCRUD: React.FC = () => {
   const [roles, setRoles] = useState<Rol[]>([]);
   const [form, setForm] = useState<Rol>({ nombre: "" });
   const [editId, setEditId] = useState<number | null>(null);
+  const [showModal, setShowModal] = useState(false);
+  const [rolToDelete, setRolToDelete] = useState<Rol | null>(null);
 
   const getAuthHeaders = () => {
     const token = localStorage.getItem("jwt");
@@ -23,7 +25,6 @@ const RolCRUD: React.FC = () => {
     };
   };
 
-  // Carga inicial
   useEffect(() => {
     loadRoles();
   }, []);
@@ -71,15 +72,21 @@ const RolCRUD: React.FC = () => {
     setEditId(r.id ?? null);
   };
 
-  const handleDelete = async (id?: number) => {
-    if (!id) return;
-    if (!window.confirm("¿Está seguro que desea eliminar este rol?")) return;
+  const confirmDelete = (r: Rol) => {
+    setRolToDelete(r);
+    setShowModal(true);
+  };
+
+  const handleDeleteConfirmed = async () => {
+    if (!rolToDelete?.id) return;
     try {
-      const res = await fetch(`${BASE_URL}/${id}`, {
+      const res = await fetch(`${BASE_URL}/${rolToDelete.id}`, {
         method: "DELETE",
         headers: getAuthHeaders(),
       });
       if (!res.ok) throw new Error(`DELETE roles ${res.status}`);
+      setShowModal(false);
+      setRolToDelete(null);
       await loadRoles();
     } catch (err) {
       console.error("Error al eliminar rol:", err);
@@ -143,7 +150,7 @@ const RolCRUD: React.FC = () => {
                       </button>
                       <button
                         className="btn-delete"
-                        onClick={() => handleDelete(r.id)}
+                        onClick={() => confirmDelete(r)}
                       >
                         Eliminar
                       </button>
@@ -154,6 +161,35 @@ const RolCRUD: React.FC = () => {
             </table>
           )}
         </div>
+
+        {/* 🔹 Modal profesional de confirmación */}
+        {showModal && rolToDelete && (
+          <div className="modal-overlay">
+            <div className="modal">
+              <h3 className="modal-title">Confirmar eliminación</h3>
+              <p className="modal-text">
+                ¿Estás seguro de que deseas eliminar este rol?
+              </p>
+
+              <div className="modal-info">
+                <p><strong>ID:</strong> {rolToDelete.id}</p>
+                <p><strong>Nombre:</strong> {rolToDelete.nombre}</p>
+              </div>
+
+              <div className="modal-buttons">
+                <button className="btn-danger" onClick={handleDeleteConfirmed}>
+                  Sí, eliminar rol
+                </button>
+                <button
+                  className="btn-secondary"
+                  onClick={() => setShowModal(false)}
+                >
+                  Cancelar
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </MasterPage>
   );
