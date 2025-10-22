@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import type { ChangeEvent, FormEvent } from "react";
 import MasterPage from "../pages/MasterPage";
-import "./shared.css";
+import "./PermisosCrud.css";
 import { fetchWithAuth } from "../utils/FetchWithAuth";
 
 interface Permiso {
@@ -47,7 +47,6 @@ const PermisoCRUD: React.FC = () => {
         body: JSON.stringify(form),
       });
       if (!res.ok) throw new Error(`Error ${method}: ${res.status}`);
-      // Limpiar formulario y modo edición
       setEditId(null);
       setForm({ nombre: "", descripcion: "" });
       await fetchPermisos();
@@ -63,6 +62,7 @@ const PermisoCRUD: React.FC = () => {
 
   const handleDelete = async (id?: number) => {
     if (!id) return;
+    if (!window.confirm("¿Está seguro que desea eliminar este permiso?")) return;
     try {
       const res = await fetchWithAuth(`${API_URL}/${id}`, { method: "DELETE" });
       if (!res.ok) throw new Error(`Error DELETE: ${res.status}`);
@@ -74,14 +74,15 @@ const PermisoCRUD: React.FC = () => {
 
   return (
     <MasterPage>
-      <div>
-        <h2>Gestión de Permisos</h2>
-        <form onSubmit={handleSubmit}>
+      <div className="permiso-container">
+        <h2 className="permiso-title">Gestión de Permisos</h2>
+
+        <form className="permiso-form" onSubmit={handleSubmit}>
           <input
             name="nombre"
             value={form.nombre}
             onChange={handleChange}
-            placeholder="Nombre"
+            placeholder="Nombre del permiso"
             required
           />
           <input
@@ -91,34 +92,62 @@ const PermisoCRUD: React.FC = () => {
             placeholder="Descripción"
             required
           />
-          <button type="submit">{editId ? "Actualizar" : "Crear"}</button>
+          <button type="submit" className="btn-primary">
+            {editId ? "Actualizar" : "Crear"}
+          </button>
           {editId && (
             <button
               type="button"
+              className="btn-secondary"
               onClick={() => {
                 setEditId(null);
                 setForm({ nombre: "", descripcion: "" });
               }}
-              style={{ marginLeft: 8 }}
             >
               Cancelar
             </button>
           )}
         </form>
 
-        <ul>
-          {permisos.map((permiso) => (
-            <li key={permiso.id}>
-              <strong>{permiso.nombre}</strong> — {permiso.descripcion}
-              <button onClick={() => handleEdit(permiso)} style={{ marginLeft: 12 }}>
-                ✎
-              </button>
-              <button onClick={() => handleDelete(permiso.id)} style={{ marginLeft: 4 }}>
-                🗑️
-              </button>
-            </li>
-          ))}
-        </ul>
+        <div className="permiso-list">
+          {permisos.length === 0 ? (
+            <p className="no-data">No hay permisos registrados.</p>
+          ) : (
+            <table className="permiso-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Nombre</th>
+                  <th>Descripción</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                {permisos.map((permiso) => (
+                  <tr key={permiso.id}>
+                    <td>{permiso.id}</td>
+                    <td>{permiso.nombre}</td>
+                    <td>{permiso.descripcion}</td>
+                    <td className="actions">
+                      <button
+                        className="btn-edit"
+                        onClick={() => handleEdit(permiso)}
+                      >
+                        Editar
+                      </button>
+                      <button
+                        className="btn-delete"
+                        onClick={() => handleDelete(permiso.id)}
+                      >
+                        Eliminar
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </div>
       </div>
     </MasterPage>
   );

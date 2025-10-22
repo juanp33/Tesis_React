@@ -1,8 +1,7 @@
-// src/crudes/RolCRUD.tsx
 import React, { useEffect, useState } from "react";
 import type { ChangeEvent, FormEvent } from "react";
 import MasterPage from "../pages/MasterPage";
-import "./shared.css";
+import "./RolCrud.css";
 
 interface Rol {
   id?: number;
@@ -74,7 +73,7 @@ const RolCRUD: React.FC = () => {
 
   const handleDelete = async (id?: number) => {
     if (!id) return;
-    if (!window.confirm("¿Eliminar este rol?")) return;
+    if (!window.confirm("¿Está seguro que desea eliminar este rol?")) return;
     try {
       const res = await fetch(`${BASE_URL}/${id}`, {
         method: "DELETE",
@@ -89,40 +88,73 @@ const RolCRUD: React.FC = () => {
 
   return (
     <MasterPage>
-      <h2>Gestión de Roles</h2>
+      <div className="roles-container">
+        <h2 className="roles-title">Gestión de Roles</h2>
 
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          name="nombre"
-          value={form.nombre}
-          onChange={handleChange}
-          placeholder="Nombre del Rol"
-          required
-        />
-        <button type="submit">{editId ? "Actualizar" : "Crear"}</button>
-        {editId && (
-          <button
-            type="button"
-            onClick={() => {
-              setEditId(null);
-              setForm({ nombre: "" });
-            }}
-          >
-            Cancelar
+        <form className="roles-form" onSubmit={handleSubmit}>
+          <input
+            type="text"
+            name="nombre"
+            value={form.nombre}
+            onChange={handleChange}
+            placeholder="Nombre del rol"
+            required
+          />
+          <button type="submit" className="btn-primary">
+            {editId ? "Actualizar" : "Crear"}
           </button>
-        )}
-      </form>
+          {editId && (
+            <button
+              type="button"
+              className="btn-secondary"
+              onClick={() => {
+                setEditId(null);
+                setForm({ nombre: "" });
+              }}
+            >
+              Cancelar
+            </button>
+          )}
+        </form>
 
-      <ul>
-        {roles.map((r) => (
-          <li key={r.id}>
-            <span>{r.nombre}</span>
-            <button onClick={() => startEdit(r)}>✎</button>
-            <button onClick={() => handleDelete(r.id)}>🗑️</button>
-          </li>
-        ))}
-      </ul>
+        <div className="roles-list">
+          {roles.length === 0 ? (
+            <p className="no-data">No hay roles registrados.</p>
+          ) : (
+            <table className="roles-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Nombre</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                {roles.map((r) => (
+                  <tr key={r.id}>
+                    <td>{r.id}</td>
+                    <td>{r.nombre}</td>
+                    <td className="actions">
+                      <button
+                        className="btn-edit"
+                        onClick={() => startEdit(r)}
+                      >
+                        Editar
+                      </button>
+                      <button
+                        className="btn-delete"
+                        onClick={() => handleDelete(r.id)}
+                      >
+                        Eliminar
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </div>
+      </div>
     </MasterPage>
   );
 };
