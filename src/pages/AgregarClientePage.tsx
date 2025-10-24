@@ -23,6 +23,40 @@ const AgregarClientePage = () => {
 
   const token = localStorage.getItem("jwt");
 
+  // ===================== VALIDACIONES =====================
+  const soloLetras = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/;
+
+  const validarNombre = (valor: string) => {
+    if (!soloLetras.test(valor)) return "❌ Solo se permiten letras";
+    if (valor.trim().length < 3) return "❌ Debe tener al menos 3 letras";
+    return "";
+  };
+
+  const validarApellido = (valor: string) => {
+    if (!soloLetras.test(valor)) return "❌ Solo se permiten letras";
+    if (valor.trim().length < 3) return "❌ Debe tener al menos 3 letras";
+    return "";
+  };
+
+  const validarCIUruguaya = (ci: string) => {
+    const clean = ci.replace(/\D/g, "");
+    if (clean.length < 7 || clean.length > 8) return false;
+    const digits = clean.padStart(8, "0").split("").map(Number);
+    const checkDigit = digits[7];
+    const multipliers = [2, 9, 8, 7, 6, 3, 4];
+    const sum = multipliers.reduce((acc, m, i) => acc + m * digits[i], 0);
+    const mod = sum % 10;
+    const expected = mod === 0 ? 0 : 10 - mod;
+    return checkDigit === expected;
+  };
+
+  const validarEmail = (valor: string) => {
+    if (!valor.includes("@")) return "❌ El email debe contener '@'";
+    return "";
+  };
+
+  // =========================================================
+
   useEffect(() => {
     if (!token) return;
 
@@ -51,6 +85,23 @@ const AgregarClientePage = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setMensaje("");
+
+    // Validaciones antes de enviar
+    const errNombre = validarNombre(nombre);
+    const errApellido = validarApellido(apellido);
+    const errEmail = validarEmail(email);
+
+    if (errNombre) return setMensaje(errNombre);
+    if (errApellido) return setMensaje(errApellido);
+    if (!validarCIUruguaya(ci)) return setMensaje("❌ Cédula uruguaya inválida");
+
+    // Verificar duplicado
+    const ciExistente = todosClientes.some((c) => c.ci === ci);
+    if (ciExistente) return setMensaje("⚠️ Ya existe un cliente con esa cédula");
+
+    if (errEmail) return setMensaje(errEmail);
+
     if (!token) {
       setMensaje("⚠️ No estás autenticado");
       return;
@@ -85,10 +136,13 @@ const AgregarClientePage = () => {
     }
 
     try {
-      const response = await fetch(`http://localhost:8080/clientes/${clienteId}/vincular`, {
-        method: "POST",
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await fetch(
+        `http://localhost:8080/clientes/${clienteId}/vincular`,
+        {
+          method: "POST",
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
 
       if (!response.ok) throw new Error("Error al vincular cliente");
 
@@ -108,13 +162,25 @@ const AgregarClientePage = () => {
 
           <form className="agregar-cliente-form" onSubmit={handleSubmit}>
             <label>Nombre</label>
-            <input value={nombre} onChange={(e) => setNombre(e.target.value)} required />
+            <input
+              value={nombre}
+              onChange={(e) => setNombre(e.target.value)}
+              required
+            />
 
             <label>Apellido</label>
-            <input value={apellido} onChange={(e) => setApellido(e.target.value)} required />
+            <input
+              value={apellido}
+              onChange={(e) => setApellido(e.target.value)}
+              required
+            />
 
             <label>CI</label>
-            <input value={ci} onChange={(e) => setCi(e.target.value)} required />
+            <input
+              value={ci}
+              onChange={(e) => setCi(e.target.value)}
+              required
+            />
 
             <label>Email</label>
             <input

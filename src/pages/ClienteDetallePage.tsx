@@ -37,6 +37,8 @@ const ClienteDetallePage = () => {
   const [archivosUrls, setArchivosUrls] = useState<Record<number, string>>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [mensaje, setMensaje] = useState("");
+  const [showConfirm, setShowConfirm] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -47,14 +49,12 @@ const ClienteDetallePage = () => {
       return;
     }
 
-
     axios
       .get(`http://localhost:8080/clientes/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => setCliente(res.data))
       .catch(() => setError("Error al cargar el cliente"));
-
 
     axios
       .get(`http://localhost:8080/clientes/${id}/casos`, {
@@ -99,6 +99,28 @@ const ClienteDetallePage = () => {
       });
     });
   }, [casos]);
+
+  // 🧹 Función para eliminar el cliente
+  const handleEliminarCliente = async () => {
+    const token = localStorage.getItem("jwt");
+    if (!token) {
+      setMensaje("⚠️ No estás autenticado.");
+      return;
+    }
+
+    try {
+      await axios.delete(`http://localhost:8080/clientes/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      setMensaje("✅ Cliente eliminado correctamente junto a sus casos.");
+      setTimeout(() => navigate("/clientes"), 1800);
+    } catch (err) {
+      setMensaje("❌ No se pudo eliminar el cliente.");
+    } finally {
+      setShowConfirm(false);
+    }
+  };
 
   return (
     <MasterPage>
@@ -159,7 +181,7 @@ const ClienteDetallePage = () => {
             className="nuevo-caso-btn"
             onClick={() => navigate(`/clientes/${id}/nuevo-caso`)}
           >
-            Agregar Caso
+            ➕ Agregar Caso
           </button>
         </div>
 
@@ -171,11 +193,44 @@ const ClienteDetallePage = () => {
               <p><b>Nombre:</b> {cliente.nombre} {cliente.apellido}</p>
               <p><b>CI:</b> {cliente.ci}</p>
               <p><b>Email:</b> {cliente.email}</p>
+
+              <button
+                className="btn-danger"
+                onClick={() => setShowConfirm(true)}
+              >
+                🗑️ Eliminar Cliente
+              </button>
+
+              {mensaje && <p className="mensaje">{mensaje}</p>}
             </div>
           ) : (
             <p>No se pudo cargar el cliente.</p>
           )}
         </div>
+
+        {/* Modal de confirmación */}
+        {showConfirm && (
+          <div className="modal-overlay">
+            <div className="modal">
+              <h3>⚠️ Confirmar eliminación</h3>
+              <p>
+                ¿Seguro que deseas eliminar este cliente?<br />
+                Se eliminarán también todos sus casos y vínculos.
+              </p>
+              <div className="modal-buttons">
+                <button className="btn-danger" onClick={handleEliminarCliente}>
+                  Sí, eliminar
+                </button>
+                <button
+                  className="btn-secondary"
+                  onClick={() => setShowConfirm(false)}
+                >
+                  Cancelar
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </MasterPage>
   );
