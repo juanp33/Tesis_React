@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import MasterPage from "../pages/MasterPage";
-import "./AsignarPermisosPorRol.css"; // usamos el mismo CSS
+import "./AsignarPermisosPorRol.css"; // mismo CSS
 
 interface Usuario {
   id: number;
@@ -23,6 +23,7 @@ const AsignarRolesAUsuario: React.FC = () => {
   const [usuarioSel, setUsuarioSel] = useState<number | "">("");
   const [rolesSel, setRolesSel] = useState<number[]>([]);
   const [msg, setMsg] = useState<string>("");
+  const [cargandoRoles, setCargandoRoles] = useState(false); // 🔹 Nuevo estado
 
   const token = localStorage.getItem("jwt");
 
@@ -37,7 +38,7 @@ const AsignarRolesAUsuario: React.FC = () => {
     return res.status === 204 ? [] : await res.json();
   };
 
-  // 🔹 Cargar usuarios y roles
+  // 🔹 Cargar usuarios y roles al inicio
   useEffect(() => {
     const cargarDatos = async () => {
       try {
@@ -60,10 +61,12 @@ const AsignarRolesAUsuario: React.FC = () => {
     const idUsuario = e.target.value === "" ? "" : +e.target.value;
     setUsuarioSel(idUsuario);
     setRolesSel([]);
+    setMsg("");
 
     if (idUsuario === "") return;
 
     try {
+      setCargandoRoles(true); // 🔹 Bloquea el botón mientras carga
       const lista: Rol[] = await fetchWithAuth(`${USUARIOS_URL}/${idUsuario}/roles`);
       const rolesIds = lista.map((r) => r.id);
       setRolesSel(rolesIds);
@@ -71,6 +74,8 @@ const AsignarRolesAUsuario: React.FC = () => {
     } catch (err) {
       console.error(err);
       setMsg("⚠️ No se pudieron cargar los roles del usuario.");
+    } finally {
+      setCargandoRoles(false); // 🔹 Reactiva el botón
     }
   };
 
@@ -109,6 +114,7 @@ const AsignarRolesAUsuario: React.FC = () => {
         <h2>Asignar Roles a Usuario</h2>
 
         <form onSubmit={onSubmit} className="asignar-permisos-form">
+          {/* Usuario */}
           <label className="asignar-permisos-label">
             Usuario:
             <select value={usuarioSel} onChange={onUsuarioChange} required>
@@ -121,6 +127,7 @@ const AsignarRolesAUsuario: React.FC = () => {
             </select>
           </label>
 
+          {/* Roles */}
           <div className="asignar-permisos-lista">
             <span className="asignar-permisos-label">Roles:</span>
             <div className="asignar-permisos-checkboxes">
@@ -130,6 +137,7 @@ const AsignarRolesAUsuario: React.FC = () => {
                     type="checkbox"
                     checked={rolesSel.includes(r.id)}
                     onChange={(e) => onRolChange(r.id, e.target.checked)}
+                    disabled={cargandoRoles} // 🔹 Deshabilita los checkboxes mientras carga
                   />
                   <span>{r.nombre}</span>
                 </label>
@@ -137,7 +145,9 @@ const AsignarRolesAUsuario: React.FC = () => {
             </div>
           </div>
 
-          <button type="submit">Guardar Cambios</button>
+          <button type="submit" disabled={cargandoRoles}>
+            {cargandoRoles ? "Cargando..." : "Guardar Cambios"}
+          </button>
         </form>
 
         {msg && <p className="asignar-permisos-mensaje">{msg}</p>}

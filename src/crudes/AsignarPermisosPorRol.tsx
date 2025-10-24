@@ -28,6 +28,7 @@ const AsignarPermisosARol: React.FC = () => {
   const [rolSel, setRolSel] = useState<number | "">("");
   const [permSel, setPermSel] = useState<number[]>([]);
   const [msg, setMsg] = useState<string>("");
+  const [cargandoPermisos, setCargandoPermisos] = useState(false); // ⬅️ nuevo estado
 
   const token = localStorage.getItem("jwt");
 
@@ -64,19 +65,21 @@ const AsignarPermisosARol: React.FC = () => {
     const idRol = e.target.value === "" ? "" : +e.target.value;
     setRolSel(idRol);
     setPermSel([]);
+    setMsg("");
 
     if (idRol === "") return;
 
+    setCargandoPermisos(true); // ⬅️ activa loading
     try {
-      const lista: RolPermiso[] = await fetchWithAuth(
-        `${ROLPER_URL}/porRol/${idRol}`
-      );
+      const lista: RolPermiso[] = await fetchWithAuth(`${ROLPER_URL}/porRol/${idRol}`);
       const permisosIds = lista.map((rp) => rp.permiso.id);
       setPermSel(permisosIds);
-      setMsg(`Permisos cargados para el rol seleccionado.`);
+      setMsg(`✅ Permisos cargados para el rol seleccionado.`);
     } catch (err) {
       console.error(err);
       setMsg("⚠️ No se pudieron cargar los permisos del rol.");
+    } finally {
+      setCargandoPermisos(false); // ⬅️ desactiva loading
     }
   };
 
@@ -88,45 +91,44 @@ const AsignarPermisosARol: React.FC = () => {
   };
 
   // 🔹 Guardar cambios
- const onSubmit = async (e: FormEvent) => {
-  e.preventDefault();
-  setMsg("");
+  const onSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    setMsg("");
 
-  if (rolSel === "") {
-    setMsg("⚠️ Debe seleccionar un rol antes de guardar.");
-    return;
-  }
+    if (rolSel === "") {
+      setMsg("⚠️ Debe seleccionar un rol antes de guardar.");
+      return;
+    }
 
-  if (permSel.length === 0) {
-    setMsg("⚠️ No se puede dejar el rol sin permisos. Marque al menos uno.");
-    return;
-  }
+    if (permSel.length === 0) {
+      setMsg("⚠️ No se puede dejar el rol sin permisos. Marque al menos uno.");
+      return;
+    }
 
-  try {
-    // 🔹 1. Eliminar los permisos anteriores de ese rol
-    await fetchWithAuth(`${ROLPER_URL}/porRol/${rolSel}`, {
-      method: "DELETE",
-    });
+    try {
+      // 🔹 1. Eliminar los permisos anteriores
+      await fetchWithAuth(`${ROLPER_URL}/porRol/${rolSel}`, { method: "DELETE" });
 
-    // 🔹 2. Asignar los permisos seleccionados actualmente
-    await Promise.all(
-      permSel.map((id) =>
-        fetchWithAuth(ROLPER_URL, {
-          method: "POST",
-          body: JSON.stringify({
-            rol: { id: rolSel },
-            permiso: { id },
-          }),
-        })
-      )
-    );
+      // 🔹 2. Crear los nuevos
+      await Promise.all(
+        permSel.map((id) =>
+          fetchWithAuth(ROLPER_URL, {
+            method: "POST",
+            body: JSON.stringify({
+              rol: { id: rolSel },
+              permiso: { id },
+            }),
+          })
+        )
+      );
 
-    setMsg("✅ Permisos actualizados correctamente.");
-  } catch (err) {
-    console.error(err);
-    setMsg("❌ Error al actualizar permisos.");
-  }
-};
+      setMsg("✅ Permisos actualizados correctamente.");
+    } catch (err) {
+      console.error(err);
+      setMsg("❌ Error al actualizar permisos.");
+    }
+  };
+
   return (
     <MasterPage>
       <div className="asignar-permisos-container">
@@ -146,7 +148,7 @@ const AsignarPermisosARol: React.FC = () => {
             </select>
           </label>
 
-          {/* Permisos con checkboxes */}
+          {/* Permisos */}
           <div className="asignar-permisos-lista">
             <span className="asignar-permisos-label">Permisos:</span>
             <div className="asignar-permisos-checkboxes">
@@ -156,6 +158,7 @@ const AsignarPermisosARol: React.FC = () => {
                     type="checkbox"
                     checked={permSel.includes(p.id)}
                     onChange={(e) => onPermChange(p.id, e.target.checked)}
+                    disabled={cargandoPermisos} // ⬅️ bloquea mientras carga
                   />
                   <span>{p.nombre}</span>
                 </label>
@@ -163,7 +166,10 @@ const AsignarPermisosARol: React.FC = () => {
             </div>
           </div>
 
-          <button type="submit">Guardar Cambios</button>
+          {/* Botón de guardar */}
+          <button type="submit" disabled={cargandoPermisos}>
+            {cargandoPermisos ? "Cargando permisos..." : "Guardar Cambios"}
+          </button>
         </form>
 
         {msg && <p className="asignar-permisos-mensaje">{msg}</p>}

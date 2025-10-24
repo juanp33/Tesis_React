@@ -186,3 +186,28 @@ button:hover {
     width: 170px;
   }
 }
+
+/* ======= MENSAJES DE ERROR Y ÉXITO ======= */
+.error-msg {
+  color: #e74c3c;
+  background-color: #ffeaea;
+  border: 1px solid #ffbcbc;
+  border-radius: 8px;
+  padding: 0.6rem 0.8rem;
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  text-align: center;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.success-msg {
+  color: #27ae60;
+  background-color: #eaffea;
+  border: 1px solid #b2ffb2;
+  border-radius: 8px;
+  padding: 0.6rem 0.8rem;
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  text-align: center;
+  animation: fadeIn 0.3s ease-in-out;
+}

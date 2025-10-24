@@ -19,18 +19,12 @@ const RegistroPage = () => {
 
   // 🔹 Función para validar cédula uruguaya
   const validarCedulaUruguaya = (ci: string): boolean => {
-    // Eliminar puntos y guiones
     ci = ci.replace(/[^\d]/g, "");
-
-    // Debe tener entre 7 y 8 dígitos
     if (ci.length < 7 || ci.length > 8) return false;
-
-    // Si tiene 7 dígitos, se agrega un cero al inicio
     if (ci.length === 7) ci = "0" + ci;
 
     const coef = [2, 9, 8, 7, 6, 3, 4];
     let suma = 0;
-
     for (let i = 0; i < 7; i++) {
       suma += parseInt(ci[i]) * coef[i];
     }
@@ -39,13 +33,49 @@ const RegistroPage = () => {
     return digitoVerificador === parseInt(ci[7]);
   };
 
-  const handleRegister = async () => {
-    // 🔹 Validar cédula antes de enviar
+  // 🔹 Validaciones previas al registro
+  const validarCampos = (): boolean => {
+    // 1️⃣ Usuario y contraseña: mínimo 6 caracteres
+    if (username.length < 6 || password.length < 6) {
+      setError("⚠️ El usuario y la contraseña deben tener al menos 6 caracteres.");
+      setMensaje("");
+      return false;
+    }
+
+    // 2️⃣ Nombre y apellido: solo letras y mínimo 3 caracteres
+    const soloLetras = /^[A-Za-zÁÉÍÓÚáéíóúñÑ\s]+$/;
+    if (!soloLetras.test(nombre) || !soloLetras.test(apellido)) {
+      setError("⚠️ El nombre y apellido solo pueden contener letras.");
+      setMensaje("");
+      return false;
+    }
+
+    if (nombre.trim().length < 3 || apellido.trim().length < 3) {
+      setError("⚠️ El nombre y el apellido deben tener al menos 3 caracteres.");
+      setMensaje("");
+      return false;
+    }
+
+    // 3️⃣ Email debe tener @
+    if (!email.includes("@")) {
+      setError("⚠️ El correo electrónico debe contener '@'.");
+      setMensaje("");
+      return false;
+    }
+
+    // 4️⃣ Cédula uruguaya válida
     if (!validarCedulaUruguaya(ci)) {
       setError("❌ La cédula ingresada no es válida en Uruguay.");
       setMensaje("");
-      return;
+      return false;
     }
+
+    setError("");
+    return true;
+  };
+
+  const handleRegister = async () => {
+    if (!validarCampos()) return; // ❌ Si hay error, no continúa
 
     try {
       await axios.post(
@@ -58,22 +88,18 @@ const RegistroPage = () => {
       setError("");
       navigate("/login");
     } catch (err: any) {
-  if (err.response && err.response.data) {
-    // Si el backend devuelve un objeto con "mensaje"
-    if (err.response.data.mensaje) {
-      setError(err.response.data.mensaje);
-    } 
-    // Si devuelve un string plano
-    else if (typeof err.response.data === "string") {
-      setError(err.response.data);
-    } 
-    else {
-      setError("❌ Error desconocido en el registro.");
-    }
-  } else {
-    setError("❌ Error al registrar usuario/abogado");
-  }
-  setMensaje("");
+      if (err.response && err.response.data) {
+        if (err.response.data.mensaje) {
+          setError(err.response.data.mensaje);
+        } else if (typeof err.response.data === "string") {
+          setError(err.response.data);
+        } else {
+          setError("❌ Error desconocido en el registro.");
+        }
+      } else {
+        setError("❌ Error al registrar usuario/abogado");
+      }
+      setMensaje("");
     }
   };
 
@@ -99,14 +125,14 @@ const RegistroPage = () => {
           type="text"
           placeholder="Nombre"
           value={nombre}
-          onChange={(e) => setNombre(e.target.value)}
+          onChange={(e) => setNombre(e.target.value.replace(/[0-9]/g, ""))} // elimina números
           required
         />
         <input
           type="text"
           placeholder="Apellido"
           value={apellido}
-          onChange={(e) => setApellido(e.target.value)}
+          onChange={(e) => setApellido(e.target.value.replace(/[0-9]/g, ""))} // elimina números
           required
         />
         <input
@@ -143,8 +169,8 @@ const RegistroPage = () => {
         <a href="#" className="forgot">¿Olvidaste tu contraseña?</a>
         <button onClick={handleRegister}>Crear cuenta</button>
 
-        {mensaje && <p style={{ color: "green", marginTop: "1rem" }}>{mensaje}</p>}
-        {error && <p style={{ color: "red", marginTop: "1rem" }}>{error}</p>}
+        {mensaje && <p className="success-msg">{mensaje}</p>}
+        {error && <p className="error-msg">{error}</p>}
 
         <p>
           ¿Ya tienes una cuenta? <a href="/login">Iniciar sesión</a>
