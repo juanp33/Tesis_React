@@ -52,7 +52,7 @@ function App() {
                    <Route path="/clientes/:id/nuevo-caso" element={<NuevoCasoPage />} />
                    <Route path="/transformardocumento" element={<TransformarDocumento />} />
                   <Route path="/resumidor" element={<ResumenDocumentos />} />
-                  {/* Página por defecto (dashboard) */}
+                  
                   <Route path="/*" element={<PerfilPage />} />
                 </Routes>
               

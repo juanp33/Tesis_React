@@ -159,7 +159,7 @@ const ClienteDetallePage = () => {
             className="nuevo-caso-btn"
             onClick={() => navigate(`/clientes/${id}/nuevo-caso`)}
           >
-            ➕ Agregar Caso
+            Agregar Caso
           </button>
         </div>
 

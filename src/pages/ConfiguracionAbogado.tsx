@@ -40,7 +40,7 @@ const ConfiguracionAbogado = () => {
       })
       .then(async (res) => {
         const usuario = res.data;
-        // Buscar abogado asociado
+      
         const abogadosRes = await axios.get(`${API_URL}`, {
           headers: { Authorization: `Bearer ${token}` },
         });

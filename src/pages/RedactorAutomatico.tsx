@@ -20,7 +20,7 @@ type DropZoneMultiProps = {
 
 type ChatMsg = { role: "user" | "assistant"; text: string };
 
-// DropZone simple (1 archivo)
+
 function DropZoneSingle({ accept, id, onFile }: DropZoneSingleProps) {
   const [dragOver, setDragOver] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -218,7 +218,7 @@ export default function RedaccionAutomatica() {
   };
 
   const startChat = async (documentoInicial: string, evidId: string) => {
-    const res = await fetch(`${API_BASE}/redaccion_chat/start/`, {
+    const res = await fetch(`${API_BASE}/redaccion_documento/redaccion_chat/start/`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ documento_inicial: documentoInicial, evidence_id: evidId }),
@@ -236,7 +236,7 @@ export default function RedaccionAutomatica() {
     setChatInput("");
 
     try {
-      const r = await fetch(`${API_BASE}/redaccion_chat/message/`, {
+      const r = await fetch(`${API_BASE}/redaccion_documento/redaccion_chat/message/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ chat_id: chatId, mensaje_usuario: msg }),

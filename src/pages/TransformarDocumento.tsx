@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "../styles/TransformarDocumento.css";
-import MasterPage from "./MasterPage"; 
+import MasterPage from "./MasterPage";
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000";
 
@@ -10,6 +10,22 @@ const TransformarDocumento: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
   const [downloadUrl, setDownloadUrl] = useState<string>("");
+
+  const getExtension = (nombre: string) => {
+    const parts = nombre.split(".");
+    return parts.length > 1 ? parts.pop()?.toLowerCase() : "";
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = e.target.files?.[0] || null;
+    setFile(selectedFile);
+    if (selectedFile) {
+      const ext = getExtension(selectedFile.name);
+      if (ext === "pdf") setFormato("docx");
+      else if (ext === "docx") setFormato("pdf");
+      else if (ext === "txt") setFormato("pdf");
+    }
+  };
 
   const handleConvertir = async () => {
     if (!file) {
@@ -25,7 +41,7 @@ const TransformarDocumento: React.FC = () => {
       fd.append("file", file);
       fd.append("formato_salida", formato);
 
-      const res = await fetch(`${API_BASE}/convertir_documento/`, {
+      const res = await fetch(`${API_BASE}/convertir/`, {
         method: "POST",
         body: fd,
       });
@@ -41,7 +57,10 @@ const TransformarDocumento: React.FC = () => {
       setLoading(false);
     }
   };
- return (
+
+  const extensionArchivo = file ? getExtension(file.name) : "";
+
+  return (
     <MasterPage>
       <div className="td-page">
         <div className="td-card">
@@ -55,11 +74,7 @@ const TransformarDocumento: React.FC = () => {
             <p className="td-drop-text">Arrastrá tu documento aquí para subirlo</p>
             <label className="td-btn-upload">
               Seleccionar desde el dispositivo
-              <input
-                type="file"
-                onChange={(e) => setFile(e.target.files?.[0] || null)}
-                hidden
-              />
+              <input type="file" onChange={handleFileChange} hidden />
             </label>
           </div>
 
@@ -74,9 +89,15 @@ const TransformarDocumento: React.FC = () => {
             onChange={(e) => setFormato(e.target.value)}
             className="td-select"
           >
-            <option value="pdf">PDF</option>
-            <option value="docx">DOCX</option>
-            <option value="txt">TXT</option>
+            <option value="pdf" disabled={extensionArchivo === "pdf"}>
+              PDF
+            </option>
+            <option value="docx" disabled={extensionArchivo === "docx"}>
+              DOCX
+            </option>
+            <option value="txt" disabled={extensionArchivo === "txt"}>
+              TXT
+            </option>
           </select>
 
           <button

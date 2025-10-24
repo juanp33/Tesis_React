@@ -122,7 +122,7 @@
   left: var(--sidebar-w);
   right: 0;
   height: 80px;
-  background: linear-gradient(180deg,#0c1a3a 0%, #081735 35%, #06132e 100%);
+ 
   display: flex;
   justify-content: center;
   align-items: center;

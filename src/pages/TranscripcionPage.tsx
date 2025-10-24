@@ -3,6 +3,7 @@ import MasterPage from "./MasterPage";
 import "../styles/TranscripcionPage.css";
 import { jsPDF } from "jspdf";
 import micIcon from "../assets/mic-icon.png";
+import { Document, Packer, Paragraph } from "docx";
 
 const TranscripcionPage = () => {
   const [file, setFile] = useState<File | null>(null);
@@ -22,18 +23,14 @@ const TranscripcionPage = () => {
     setLoading(true);
     const formData = new FormData();
     formData.append("audio", file);
-
     try {
       const response = await fetch("http://localhost:8000/transcribir_diarizado/", {
         method: "POST",
         body: formData,
       });
-
       const data = await response.json();
-      if (data.conversacion) {
-        setRawText(data.conversacion);
-      }
-    } catch (error) {
+      if (data.conversacion) setRawText(data.conversacion);
+    } catch {
       alert("Error al transcribir el archivo");
     } finally {
       setLoading(false);
@@ -44,7 +41,6 @@ const TranscripcionPage = () => {
     const doc = new jsPDF();
     const pageHeight = doc.internal.pageSize.getHeight();
     let y = 10;
-
     const lines = rawText.split("\n");
     lines.forEach((line) => {
       const wrapped = doc.splitTextToSize(line, 180);
@@ -57,8 +53,21 @@ const TranscripcionPage = () => {
         y += 10;
       });
     });
-
     doc.save("transcripcion.pdf");
+  };
+
+  const handleExportDOCX = async () => {
+    const paragraphs = rawText.split("\n").map((line) => new Paragraph({ text: line || " " }));
+    const doc = new Document({ sections: [{ properties: {}, children: paragraphs }] });
+    const blob = await Packer.toBlob(doc);
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "transcripcion.docx";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
   };
 
   useEffect(() => {
@@ -73,37 +82,20 @@ const TranscripcionPage = () => {
   }, [loading]);
 
   useEffect(() => {
-    if (loading) {
-      setButtonText("Transcribiendo" + ".".repeat(dotCount));
-    }
+    if (loading) setButtonText("Transcribiendo" + ".".repeat(dotCount));
   }, [dotCount, loading]);
 
   return (
     <MasterPage>
       <h1 className="titulo-principal">Transcripción de Audio</h1>
-
       <div className="transcripcion-layout">
         <div className="panel-contenedor">
-          <p className="descripcion">
-            Subí un archivo de audio para generar la transcripción diarizada.
-          </p>
-
-
-          <div
-            className="upload-box"
-            onClick={() => fileInputRef.current?.click()}
-          >
-            <img
-              src={micIcon}
-              alt="Icono micrófono"
-              className="upload-img"
-            />
-
+          <p className="descripcion">Subí un archivo de audio para generar la transcripción diarizada.</p>
+          <div className="upload-box" onClick={() => fileInputRef.current?.click()}>
+            <img src={micIcon} alt="Icono micrófono" className="upload-img" />
             <div className="upload-text">Subí tu archivo de audio aquí</div>
             <div className="upload-hint">Arrastrá un archivo de audio o</div>
-            <button type="button" className="upload-btn">
-              Seleccionar desde el dispositivo
-            </button>
+            <button type="button" className="upload-btn">Seleccionar desde el dispositivo</button>
             <input
               ref={fileInputRef}
               type="file"
@@ -112,19 +104,12 @@ const TranscripcionPage = () => {
               onChange={(e) => handleFileChange(e.target.files?.[0] || null)}
             />
           </div>
-
           {file && (
             <p className="archivo-seleccionado">
-              Archivo seleccionado:{" "}
-              <strong>{file.name}</strong>
+              Archivo seleccionado: <strong>{file.name}</strong>
             </p>
           )}
-
-          <button
-            className="transcribir-btn"
-            onClick={handleTranscribe}
-            disabled={loading || !file}
-          >
+          <button className="transcribir-btn" onClick={handleTranscribe} disabled={loading || !file}>
             {buttonText}
           </button>
         </div>
@@ -133,14 +118,15 @@ const TranscripcionPage = () => {
           <textarea
             className="transcripcion-textarea"
             value={rawText}
-            readOnly
+            onChange={(e) => setRawText(e.target.value)}
             placeholder="La transcripción aparecerá aquí…"
           ></textarea>
 
           {rawText && (
-            <button className="exportar-btn" onClick={handleExportPDF}>
-              EXPORTAR
-            </button>
+            <div className="export-actions">
+              <button className="exportar-btn" onClick={handleExportPDF}>Exportar PDF</button>
+              <button className="exportar-btn" onClick={handleExportDOCX}>Exportar DOCX</button>
+            </div>
           )}
         </div>
       </div>

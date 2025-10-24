@@ -3,14 +3,14 @@ import MasterPage from "./MasterPage";
 import "../styles/ResumenDocumentos.css";
 import { jsPDF } from "jspdf";
 
-const API_BASE: string = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000";
+const API_BASE: string =
+  import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000";
 
 const ResumenDocumentos = () => {
   const [files, setFiles] = useState<File[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [resumenes, setResumenes] = useState<{ nombre: string; resumen: string }[]>([]);
-  const [informe, setInforme] = useState("");
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const handleFiles = (fl: FileList | null) => {
@@ -23,12 +23,12 @@ const ResumenDocumentos = () => {
     setLoading(true);
     setError("");
     setResumenes([]);
-    setInforme("");
+
     try {
       const fd = new FormData();
       files.forEach((f) => fd.append("files", f));
 
-      const res = await fetch(`${API_BASE}/resumir_documentos/`, {
+      const res = await fetch(`${API_BASE}/resumen/`, {
         method: "POST",
         body: fd,
       });
@@ -36,7 +36,6 @@ const ResumenDocumentos = () => {
 
       const json = await res.json();
       setResumenes(json.documentos || []);
-      setInforme(json.informe_final || "");
     } catch (e: any) {
       setError(e?.message || "Error al resumir documentos");
     } finally {
@@ -50,7 +49,7 @@ const ResumenDocumentos = () => {
 
     doc.setFont("helvetica", "bold");
     doc.setFontSize(16);
-    doc.text("Informe de Resúmenes de Documentos", 20, y);
+    doc.text("Resúmenes de Documentos", 20, y);
     y += 15;
 
     doc.setFont("helvetica", "normal");
@@ -72,21 +71,6 @@ const ResumenDocumentos = () => {
       y += 8;
     });
 
-    if (informe) {
-      if (y > 260) { doc.addPage(); y = 20; }
-      doc.setFont("helvetica", "bold");
-      doc.text("Informe Final Consolidado", 20, y);
-      y += 10;
-
-      doc.setFont("helvetica", "normal");
-      const lines = doc.splitTextToSize(informe, 170);
-      lines.forEach((line: string) => {
-        if (y > 270) { doc.addPage(); y = 20; }
-        doc.text(line, 20, y);
-        y += 6;
-      });
-    }
-
     doc.save("resumen_documentos.pdf");
   };
 
@@ -95,9 +79,14 @@ const ResumenDocumentos = () => {
       <div className="resumen-page">
         <div className="resumen-left">
           <h2>Resumir Documentos</h2>
-          <p className="descripcion">Subí tus documentos para generar resúmenes y un informe consolidado.</p>
+          <p className="descripcion">
+            Subí tus documentos para generar resúmenes individuales.
+          </p>
 
-          <div className="upload-box" onClick={() => fileInputRef.current?.click()}>
+          <div
+            className="upload-box"
+            onClick={() => fileInputRef.current?.click()}
+          >
             <div className="upload-icon">📄</div>
             <div className="upload-text">Arrastrá o seleccioná tus archivos</div>
             <div className="upload-hint">Formatos: PDF, DOC, DOCX, TXT</div>
@@ -122,9 +111,14 @@ const ResumenDocumentos = () => {
             </ul>
           )}
 
-          <button className="resumen-btn" onClick={handleGenerate} disabled={loading || !files.length}>
+          <button
+            className="resumen-btn"
+            onClick={handleGenerate}
+            disabled={loading || !files.length}
+          >
             {loading ? "Resumiendo…" : "Generar Resúmenes"}
           </button>
+
           {error && <div className="resumen-error">{error}</div>}
         </div>
 
@@ -141,15 +135,11 @@ const ResumenDocumentos = () => {
             </div>
           )}
 
-          {informe && (
-            <div className="resumen-informe">
-              <h3>Informe Final Consolidado</h3>
-              <pre>{informe}</pre>
-            </div>
-          )}
-
-          {(resumenes.length > 0 || informe) && (
-            <button className="resumen-btn export-btn" onClick={handleExportPDF}>
+          {resumenes.length > 0 && (
+            <button
+              className="resumen-btn export-btn"
+              onClick={handleExportPDF}
+            >
               Exportar PDF
             </button>
           )}

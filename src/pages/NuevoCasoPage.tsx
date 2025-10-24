@@ -51,7 +51,7 @@ const NuevoCasoPage = () => {
   return (
     <MasterPage>
       <div className="nuevo-caso">
-        <h2>➕ Nuevo Caso</h2>
+        <h2> Nuevo Caso</h2>
         {error && <p className="error-msg">{error}</p>}
         <form onSubmit={handleSubmit} className="form-caso">
           <label>Título</label>
