@@ -20,6 +20,7 @@ import AgregarClientePage from './pages/AgregarClientePage';
 import AsignarPermisosPorRol from "./crudes/AsignarPermisosPorRol";
 import ClienteDetallePage from "./pages/ClienteDetallePage";
 import NuevoCasoPage from "./pages/NuevoCasoPage";
+import AsignarRolesAUsuario from "./crudes/AsignarRolesAUsuario";
 function App() {
   return (
     <Router>
@@ -46,6 +47,7 @@ function App() {
                   <Route path="/abogados" element={<AbogadoCRUD />} />
                   <Route path="/permisos" element={<PermisoCRUD />} />
                   <Route path="/roles" element={<RolCRUD />} />
+                  <Route path="/asignar-roles" element={<AsignarRolesAUsuario />} />
                   <Route path="/usuarios" element={<UsuarioCRUD />} />
                   <Route path="/clientes/:id" element={<ClienteDetallePage />} />
                   <Route path="/asignar-permisos" element={<AsignarPermisosPorRol />} />

@@ -12,6 +12,7 @@ import Resumidor from "../logos/resumido2r.png";
 import Transformar from "../logos/transforma2.png";
 import AbogadoInteligenteLogo from "../logos/AbogadoInteligenteLogo.png";
 import ConfigLogo from "../assets/configuracion.png"; // ⚙️ Imagen de configuración
+import AsignarRolesAUsuario from "../crudes/AsignarRolesAUsuario";
 
 interface MasterPageProps {
   children: ReactNode;
@@ -86,7 +87,7 @@ const MasterPage = ({ children }: MasterPageProps) => {
                 <NavLink to="/usuarios" className="mp-admin-link">Usuarios</NavLink>
                 <NavLink to="/roles" className="mp-admin-link">Roles</NavLink>
                 <NavLink to="/permisos" className="mp-admin-link">Permisos</NavLink>
-                <NavLink to="/rolpermisos" className="mp-admin-link">RolPermisos</NavLink>
+                <NavLink to="/asignar-roles" className="mp-admin-link">Asignar Roles a Usuario</NavLink>
                 <NavLink to="/asignar-permisos" className="mp-admin-link">Asignar Permisos a Rol</NavLink>
               </div>
             )}
