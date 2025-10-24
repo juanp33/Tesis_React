@@ -50,14 +50,14 @@ const PerfilPage = () => {
   const token = localStorage.getItem("jwt");
 
   // ================== 🔹 Cargar datos ==================
-  useEffect(() => {
+    useEffect(() => {
     if (!token) {
       setError("No estás autenticado");
       setLoading(false);
       return;
     }
 
-    // Clientes
+    // 🔹 Cargar clientes
     axios
       .get("http://localhost:8080/clientes", {
         headers: { Authorization: `Bearer ${token}` },
@@ -66,7 +66,7 @@ const PerfilPage = () => {
       .catch(() => setError("No se pudieron cargar los clientes"))
       .finally(() => setLoading(false));
 
-    // Usuario logueado
+    // 🔹 Cargar usuario logueado
     axios
       .get("http://localhost:8080/api/usuario/me", {
         headers: { Authorization: `Bearer ${token}` },
@@ -81,21 +81,35 @@ const PerfilPage = () => {
       })
       .catch(() => setError("No se pudo obtener el usuario"));
 
-    // Abogado logueado
-    axios
-      .get("http://localhost:8080/abogados/me", {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .then((res) => {
-        setAbogado(res.data);
-        setAbogadoForm({
-          nombre: res.data.nombre,
-          apellido: res.data.apellido,
-          ci: res.data.ci,
+    // 🔹 Cargar abogado logueado desde JWT
+    const fetchAbogado = async () => {
+      try {
+        const response = await fetch("http://localhost:8080/api/abogados/me", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         });
-      })
-      .catch(() => setError("No se pudo obtener el abogado"));
+
+        if (!response.ok) {
+          throw new Error(`Error ${response.status}: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        setAbogado(data);
+        setAbogadoForm({
+          nombre: data.nombre,
+          apellido: data.apellido,
+          ci: data.ci,
+        });
+      } catch (err: any) {
+        console.error("Error al obtener abogado:", err);
+        setError("❌ No se pudo obtener el abogado actual.");
+      }
+    };
+
+    fetchAbogado();
   }, []);
+
 
   // ================== 🔹 Validadores ==================
   const validarTexto = (txt: string) =>
