@@ -1,8 +1,16 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { jwtDecode } from 'jwt-decode';
 import '../styles/LoginPage.css';
 import LogoNegro from '../assets/logo-negro.png';
+
+// 👇 Tipo para el contenido del token JWT
+interface JwtPayload {
+  id?: number;
+  sub?: string;
+  username?: string;
+}
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
@@ -12,6 +20,11 @@ const LoginPage = () => {
 
   const handleLogin = async () => {
     try {
+      // 🧹 Limpieza previa
+      localStorage.removeItem("jwt");
+      localStorage.removeItem("permisos");
+
+      // 🔹 Autenticación
       const response = await axios.post('http://localhost:8080/api/auth/login', {
         username: email,
         password: password
@@ -19,12 +32,34 @@ const LoginPage = () => {
 
       const token = response.data.token;
       localStorage.setItem('jwt', token);
-      alert('Inicio de sesión exitoso');
-      navigate("/perfil"); 
+
+      // 🔍 Decodificar el token para obtener el ID o el username
+      const decoded: JwtPayload = jwtDecode(token);
+      const usuarioId = decoded.id || decoded.sub || null;
+
+      // 🔹 Traer los permisos del usuario (si hay ID válido)
+      if (usuarioId) {
+        try {
+          const permisosResponse = await axios.get(
+            `http://localhost:8080/usuarios/${usuarioId}/permisos`,
+            { headers: { Authorization: `Bearer ${token}` } }
+          );
+          const permisos = permisosResponse.data || [];
+          localStorage.setItem("permisos", JSON.stringify(permisos));
+          console.log("✅ Permisos cargados:", permisos);
+        } catch (permError) {
+          console.error("Error al obtener permisos:", permError);
+        }
+      } else {
+        console.warn("⚠️ No se pudo obtener el ID del usuario del token.");
+      }
+
+      alert('Inicio de sesión exitoso ✅');
+      navigate("/perfil");
 
     } catch (err) {
-      console.log(err);
-      setError('Credenciales inválidas. Intenta nuevamente.');
+      console.error(err);
+      setError('❌ Credenciales inválidas. Intenta nuevamente.');
     }
   };
 
