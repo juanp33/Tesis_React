@@ -44,9 +44,13 @@
   border: 1px solid var(--border);
   border-radius: var(--radius);
   background-color: var(--gray-bg);
-  color: var(--text-dark);
+  color: #000 !important; /* ✅ Texto negro */
   font-size: 0.95rem;
   transition: all 0.2s ease;
+}
+
+.abogado-form input::placeholder {
+  color: #555; /* ✅ Placeholders gris oscuro */
 }
 
 .abogado-form input:focus {
@@ -137,8 +141,7 @@
   background-color: var(--primary-hover);
 }
 
-
-
+/* ERRORES */
 .input-error {
   border: 1px solid #dc2626;
   background-color: #fff5f5;
@@ -152,5 +155,3 @@
   margin-bottom: 10px;
   text-align: center;
 }
-
-

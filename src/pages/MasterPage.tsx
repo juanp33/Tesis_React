@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import type { ReactNode } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import "../styles/MasterPage.css";
+import { tienePermiso } from "../utils/PermisosHelper";
 
 import HomeLogo from "../logos/HomeLogo-removebg-preview.png";
 import MicLogo from "../logos/MicLogo-removebg-preview.png";
@@ -11,6 +12,7 @@ import ZoomLogo from "../logos/ZoomLogo-removebg-preview.png";
 import Resumidor from "../logos/resumido2r.png";
 import Transformar from "../logos/transforma2.png";
 import AbogadoInteligenteLogo from "../logos/AbogadoInteligenteLogo.png";
+import ConfigLogo from "../assets/configuracion.png";
 import ConfigLogo from "../assets/configuracion.png";
 
 interface MasterPageProps {
@@ -31,6 +33,7 @@ const MasterPage = ({ children }: MasterPageProps) => {
       ) {
         setAdminOpen(false);
       }
+      }
     };
     document.addEventListener("mousedown", handleClick);
     return () => document.removeEventListener("mousedown", handleClick);
@@ -46,6 +49,11 @@ const MasterPage = ({ children }: MasterPageProps) => {
       {/* ===== HEADER SUPERIOR ===== */}
       <header className="mp-header mp-topbar">
         <div className="mp-brand">
+          <img
+            src={AbogadoInteligenteLogo}
+            alt="Logo Abogado Inteligente"
+            className="mp-brand-img"
+          />
           <img
             src={AbogadoInteligenteLogo}
             alt="Logo Abogado Inteligente"

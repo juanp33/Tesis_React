@@ -1,8 +1,7 @@
-// src/crudes/AsignarPermisosARol.tsx
 import React, { useEffect, useState } from "react";
 import type { ChangeEvent, FormEvent } from "react";
 import MasterPage from "../pages/MasterPage";
-import "./shared.css";
+import "./AsignarPermisosPorRol.css";
 
 interface Rol {
   id: number;
@@ -14,9 +13,14 @@ interface Permiso {
   nombre: string;
 }
 
-const ROLES_URL     = "http://localhost:8080/api/roles";
-const PERMISOS_URL = "http://localhost:8080/api/permisos";
-const ROLPER_URL   = "http://localhost:8080/api/rolPermisos";
+interface RolPermiso {
+  id: number;
+  permiso: Permiso;
+}
+
+const ROLES_URL = "http://localhost:8080/api/roles";
+const PERMISOS_URL = "http://localhost:8080/permisos";
+const ROLPER_URL = "http://localhost:8080/api/rolPermisos";
 
 const AsignarPermisosARol: React.FC = () => {
   const [roles, setRoles] = useState<Rol[]>([]);
@@ -25,88 +29,141 @@ const AsignarPermisosARol: React.FC = () => {
   const [permSel, setPermSel] = useState<number[]>([]);
   const [msg, setMsg] = useState<string>("");
 
-  useEffect(() => {
-    fetch(ROLES_URL)
-      .then(r => r.ok ? r.json() : Promise.reject(r.status))
-      .then(setRoles)
-      .catch(err => console.error("GET roles:", err));
+  const token = localStorage.getItem("jwt");
 
-    fetch(PERMISOS_URL)
-      .then(r => r.ok ? r.json() : Promise.reject(r.status))
-      .then(setPermisos)
-      .catch(err => console.error("GET permisos:", err));
+  const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
+    const headers = {
+      "Content-Type": "application/json",
+      ...(options.headers || {}),
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    };
+    const res = await fetch(url, { ...options, headers });
+    if (!res.ok) throw new Error(`${res.status}`);
+    return res.status === 204 ? [] : await res.json();
+  };
+
+  // 🔹 Cargar roles y permisos
+  useEffect(() => {
+    const cargarDatos = async () => {
+      try {
+        const [rolesData, permisosData] = await Promise.all([
+          fetchWithAuth(ROLES_URL),
+          fetchWithAuth(PERMISOS_URL),
+        ]);
+        setRoles(rolesData);
+        setPermisos(permisosData);
+      } catch (err) {
+        console.error("Error al cargar datos:", err);
+      }
+    };
+    cargarDatos();
   }, []);
 
-  const onRolChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    setRolSel(e.target.value === "" ? "" : +e.target.value);
-  };
+  // 🔹 Cargar permisos del rol seleccionado
+  const onRolChange = async (e: ChangeEvent<HTMLSelectElement>) => {
+    const idRol = e.target.value === "" ? "" : +e.target.value;
+    setRolSel(idRol);
+    setPermSel([]);
 
-  const onPermChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    const vals = Array.from(e.target.selectedOptions, o => +o.value);
-    setPermSel(vals);
-  };
-
-  const onSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-    setMsg("");
-    if (rolSel === "" || permSel.length === 0) {
-      setMsg("Debes elegir un rol y al menos un permiso.");
-      return;
-    }
+    if (idRol === "") return;
 
     try {
-      await Promise.all(
-        permSel.map(id =>
-          fetch(ROLPER_URL, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              rol:    { id: rolSel },
-              permiso:{ id }
-            }),
-          }).then(res => {
-            if (!res.ok) throw new Error(res.status.toString());
-          })
-        )
+      const lista: RolPermiso[] = await fetchWithAuth(
+        `${ROLPER_URL}/porRol/${idRol}`
       );
-      setMsg("Permisos asignados con éxito.");
-      setPermSel([]);
+      const permisosIds = lista.map((rp) => rp.permiso.id);
+      setPermSel(permisosIds);
+      setMsg(`Permisos cargados para el rol seleccionado.`);
     } catch (err) {
       console.error(err);
-      setMsg("Error al asignar permisos.");
+      setMsg("⚠️ No se pudieron cargar los permisos del rol.");
     }
   };
 
+  // 🔹 Manejo de checkboxes
+  const onPermChange = (permisoId: number, checked: boolean) => {
+    setPermSel((prev) =>
+      checked ? [...prev, permisoId] : prev.filter((id) => id !== permisoId)
+    );
+  };
+
+  // 🔹 Guardar cambios
+ const onSubmit = async (e: FormEvent) => {
+  e.preventDefault();
+  setMsg("");
+
+  if (rolSel === "") {
+    setMsg("⚠️ Debe seleccionar un rol antes de guardar.");
+    return;
+  }
+
+  if (permSel.length === 0) {
+    setMsg("⚠️ No se puede dejar el rol sin permisos. Marque al menos uno.");
+    return;
+  }
+
+  try {
+    // 🔹 1. Eliminar los permisos anteriores de ese rol
+    await fetchWithAuth(`${ROLPER_URL}/porRol/${rolSel}`, {
+      method: "DELETE",
+    });
+
+    // 🔹 2. Asignar los permisos seleccionados actualmente
+    await Promise.all(
+      permSel.map((id) =>
+        fetchWithAuth(ROLPER_URL, {
+          method: "POST",
+          body: JSON.stringify({
+            rol: { id: rolSel },
+            permiso: { id },
+          }),
+        })
+      )
+    );
+
+    setMsg("✅ Permisos actualizados correctamente.");
+  } catch (err) {
+    console.error(err);
+    setMsg("❌ Error al actualizar permisos.");
+  }
+};
   return (
     <MasterPage>
       <div className="asignar-permisos-container">
-        <h2>Asignar permisos a un rol</h2>
+        <h2>Asignar Permisos a un Rol</h2>
+
         <form onSubmit={onSubmit} className="asignar-permisos-form">
-          <label>
+          {/* Rol */}
+          <label className="asignar-permisos-label">
             Rol:
             <select value={rolSel} onChange={onRolChange} required>
               <option value="">-- Seleccione un rol --</option>
-              {roles.map(r => (
-                <option key={r.id} value={r.id}>{r.nombre}</option>
+              {roles.map((r) => (
+                <option key={r.id} value={r.id}>
+                  {r.nombre}
+                </option>
               ))}
             </select>
           </label>
 
-          <label>
-            Permisos:
-            <select
-              multiple
-              value={permSel.map(String)}
-              onChange={onPermChange}
-              required
-            >
-              {permisos.map(p => (
-                <option key={p.id} value={p.id}>{p.nombre}</option>
+          {/* Permisos con checkboxes */}
+          <div className="asignar-permisos-lista">
+            <span className="asignar-permisos-label">Permisos:</span>
+            <div className="asignar-permisos-checkboxes">
+              {permisos.map((p) => (
+                <label key={p.id} className="permiso-item">
+                  <input
+                    type="checkbox"
+                    checked={permSel.includes(p.id)}
+                    onChange={(e) => onPermChange(p.id, e.target.checked)}
+                  />
+                  <span>{p.nombre}</span>
+                </label>
               ))}
-            </select>
-          </label>
+            </div>
+          </div>
 
-          <button type="submit">Asignar permisos</button>
+          <button type="submit">Guardar Cambios</button>
         </form>
 
         {msg && <p className="asignar-permisos-mensaje">{msg}</p>}

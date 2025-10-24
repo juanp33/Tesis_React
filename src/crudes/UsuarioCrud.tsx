@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import type { ChangeEvent, FormEvent } from "react";
+import { useNavigate } from "react-router-dom";
 import MasterPage from "../pages/MasterPage";
 import "./UsuarioCRUD.css";
 import { fetchWithAuth } from "../utils/FetchWithAuth";
@@ -7,20 +8,19 @@ import { fetchWithAuth } from "../utils/FetchWithAuth";
 interface Usuario {
   id?: number;
   username: string;
-  password?: string; 
+  password?: string;
   email: string;
-  abogadoId?: number;
 }
 
 const API_URL = "http://localhost:8080/usuarios";
 
 const UsuarioCRUD: React.FC = () => {
+  const navigate = useNavigate();
   const [items, setItems] = useState<Usuario[]>([]);
   const [form, setForm] = useState<Usuario>({
     username: "",
     password: "",
     email: "",
-    abogadoId: undefined,
   });
   const [editId, setEditId] = useState<number | null>(null);
   const [showModal, setShowModal] = useState(false);
@@ -43,17 +43,23 @@ const UsuarioCRUD: React.FC = () => {
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setForm({ ...form, [name]: name === "abogadoId" ? Number(value) : value });
+    setForm({ ...form, [name]: value });
   };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    try {
-      const method = editId ? "PUT" : "POST";
-      const url = editId ? `${API_URL}/${editId}` : API_URL;
 
+    // Si no hay usuario en edición, redirige al registro
+    if (!editId) {
+      navigate("/registro");
+      return;
+    }
+
+    try {
+      const method = "PUT";
+      const url = `${API_URL}/${editId}`;
       const payload = { ...form };
-      if (editId && !payload.password) delete payload.password;
+      if (!payload.password) delete payload.password;
 
       const res = await fetchWithAuth(url, {
         method,
@@ -62,7 +68,7 @@ const UsuarioCRUD: React.FC = () => {
 
       if (!res.ok) throw new Error(`Error ${method} usuario: ${res.status}`);
       setEditId(null);
-      setForm({ username: "", password: "", email: "", abogadoId: undefined });
+      setForm({ username: "", password: "", email: "" });
       await fetchAll();
     } catch (e) {
       console.error(e);
@@ -74,7 +80,6 @@ const UsuarioCRUD: React.FC = () => {
       username: u.username,
       password: "",
       email: u.email,
-      abogadoId: u.abogadoId,
     });
     setEditId(u.id ?? null);
   };
@@ -104,62 +109,63 @@ const UsuarioCRUD: React.FC = () => {
       <div className="usuario-container">
         <h2 className="usuario-title">Gestión de Usuarios</h2>
 
-        <form className="usuario-form" onSubmit={handleSubmit}>
-          <input
-            name="username"
-            value={form.username}
-            onChange={handleChange}
-            placeholder="Nombre de usuario"
-            required
-          />
-
-          <input
-            name="password"
-            type="password"
-            value={form.password || ""}
-            onChange={handleChange}
-            placeholder="Contraseña"
-            required={!editId}
-          />
-
-          <input
-            name="email"
-            value={form.email}
-            onChange={handleChange}
-            placeholder="Correo electrónico"
-            required
-          />
-
-          <input
-            name="abogadoId"
-            value={form.abogadoId ?? ""}
-            onChange={handleChange}
-            placeholder="ID del abogado (opcional)"
-          />
-
+        {/* Si NO se está editando, solo muestra el botón Crear */}
+        {!editId && (
           <div className="usuario-buttons">
-            <button type="submit" className="btn-primary">
-              {editId ? "Actualizar" : "Crear"}
+            <button
+              type="button"
+              className="btn-primary"
+              onClick={() => navigate("/registro")}
+            >
+              Crear
             </button>
-            {editId && (
+          </div>
+        )}
+
+        {/* Si se está editando, muestra los cuadros para editar */}
+        {editId && (
+          <form className="usuario-form" onSubmit={handleSubmit}>
+            <input
+              name="username"
+              value={form.username}
+              onChange={handleChange}
+              placeholder="Nombre de usuario"
+              required
+            />
+
+            <input
+              name="password"
+              type="password"
+              value={form.password || ""}
+              onChange={handleChange}
+              placeholder="Nueva contraseña (opcional)"
+            />
+
+            <input
+              name="email"
+              value={form.email}
+              onChange={handleChange}
+              placeholder="Correo electrónico"
+              required
+            />
+
+            <div className="usuario-buttons">
+              <button type="submit" className="btn-primary">
+                Actualizar
+              </button>
               <button
                 type="button"
                 className="btn-secondary"
                 onClick={() => {
                   setEditId(null);
-                  setForm({
-                    username: "",
-                    password: "",
-                    email: "",
-                    abogadoId: undefined,
-                  });
+                  setForm({ username: "", password: "", email: "" });
                 }}
               >
                 Cancelar
               </button>
-            )}
-          </div>
-        </form>
+            </div>
+          </form>
+        )}
 
         <div className="usuario-list">
           <h3>Listado de Usuarios</h3>
@@ -171,7 +177,6 @@ const UsuarioCRUD: React.FC = () => {
                 <tr>
                   <th>Usuario</th>
                   <th>Email</th>
-                  <th>ID Abogado</th>
                   <th>Acciones</th>
                 </tr>
               </thead>
@@ -180,7 +185,6 @@ const UsuarioCRUD: React.FC = () => {
                   <tr key={u.id}>
                     <td>{u.username}</td>
                     <td>{u.email}</td>
-                    <td>{u.abogadoId ?? "N/A"}</td>
                     <td>
                       <button
                         className="btn-edit"
@@ -210,7 +214,6 @@ const UsuarioCRUD: React.FC = () => {
               <div className="modal-info">
                 <p><strong>Usuario:</strong> {usuarioToDelete.username}</p>
                 <p><strong>Email:</strong> {usuarioToDelete.email}</p>
-                <p><strong>ID Abogado:</strong> {usuarioToDelete.abogadoId ?? "N/A"}</p>
               </div>
               <div className="modal-buttons">
                 <button className="btn-danger" onClick={handleDeleteConfirmed}>
