@@ -23,8 +23,10 @@ const AbogadoCRUD: React.FC = () => {
     ci: "",
   });
   const [editId, setEditId] = useState<number | null>(null);
-  const [originalCI, setOriginalCI] = useState<string>(""); // 🔹 para guardar la cédula original al editar
+  const [originalCI, setOriginalCI] = useState<string>("");
   const [errorCI, setErrorCI] = useState<string>("");
+  const [errorNombre, setErrorNombre] = useState<string>("");
+  const [errorApellido, setErrorApellido] = useState<string>("");
 
   useEffect(() => {
     fetchAll();
@@ -45,8 +47,28 @@ const AbogadoCRUD: React.FC = () => {
     const { name, value } = e.target;
     setForm({ ...form, [name]: value });
 
-    if (name === "ci") {
-      verificarCedula(value);
+    if (name === "ci") verificarCedula(value);
+    if (name === "nombre") validarNombre(value);
+    if (name === "apellido") validarApellido(value);
+  };
+
+  const validarNombre = (nombre: string) => {
+    if (!/^[A-Za-zÁÉÍÓÚáéíóúñÑ\s]+$/.test(nombre)) {
+      setErrorNombre("El nombre no puede contener números ni símbolos.");
+    } else if (nombre.trim().length < 3) {
+      setErrorNombre("El nombre debe tener al menos 3 letras.");
+    } else {
+      setErrorNombre("");
+    }
+  };
+
+  const validarApellido = (apellido: string) => {
+    if (!/^[A-Za-zÁÉÍÓÚáéíóúñÑ\s]+$/.test(apellido)) {
+      setErrorApellido("El apellido no puede contener números ni símbolos.");
+    } else if (apellido.trim().length < 3) {
+      setErrorApellido("El apellido debe tener al menos 3 letras.");
+    } else {
+      setErrorApellido("");
     }
   };
 
@@ -57,19 +79,14 @@ const AbogadoCRUD: React.FC = () => {
       return;
     }
 
-    // Validar formato
     if (!validateUruguayanCI(clean)) {
-      setErrorCI("Cédula uruguaya inválida");
+      setErrorCI("Cédula uruguaya inválida.");
       return;
     }
 
-    // Validar duplicados solo si cambia la cédula original
-    const existe = items.some(
-      (a) => a.ci === clean && a.ci !== originalCI
-    );
-
+    const existe = items.some((a) => a.ci === clean && a.ci !== originalCI);
     if (existe) {
-      setErrorCI("Esta cédula ya está registrada");
+      setErrorCI("Esta cédula ya está registrada.");
     } else {
       setErrorCI("");
     }
@@ -92,17 +109,23 @@ const AbogadoCRUD: React.FC = () => {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
+    if (errorCI || errorNombre || errorApellido) return;
+
     if (!validateUruguayanCI(form.ci)) {
-      setErrorCI("Debe ingresar una cédula uruguaya válida");
+      setErrorCI("Debe ingresar una cédula uruguaya válida.");
       return;
     }
 
-    // Validar duplicado al enviar (por seguridad)
     const existe = items.some(
       (a) => a.ci === form.ci && a.ci !== originalCI
     );
     if (existe) {
-      setErrorCI("Esta cédula ya está registrada");
+      setErrorCI("Esta cédula ya está registrada.");
+      return;
+    }
+
+    if (form.nombre.trim().length < 3 || form.apellido.trim().length < 3) {
+      setErrorNombre("El nombre y apellido deben tener al menos 3 letras.");
       return;
     }
 
@@ -118,6 +141,8 @@ const AbogadoCRUD: React.FC = () => {
       setEditId(null);
       setForm({ nombre: "", apellido: "", ci: "" });
       setErrorCI("");
+      setErrorNombre("");
+      setErrorApellido("");
       await fetchAll();
     } catch (err) {
       console.error(err);
@@ -130,9 +155,11 @@ const AbogadoCRUD: React.FC = () => {
       apellido: a.apellido,
       ci: a.ci,
     });
-    setOriginalCI(a.ci); 
+    setOriginalCI(a.ci);
     setEditId(a.id ?? null);
     setErrorCI("");
+    setErrorNombre("");
+    setErrorApellido("");
   };
 
   return (
@@ -155,20 +182,29 @@ const AbogadoCRUD: React.FC = () => {
         {editId && (
           <form className="abogado-form" onSubmit={handleSubmit}>
             <div className="input-group">
-              <input
-                name="nombre"
-                value={form.nombre}
-                onChange={handleChange}
-                placeholder="Nombre"
-                required
-              />
-              <input
-                name="apellido"
-                value={form.apellido}
-                onChange={handleChange}
-                placeholder="Apellido"
-                required
-              />
+              <div className="input-with-error">
+                <input
+                  name="nombre"
+                  value={form.nombre}
+                  onChange={handleChange}
+                  placeholder="Nombre"
+                  required
+                  className={errorNombre ? "input-error" : ""}
+                />
+                {errorNombre && <p className="error-text">{errorNombre}</p>}
+              </div>
+
+              <div className="input-with-error">
+                <input
+                  name="apellido"
+                  value={form.apellido}
+                  onChange={handleChange}
+                  placeholder="Apellido"
+                  required
+                  className={errorApellido ? "input-error" : ""}
+                />
+                {errorApellido && <p className="error-text">{errorApellido}</p>}
+              </div>
             </div>
 
             <div className="input-group">
@@ -189,7 +225,7 @@ const AbogadoCRUD: React.FC = () => {
               <button
                 type="submit"
                 className="btn-primary"
-                disabled={!!errorCI}
+                disabled={!!(errorCI || errorNombre || errorApellido)}
               >
                 Actualizar
               </button>
@@ -200,6 +236,8 @@ const AbogadoCRUD: React.FC = () => {
                   setEditId(null);
                   setForm({ nombre: "", apellido: "", ci: "" });
                   setErrorCI("");
+                  setErrorNombre("");
+                  setErrorApellido("");
                 }}
               >
                 Cancelar

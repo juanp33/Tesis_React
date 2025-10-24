@@ -25,6 +25,7 @@ const UsuarioCRUD: React.FC = () => {
   const [editId, setEditId] = useState<number | null>(null);
   const [showModal, setShowModal] = useState(false);
   const [usuarioToDelete, setUsuarioToDelete] = useState<Usuario | null>(null);
+  const [error, setError] = useState<string>(""); // 🔹 Para mostrar errores visualmente
 
   useEffect(() => {
     fetchAll();
@@ -48,6 +49,23 @@ const UsuarioCRUD: React.FC = () => {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    setError(""); // Limpia errores previos
+
+    // 🔹 Validaciones antes de enviar
+    if (!form.username || form.username.length < 6) {
+      setError("⚠️ El nombre de usuario debe tener al menos 6 caracteres.");
+      return;
+    }
+
+    if (form.password && form.password.length < 6) {
+      setError("⚠️ La contraseña debe tener al menos 6 caracteres.");
+      return;
+    }
+
+    if (!form.email.includes("@")) {
+      setError("⚠️ El correo electrónico debe contener '@'.");
+      return;
+    }
 
     // Si no hay usuario en edición, redirige al registro
     if (!editId) {
@@ -70,8 +88,10 @@ const UsuarioCRUD: React.FC = () => {
       setEditId(null);
       setForm({ username: "", password: "", email: "" });
       await fetchAll();
+      setError(""); // Limpia mensaje si todo sale bien
     } catch (e) {
       console.error(e);
+      setError("❌ Error al actualizar el usuario.");
     }
   };
 
@@ -82,6 +102,7 @@ const UsuarioCRUD: React.FC = () => {
       email: u.email,
     });
     setEditId(u.id ?? null);
+    setError("");
   };
 
   const confirmDelete = (u: Usuario) => {
@@ -149,6 +170,10 @@ const UsuarioCRUD: React.FC = () => {
               required
             />
 
+            {error && (
+              <p style={{ color: "red", marginTop: "0.8rem" }}>{error}</p>
+            )}
+
             <div className="usuario-buttons">
               <button type="submit" className="btn-primary">
                 Actualizar
@@ -159,6 +184,7 @@ const UsuarioCRUD: React.FC = () => {
                 onClick={() => {
                   setEditId(null);
                   setForm({ username: "", password: "", email: "" });
+                  setError("");
                 }}
               >
                 Cancelar
@@ -206,6 +232,7 @@ const UsuarioCRUD: React.FC = () => {
           )}
         </div>
 
+        {/* Modal de confirmación */}
         {showModal && usuarioToDelete && (
           <div className="modal-overlay">
             <div className="modal">
