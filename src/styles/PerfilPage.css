@@ -147,3 +147,76 @@
     font-size: 15px;
   }
 }
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(17, 24, 39, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(4px);
+  z-index: 999;
+}
+
+.modal {
+  background: white;
+  border-radius: 10px;
+  padding: 25px 30px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  width: 380px;
+  text-align: center;
+}
+
+.modal h3 {
+  color: #1e3a8a;
+  margin-bottom: 15px;
+}
+
+.modal input {
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 0.95rem;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.btn-primary {
+  background-color: #1e3a8a;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.btn-primary:hover {
+  background-color: #2e4eb0;
+}
+
+.btn-secondary {
+  background-color: #e5e7eb;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.btn-secondary:hover {
+  background-color: #d1d5db;
+}
+
+.mensaje {
+  color: #b91c1c;
+  font-weight: 500;
+  font-size: 0.9rem;
+  margin: 5px 0;
+}
