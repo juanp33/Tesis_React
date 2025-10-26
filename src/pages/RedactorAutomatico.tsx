@@ -20,7 +20,6 @@ type DropZoneMultiProps = {
 
 type ChatMsg = { role: "user" | "assistant"; text: string };
 
-
 function DropZoneSingle({ accept, id, onFile }: DropZoneSingleProps) {
   const [dragOver, setDragOver] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -78,7 +77,6 @@ function DropZoneSingle({ accept, id, onFile }: DropZoneSingleProps) {
     </div>
   );
 }
-
 
 function DropZoneMulti({ accept, id, onFiles }: DropZoneMultiProps) {
   const [dragOver, setDragOver] = useState(false);
@@ -161,11 +159,11 @@ export default function RedaccionAutomatica() {
   const [templateFile, setTemplateFile] = useState<File | null>(null);
   const [evidenceFiles, setEvidenceFiles] = useState<File[]>([]);
   const [pdfSrc, setPdfSrc] = useState<string>("");
-  const [evidenceId, setEvidenceId] = useState<string>("");
   const [chatId, setChatId] = useState<string>("");
   const [chatMsgs, setChatMsgs] = useState<ChatMsg[]>([]);
   const [chatInput, setChatInput] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
+  const [responding, setResponding] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
 
   const messagesRef = useRef<HTMLDivElement | null>(null);
@@ -187,7 +185,6 @@ export default function RedaccionAutomatica() {
     setChatId("");
     setChatMsgs([]);
     setPdfSrc("");
-    setEvidenceId("");
     setLoading(true);
 
     try {
@@ -205,11 +202,9 @@ export default function RedaccionAutomatica() {
       const json = await res.json();
 
       const inicial = json.generated_text || "";
-      const evidId = json.evidence_id || "";
-      setEvidenceId(evidId);
       setPdfSrc(`${json.pdf_url}?t=${Date.now()}`);
 
-      await startChat(inicial, evidId);
+      await startChat(inicial, json.evidence_id || "");
     } catch (err: any) {
       setError(err.message || "Error al generar el documento");
     } finally {
@@ -234,6 +229,7 @@ export default function RedaccionAutomatica() {
     const msg = chatInput.trim();
     setChatMsgs((m) => [...m, { role: "user", text: msg }]);
     setChatInput("");
+    setResponding(true);
 
     try {
       const r = await fetch(`${API_BASE}/redaccion_documento/redaccion_chat/message/`, {
@@ -246,11 +242,13 @@ export default function RedaccionAutomatica() {
 
       setChatMsgs((m) => [...m, { role: "assistant", text: data.respuesta }]);
       setPdfSrc(`${data.pdf_url}?t=${Date.now()}`);
-    } catch (err: any) {
+    } catch {
       setChatMsgs((m) => [
         ...m,
         { role: "assistant", text: "⚠️ Error al procesar la solicitud." },
       ]);
+    } finally {
+      setResponding(false);
     }
   };
 
@@ -326,14 +324,15 @@ export default function RedaccionAutomatica() {
               <button className="ra-btn" onClick={copyLink} disabled={!pdfSrc}>
                 Copiar enlace del PDF
               </button>
-              {evidenceId && <span className="ra-evidenceTag">Evidencias vinculadas</span>}
             </div>
           </div>
 
           <div className="ra-chat">
             <div className="ra-chat__header">
               <div className="ra-chat__title">Chat de mejora del documento</div>
-              <div className="ra-chat__status">{chatId ? "Listo" : "Esperando inicio…"}</div>
+              <div className="ra-chat__status">
+                {responding ? "Asistente escribiendo…" : chatId ? "Listo" : "Esperando inicio…"}
+              </div>
             </div>
 
             <div className="ra-chat__messages" ref={messagesRef}>
@@ -347,6 +346,11 @@ export default function RedaccionAutomatica() {
                   {m.text}
                 </div>
               ))}
+              {responding && (
+                <div className="ra-chat__bubble ra-chat__bubble--bot">
+                  💬 Escribiendo…
+                </div>
+              )}
             </div>
 
             <div className="ra-chat__form">
@@ -356,12 +360,12 @@ export default function RedaccionAutomatica() {
                 value={chatInput}
                 onChange={(e) => setChatInput(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && sendChat()}
-                disabled={!chatId || loading}
+                disabled={!chatId || loading || responding}
               />
               <button
                 className="ra-btn ra-btn--primary"
                 onClick={sendChat}
-                disabled={!chatId || loading || !chatInput.trim()}
+                disabled={!chatId || loading || responding || !chatInput.trim()}
               >
                 Enviar
               </button>

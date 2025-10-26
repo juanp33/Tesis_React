@@ -2,8 +2,8 @@
   --ra-bg: #ffffff;
   --ra-bg-soft: #fafafa;
   --ra-text: #000;
-  --ra-primary: #4D8BFF;
-  --ra-primary-hover: #3973E6;
+  --ra-primary: #6ccce4; /* 💠 color turquesa principal */
+  --ra-primary-hover: #4fb3cc; /* 💠 hover más oscuro */
 }
 
 /* ======= CONTENEDOR PRINCIPAL ======= */
@@ -307,6 +307,30 @@
   padding: 0 10px;
   color: #000;
   box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.35);
+}
+
+/* ======= BOTONES UNIFICADOS ======= */
+.ra-btn,
+.ra-btn-upload,
+.ra-evidenceTag,
+button {
+  background-color: var(--ra-primary) !important;
+  color: #fff !important;
+  border: none;
+  border-radius: 0;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.35);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.ra-btn:hover,
+.ra-btn-upload:hover,
+.ra-evidenceTag:hover,
+button:hover {
+  background-color: var(--ra-primary-hover) !important;
+  transform: translateY(-2px);
+  box-shadow: 0px 6px 14px rgba(0, 0, 0, 0.45);
 }
 
 /* ======= RESPONSIVE ======= */
