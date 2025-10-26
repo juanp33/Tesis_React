@@ -57,6 +57,8 @@ const MasterPage = ({ children }: MasterPageProps) => {
     "Roles Crud",
     "Permisos",
     "Asignar permisos a rol",
+    "Asignar roles a usuario",
+    
   ].some((p) => permisos.includes(p));
 
   return (
@@ -183,7 +185,7 @@ const MasterPage = ({ children }: MasterPageProps) => {
                   <IfPermiso nombre="Asignar permisos a rol">
                     <NavLink to="/asignar-permisos" className="mp-admin-link">Asignar Permisos a Rol</NavLink>
                   </IfPermiso>
-                  <IfPermiso nombre="Usuario Crud">
+                  <IfPermiso nombre="Asignar roles a usuario">
                     <NavLink to="/asignar-roles" className="mp-admin-link">Asignar Roles a Usuario</NavLink>
                   </IfPermiso>
                 </div>

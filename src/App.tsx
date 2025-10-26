@@ -60,6 +60,7 @@ function App() {
                       </RutaProtegida>
                     }
                   />
+                  
                   <Route
                     path="/ocr"
                     element={
@@ -137,7 +138,7 @@ function App() {
                   <Route
                     path="/asignar-roles"
                     element={
-                      <RutaProtegida permiso="Usuario Crud">
+                      <RutaProtegida permiso="Asignar roles a usuario">
                         <AsignarRolesAUsuario />
                       </RutaProtegida>
                     }
