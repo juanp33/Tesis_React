@@ -23,7 +23,8 @@ const AsignarRolesAUsuario: React.FC = () => {
   const [usuarioSel, setUsuarioSel] = useState<number | "">("");
   const [rolesSel, setRolesSel] = useState<number[]>([]);
   const [msg, setMsg] = useState<string>("");
-  const [cargandoRoles, setCargandoRoles] = useState(false); // 🔹 Nuevo estado
+  const [cargandoRoles, setCargandoRoles] = useState(false); 
+
 
   const token = localStorage.getItem("jwt");
 
@@ -102,6 +103,7 @@ const AsignarRolesAUsuario: React.FC = () => {
         body: JSON.stringify(rolesSel),
       });
       setMsg("✅ Roles actualizados correctamente.");
+      
     } catch (err) {
       console.error(err);
       setMsg("❌ Error al actualizar roles del usuario.");

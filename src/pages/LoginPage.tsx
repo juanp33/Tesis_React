@@ -1,9 +1,10 @@
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { jwtDecode } from 'jwt-decode';
-import '../styles/LoginPage.css';
-import LogoNegro from '../assets/logo-negro.png';
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { jwtDecode } from "jwt-decode"; // lo dejamos, por si querés leer info del token
+import "../styles/LoginPage.css";
+import LogoNegro from "../assets/logo-negro.png";
+import { usePermisos } from "../context/PermisosContext"; 
 
 // 👇 Tipo para el contenido del token JWT
 interface JwtPayload {
@@ -13,53 +14,44 @@ interface JwtPayload {
 }
 
 const LoginPage = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
+    const { refrescarPermisos } = usePermisos();
 
   const handleLogin = async () => {
     try {
       // 🧹 Limpieza previa
       localStorage.removeItem("jwt");
-      localStorage.removeItem("permisos");
+      localStorage.removeItem("permisos"); // ya no se usa, pero se limpia por si quedó de sesiones viejas
 
       // 🔹 Autenticación
-      const response = await axios.post('http://localhost:8080/api/auth/login', {
+      const response = await axios.post("http://localhost:8080/api/auth/login", {
         username: email,
-        password: password
+        password: password,
       });
 
       const token = response.data.token;
-      localStorage.setItem('jwt', token);
+      localStorage.setItem("jwt", token);
 
-      // 🔍 Decodificar el token para obtener el ID o el username
+      await refrescarPermisos();
+
+      // 🔍 (opcional) decodificamos el token para mostrar algo, pero sin pedir permisos
       const decoded: JwtPayload = jwtDecode(token);
-      const usuarioId = decoded.id || decoded.sub || null;
+      console.log("Usuario autenticado:", decoded);
 
-      // 🔹 Traer los permisos del usuario (si hay ID válido)
-      if (usuarioId) {
-        try {
-          const permisosResponse = await axios.get(
-            `http://localhost:8080/usuarios/${usuarioId}/permisos`,
-            { headers: { Authorization: `Bearer ${token}` } }
-          );
-          const permisos = permisosResponse.data || [];
-          localStorage.setItem("permisos", JSON.stringify(permisos));
-          console.log("✅ Permisos cargados:", permisos);
-        } catch (permError) {
-          console.error("Error al obtener permisos:", permError);
-        }
-      } else {
-        console.warn("⚠️ No se pudo obtener el ID del usuario del token.");
-      }
+      // 🚫 🔴 SE ELIMINÓ este bloque:
+      // - GET /usuarios/{id}/permisos
+      // - localStorage.setItem("permisos", ...)
+      // porque ahora los permisos se consultan dinámicamente desde el back
+      // en el componente IfPermiso y en RequirePermiso
 
-      alert('Inicio de sesión exitoso ✅');
+      alert("Inicio de sesión exitoso ✅");
       navigate("/perfil");
-
     } catch (err) {
       console.error(err);
-      setError('❌ Credenciales inválidas. Intenta nuevamente.');
+      setError("❌ Credenciales inválidas. Intenta nuevamente.");
     }
   };
 
@@ -88,14 +80,15 @@ const LoginPage = () => {
           onChange={(e) => setPassword(e.target.value)}
         />
 
-        <a href="#" className="forgot">Olvidé mi contraseña</a>
+        <a href="#" className="forgot">
+          Olvidé mi contraseña
+        </a>
         <button onClick={handleLogin}>Iniciar sesión</button>
 
-        {error && <p style={{ color: 'red', marginTop: '1rem' }}>{error}</p>}
+        {error && <p style={{ color: "red", marginTop: "1rem" }}>{error}</p>}
 
         <p>
-          ¿Aún no estás registrado?{' '}
-          <Link to="/registro">Registrarse</Link>
+          ¿Aún no estás registrado? <Link to="/registro">Registrarse</Link>
         </p>
       </div>
     </div>

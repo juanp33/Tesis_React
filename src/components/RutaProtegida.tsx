@@ -1,19 +1,19 @@
 import React from "react";
-import type { ReactNode } from "react";
 import { Navigate } from "react-router-dom";
-import { tienePermiso } from "../utils/PermisosHelper";
+import { usePermisos } from "../context/PermisosContext";
 
 interface RutaProtegidaProps {
   permiso: string;
-  children: ReactNode;
+  children: React.ReactNode;
 }
 
 const RutaProtegida = ({ permiso, children }: RutaProtegidaProps) => {
-  if (tienePermiso(permiso)) {
-    return <>{children}</>;
-  }
+  const { cargando, tienePermiso } = usePermisos();
 
-  return <Navigate to="/perfil" replace />;
+  if (cargando) return null; // o spinner
+  if (!tienePermiso(permiso)) return <Navigate to="/perfil" replace />;
+
+  return <>{children}</>;
 };
 
 export default RutaProtegida;

@@ -1,17 +1,29 @@
-// src/utils/PermisosHelper.ts
-export const getPermisos = (): string[] => {
+import { jwtDecode } from "jwt-decode";
+
+interface JwtPayload {
+  id?: number;
+  sub?: string;
+}
+
+const API_BASE = "http://localhost:8080";
+
+// Devuelve todos los permisos del backend (sin guardarlos)
+export const fetchPermisosBack = async (): Promise<string[]> => {
+  const token = localStorage.getItem("jwt");
+  if (!token) return [];
+
+  const decoded = jwtDecode<JwtPayload>(token);
+  const userIdent = decoded.id ?? decoded.sub;
+  if (!userIdent) return [];
+
   try {
-    const permisos = localStorage.getItem("permisos");
-    return permisos ? JSON.parse(permisos) : [];
-  } catch (e) {
-    console.error("Error al leer permisos del localStorage:", e);
+    const resp = await fetch(
+      `${API_BASE}/usuarios/${encodeURIComponent(String(userIdent))}/permisos`,
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+    if (!resp.ok) return [];
+    return await resp.json();
+  } catch {
     return [];
   }
-};
-
-export const tienePermiso = (nombre: string): boolean => {
-  const permisos = getPermisos();
-  return permisos.some(
-    (p) => p.trim().toLowerCase() === nombre.trim().toLowerCase()
-  );
 };
