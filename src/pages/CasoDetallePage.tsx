@@ -122,7 +122,7 @@ const CasoDetallePage = () => {
           <p>Cargando...</p>
         ) : caso ? (
           <div className="caso-card">
-            <h2>✏️ Editar Caso</h2>
+            <h2>Editar Caso</h2>
 
             <label>Título</label>
             <input
@@ -160,12 +160,12 @@ const CasoDetallePage = () => {
               <option value="en_juicio">En Juicio</option>
             </select>
 
-            <button onClick={actualizarCaso}>💾 Guardar</button>
+            <button onClick={actualizarCaso}> Guardar</button>
             <button onClick={eliminarCaso} style={{ color: "red" }}>
-              🗑️ Eliminar Caso
+               Eliminar Caso
             </button>
 
-            <h3>📂 Archivos</h3>
+            <h3> Archivos</h3>
             <ul>
               {caso.archivos?.map((a) => (
                 <li key={a.id}>
@@ -186,7 +186,7 @@ const CasoDetallePage = () => {
                 setNuevoArchivo(e.target.files ? e.target.files[0] : null)
               }
             />
-            <button onClick={subirArchivo}>⬆️ Subir Archivo</button>
+            <button onClick={subirArchivo}> Subir Archivo</button>
           </div>
         ) : (
           <p>No se encontró el caso</p>

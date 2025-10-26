@@ -126,7 +126,7 @@ const ClienteDetallePage = () => {
     <MasterPage>
       <div className="cliente-detalle-layout">
         <div className="casos-section">
-          <h2>📂 Casos</h2>
+          <h2> Casos</h2>
 
           {loading ? (
             <p>Cargando...</p>
@@ -181,12 +181,12 @@ const ClienteDetallePage = () => {
             className="nuevo-caso-btn"
             onClick={() => navigate(`/clientes/${id}/nuevo-caso`)}
           >
-            ➕ Agregar Caso
+             Agregar Caso
           </button>
         </div>
 
         <div className="cliente-info-section">
-          <h2>👤 Información del Cliente</h2>
+          <h2> Información del Cliente</h2>
           {cliente ? (
             <div className="perfil-card">
               <p><b>ID:</b> {cliente.id}</p>
@@ -198,7 +198,7 @@ const ClienteDetallePage = () => {
                 className="btn-danger"
                 onClick={() => setShowConfirm(true)}
               >
-                🗑️ Eliminar Cliente
+                 Eliminar Cliente
               </button>
 
               {mensaje && <p className="mensaje">{mensaje}</p>}

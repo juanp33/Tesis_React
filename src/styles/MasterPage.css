@@ -72,7 +72,7 @@ html, body, #root {
   font-weight: 600;
   font-size: clamp(13px, 1vw, 15px);
   text-decoration: none;
-  border-radius: 6px;
+  border-radius: 0%;
   transition: background 0.2s ease;
   position: relative;
 }
@@ -84,7 +84,7 @@ html, body, #root {
   right: 8px;
   bottom: 0;
   height: 3px;
-  border-radius: 3px 3px 0 0;
+  border-radius: 0;
   background: #fff !important;
 }
 
@@ -116,7 +116,7 @@ html, body, #root {
   align-items: center;
   gap: 6px;
   padding: 8px 12px;
-  border-radius: 8px;
+
   transition: background 0.2s ease;
 }
 .mp-admin-btn:hover { background: rgba(255, 255, 255, 0.25) !important; }
@@ -126,7 +126,7 @@ html, body, #root {
   top: 56px;
   right: 0;
   background: #6ccce4 !important;
-  border-radius: 8px;
+  border-radius: 0px;
   display: flex;
   flex-direction: column;
   min-width: 200px;
@@ -154,7 +154,7 @@ html, body, #root {
   margin-bottom: 60px;
   padding: clamp(20px, 2vw, 28px);
   background: #ffffff !important;
-  border-radius: 10px;
+  border-radius: 0px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12) !important;
   min-height: 85vh;
 }
@@ -183,7 +183,7 @@ html, body, #root {
   width: 24px;
   height: 3px;
   background: #fff !important;
-  border-radius: 2px;
+  border-radius: 0px;
   transition: all 0.3s ease;
 }
 

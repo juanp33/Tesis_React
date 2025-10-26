@@ -303,11 +303,11 @@ const PerfilPage = () => {
         </div>
       </div>
 
-      {/* ⚙️ Popup Configuración */}
+      {/*  Popup Configuración */}
       {showConfig && (
         <div className="modal-overlay">
           <div className="modal">
-            <h3>⚙️ Configuración de Usuario</h3>
+            <h3> Configuración de Usuario</h3>
             <input
               name="username"
               value={editForm.username}
@@ -332,9 +332,9 @@ const PerfilPage = () => {
               Guardar Usuario
             </button>
 
-            <hr style={{ margin: "15px 0" }} />
+            <hr style={{ margin: "15px 0", border: "none" }} />
 
-            <h3>👨‍⚖️ Configuración de Abogado</h3>
+            <h3> Configuración de Abogado</h3>
             <input
               name="nombre"
               value={abogadoForm.nombre}
