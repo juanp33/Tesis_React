@@ -144,3 +144,20 @@ textarea:focus {
   align-items: center;
   gap: 4px;
 }
+.chat-disabled {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  font-size: 18px;
+  color: #666;
+  background-color: #f7f7f7;
+}
+
+.no-chat-message {
+  text-align: center;
+  padding: 30px;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
