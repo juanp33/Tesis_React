@@ -1,3 +1,10 @@
+:root {
+  --ocr-primary: #6ccce4; /* 💠 color turquesa principal */
+  --ocr-primary-hover: #4fb3cc; /* 💠 tono hover más oscuro */
+  --ocr-bg: #ffffff;
+  --ocr-text: #000;
+}
+
 /* ======== FONDO GENERAL ======== */
 .ocr-page {
   display: flex;
@@ -5,17 +12,17 @@
   align-items: flex-start;
   min-height: 100vh;
   padding: 40px 20px;
- 
-  color: #000;
+  background: var(--ocr-bg);
+  color: var(--ocr-text);
   font-family: "Segoe UI", sans-serif;
 }
 
 /* ======== TARJETA CENTRAL ======== */
 .ocr-card {
   background: #fff;
-  border: none; /* ❌ sin borde visible */
-  border-radius: 0; /* ⬛ recto */
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.35); /* 🌑 sombra fuerte */
+  border: none;
+  border-radius: 0;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.35);
   padding: 40px;
   max-width: 700px;
   width: 100%;
@@ -76,7 +83,7 @@
 /* ======== BOTÓN DE SUBIDA ======== */
 .ocr-btn-upload {
   display: inline-block;
-  background: #4D8BFF;
+  background: var(--ocr-primary);
   color: #fff;
   font-size: 16px;
   font-weight: 600;
@@ -89,7 +96,7 @@
 }
 
 .ocr-btn-upload:hover {
-  background: #3973E6;
+  background: var(--ocr-primary-hover);
   transform: translateY(-2px);
   box-shadow: 0px 6px 14px rgba(0, 0, 0, 0.45);
 }
@@ -100,7 +107,7 @@
 
 /* ======== BOTÓN PRINCIPAL ======== */
 .ocr-btn {
-  background: #4D8BFF;
+  background: var(--ocr-primary);
   color: #fff;
   font-size: 18px;
   font-weight: 600;
@@ -114,7 +121,7 @@
 }
 
 .ocr-btn:hover {
-  background: #3973E6;
+  background: var(--ocr-primary-hover);
   transform: translateY(-2px);
   box-shadow: 0px 6px 14px rgba(0, 0, 0, 0.45);
 }
@@ -130,7 +137,7 @@
   display: inline-block;
   margin-top: 20px;
   color: #fff;
-  background: #4D8BFF;
+  background: var(--ocr-primary);
   padding: 12px 20px;
   border: none;
   border-radius: 0;
@@ -141,7 +148,7 @@
 }
 
 .ocr-download:hover {
-  background: #3973E6;
+  background: var(--ocr-primary-hover);
   transform: translateY(-2px);
   box-shadow: 0px 6px 14px rgba(0, 0, 0, 0.45);
 }

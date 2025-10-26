@@ -220,3 +220,33 @@
   font-size: 0.9rem;
   margin: 5px 0;
 }
+/* ===== FORZAR COLOR DE TEXTO ===== */
+body, 
+.clientes-layout, 
+.clientes-section, 
+.usuario-section, 
+.perfil-card, 
+.modal {
+  color: #000 !important;
+}
+
+/* ===== BOTONES CON COLOR #6ccce4 ===== */
+.nuevo-cliente-btn,
+.perfil-actions button,
+.btn-primary {
+  background-color: #6ccce4 !important;
+  color: #fff !important;
+  border: none;
+}
+
+.nuevo-cliente-btn:hover,
+.perfil-actions button:hover,
+.btn-primary:hover {
+  background-color: #4fb3cc !important; /* tono más oscuro para hover */
+}
+
+/* ===== AJUSTE PARA .btn-secondary (opcional) ===== */
+.btn-secondary {
+  background-color: #e5e7eb;
+  color: #000;
+}

@@ -1,3 +1,10 @@
+:root {
+  --td-primary: #6ccce4; /* 💠 color turquesa principal */
+  --td-primary-hover: #4fb3cc; /* 💠 tono hover más oscuro */
+  --td-bg: #ffffff;
+  --td-text: #000;
+}
+
 /* ======== FONDO GENERAL ======== */
 .td-page {
   display: flex;
@@ -5,8 +12,8 @@
   align-items: flex-start;
   min-height: 100vh;
   padding: 40px 20px;
-  
-  color: #000;
+  background: var(--td-bg);
+  color: var(--td-text);
   font-family: "Segoe UI", sans-serif;
 }
 
@@ -14,8 +21,8 @@
 .td-card {
   background: #fff;
   border: none;
-  border-radius: 0; /* ⬛ recto */
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.35); /* 🌑 sombra fuerte */
+  border-radius: 0;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.35);
   padding: 40px;
   max-width: 700px;
   width: 100%;
@@ -68,7 +75,7 @@
 /* ======== BOTÓN DE UPLOAD ======== */
 .td-btn-upload {
   display: inline-block;
-  background: #4D8BFF;
+  background: var(--td-primary);
   color: #fff;
   font-size: 16px;
   font-weight: 600;
@@ -81,7 +88,7 @@
 }
 
 .td-btn-upload:hover {
-  background: #3973E6;
+  background: var(--td-primary-hover);
   transform: translateY(-2px);
   box-shadow: 0px 6px 14px rgba(0, 0, 0, 0.45);
 }
@@ -113,7 +120,7 @@
 
 /* ======== BOTÓN PRINCIPAL ======== */
 .td-btn {
-  background: #4D8BFF;
+  background: var(--td-primary);
   color: #fff;
   font-size: 18px;
   font-weight: 600;
@@ -127,7 +134,7 @@
 }
 
 .td-btn:hover {
-  background: #3973E6;
+  background: var(--td-primary-hover);
   transform: translateY(-2px);
   box-shadow: 0px 6px 14px rgba(0, 0, 0, 0.45);
 }
@@ -137,7 +144,7 @@
   display: inline-block;
   margin-top: 20px;
   color: #fff;
-  background: #4D8BFF;
+  background: var(--td-primary);
   padding: 12px 20px;
   border: none;
   border-radius: 0;
@@ -148,7 +155,7 @@
 }
 
 .td-download:hover {
-  background: #3973E6;
+  background: var(--td-primary-hover);
   transform: translateY(-2px);
   box-shadow: 0px 6px 14px rgba(0, 0, 0, 0.45);
 }
