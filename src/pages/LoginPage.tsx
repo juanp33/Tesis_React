@@ -1,61 +1,64 @@
-// src/pages/LoginPage.tsx
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../styles/LoginPage.css";
 import LogoNegro from "../assets/logo-negro.png";
-import { usePermisos } from "../context/PermisosContext"; // ✅ para refrescar permisos tras JWT
+import { usePermisos } from "../context/PermisosContext";
 
-type Paso = "credenciales" | "otp";
+type Paso = "credenciales" | "otp" | "recuperar" | "reset";
 
 const LoginPage = () => {
   const [paso, setPaso] = useState<Paso>("credenciales");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
   const [txId, setTxId] = useState<string | null>(null);
   const [emailMasked, setEmailMasked] = useState<string>("");
   const [otp, setOtp] = useState("");
-
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
-  const { refrescarPermisos } = usePermisos(); // ✅
+  const { refrescarPermisos } = usePermisos();
 
+  // 🔹 Cada vez que cambia de paso, limpiamos los campos
+  useEffect(() => {
+    setEmail("");
+    setPassword("");
+    setOtp("");
+    setError(null);
+  }, [paso]);
+
+  // ================== LOGIN ==================
   const handleLogin = async () => {
     try {
       setError(null);
       setLoading(true);
       localStorage.removeItem("jwt");
 
-      // Paso 1: credenciales → /api/auth/login
       const resp = await axios.post("http://localhost:8080/api/auth/login", {
         username: email,
         password: password,
       });
 
-      // Respuesta: { twoFactor: true, txId, emailMasked }
       if (resp.data?.twoFactor && resp.data?.txId) {
         setTxId(resp.data.txId);
         setEmailMasked(resp.data.emailMasked || "");
         setPaso("otp");
       } else if (resp.data?.token) {
-        // (por si en algún entorno devolvés token directo)
         localStorage.setItem("jwt", resp.data.token);
         await refrescarPermisos();
         navigate("/perfil");
       } else {
         setError("Respuesta inesperada del servidor.");
       }
-    } catch (err: any) {
-      console.error(err);
+    } catch {
       setError("❌ Credenciales inválidas.");
     } finally {
       setLoading(false);
     }
   };
 
+  // ================== VERIFICAR OTP ==================
   const handleVerifyOtp = async () => {
     if (!txId) return;
     try {
@@ -69,20 +72,20 @@ const LoginPage = () => {
 
       if (resp.data?.token) {
         localStorage.setItem("jwt", resp.data.token);
-        await refrescarPermisos(); // ✅ cargar permisos ya mismo
+        await refrescarPermisos();
         alert("Inicio de sesión exitoso ✅");
         navigate("/perfil");
       } else {
         setError("No se recibió token.");
       }
-    } catch (err: any) {
-      console.error(err);
+    } catch {
       setError("❌ Código inválido o expirado.");
     } finally {
       setLoading(false);
     }
   };
 
+  // ================== REENVIAR CÓDIGO (Login y Reset) ==================
   const handleResend = async () => {
     if (!txId) return;
     try {
@@ -97,9 +100,46 @@ const LoginPage = () => {
       } else {
         setError("No se pudo reenviar el código.");
       }
-    } catch (err) {
-      console.error(err);
+    } catch {
       setError("Error al reenviar el código.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // ================== RECUPERAR CONTRASEÑA ==================
+  const handleForgotPassword = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const resp = await axios.post("http://localhost:8080/api/auth/forgot-password", { email });
+      setTxId(resp.data.txId);
+      setEmailMasked(resp.data.emailMasked);
+      setPaso("reset");
+      alert(resp.data.mensaje);
+    } catch {
+      setError("❌ No se pudo enviar el código.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // ================== RESETEAR CONTRASEÑA ==================
+  const handleResetPassword = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      await axios.post("http://localhost:8080/api/auth/reset-password", {
+        txId,
+        code: otp.trim(),
+        password,
+      });
+      alert("✅ Contraseña restablecida. Ahora puedes iniciar sesión.");
+      setPaso("credenciales");
+      setOtp("");
+      setPassword("");
+    } catch {
+      setError("❌ Código inválido o error al restablecer contraseña.");
     } finally {
       setLoading(false);
     }
@@ -114,8 +154,15 @@ const LoginPage = () => {
       </div>
 
       <div className="form-box">
-        <h2>Iniciar sesión</h2>
+        {/* 🔹 TÍTULO DINÁMICO */}
+        <h2>
+          {paso === "credenciales" && "Ingrese el email del usuario"}
+          {paso === "otp" && "Esperando código de verificación"}
+          {paso === "recuperar" && "Recuperar contraseña"}
+          {paso === "reset" && "Restablecer contraseña"}
+        </h2>
 
+        {/* === Paso 1: Credenciales === */}
         {paso === "credenciales" && (
           <>
             <input
@@ -132,13 +179,16 @@ const LoginPage = () => {
               onChange={(e) => setPassword(e.target.value)}
               disabled={loading}
             />
-            <a href="#" className="forgot">Olvidé mi contraseña</a>
+            <a href="#" className="forgot" onClick={() => setPaso("recuperar")}>
+              Olvidé mi contraseña
+            </a>
             <button onClick={handleLogin} disabled={loading}>
               {loading ? "Validando..." : "Iniciar sesión"}
             </button>
           </>
         )}
 
+        {/* === Paso 2: OTP === */}
         {paso === "otp" && (
           <>
             <p>Te enviamos un código a <b>{emailMasked || "tu correo"}</b></p>
@@ -157,7 +207,76 @@ const LoginPage = () => {
               Reenviar código
             </button>
             <button
-              onClick={() => { setPaso("credenciales"); setOtp(""); setTxId(null); }}
+              onClick={() => {
+                setPaso("credenciales");
+                setOtp("");
+                setTxId(null);
+              }}
+              disabled={loading}
+              style={{ marginTop: 8 }}
+            >
+              Volver
+            </button>
+          </>
+        )}
+
+        {/* === Paso 3: Recuperar contraseña === */}
+        {paso === "recuperar" && (
+          <>
+            <p>Ingresa tu correo y te enviaremos un código para restablecer tu contraseña.</p>
+            <input
+              type="email"
+              placeholder="Correo registrado"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              disabled={loading}
+            />
+            <button onClick={handleForgotPassword} disabled={loading || !email}>
+              {loading ? "Enviando..." : "Enviar código"}
+            </button>
+            <button
+              onClick={() => setPaso("credenciales")}
+              disabled={loading}
+              style={{ marginTop: 8 }}
+            >
+              Volver
+            </button>
+          </>
+        )}
+
+        {/* === Paso 4: Resetear contraseña === */}
+        {paso === "reset" && (
+          <>
+            <p>Revisa tu correo <b>{emailMasked || email}</b> e ingresa el código recibido.</p>
+            <input
+              type="text"
+              placeholder="Código de 6 dígitos"
+              value={otp}
+              onChange={(e) => setOtp(e.target.value)}
+              maxLength={6}
+              disabled={loading}
+            />
+            <input
+              type="password"
+              placeholder="Nueva contraseña"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              disabled={loading}
+            />
+            <button
+              onClick={handleResetPassword}
+              disabled={loading || otp.length !== 6 || password.trim().length < 4}
+            >
+              {loading ? "Actualizando..." : "Cambiar contraseña"}
+            </button>
+
+            {/* 🔁 Reenviar código solo acá */}
+            <button onClick={handleResend} disabled={loading} style={{ marginTop: 8 }}>
+              Reenviar código
+            </button>
+
+            <button
+              onClick={() => setPaso("credenciales")}
               disabled={loading}
               style={{ marginTop: 8 }}
             >
