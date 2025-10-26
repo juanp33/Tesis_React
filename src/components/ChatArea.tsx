@@ -24,9 +24,12 @@ export default function ChatArea({ chatId }: ChatAreaProps) {
   const [isLoading, setIsLoading] = useState(false);
   const chatEndRef = useRef<HTMLDivElement | null>(null);
 
-
   useEffect(() => {
-    if (!chatId) return;
+    if (!chatId) {
+      setMessages([]);
+      return;
+    }
+
     const token = localStorage.getItem("jwt");
     setMessages([]);
 
@@ -88,22 +91,13 @@ export default function ChatArea({ chatId }: ChatAreaProps) {
 
       setMessages((prev) => {
         const updated = [...prev];
-        const lastIndex = [...updated]
-          .reverse()
-          .findIndex((m) => m.role === "assistant");
-        const realIndex =
-          lastIndex === -1 ? -1 : updated.length - 1 - lastIndex;
-
-        if (realIndex !== -1) {
-          updated[realIndex] = {
-            role: "assistant",
-            content: assistantResponse,
-          };
+        const idx = updated.findIndex((m) => m.role === "assistant" && m.content.includes("redactando"));
+        if (idx !== -1) {
+          updated[idx] = { role: "assistant", content: assistantResponse };
         }
         return updated;
       });
-    } catch (err) {
-      console.error("Error enviando mensaje:", err);
+    } catch {
       setMessages((prev) => [
         ...prev.slice(0, -1),
         { role: "assistant", content: "❌ Error interno del servidor." },
@@ -113,6 +107,17 @@ export default function ChatArea({ chatId }: ChatAreaProps) {
     setIsLoading(false);
   };
 
+  // Si no hay chat activo, mostrar un mensaje deshabilitado
+  if (!chatId) {
+    return (
+      <div className="chat-area chat-disabled">
+        <div className="no-chat-message">
+          💬 Selecciona o crea un chat para comenzar a conversar.
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="chat-area">
       <div className="messages-box">
@@ -121,8 +126,7 @@ export default function ChatArea({ chatId }: ChatAreaProps) {
             <div className="msg-content" style={{ whiteSpace: "pre-line" }}>
               {msg.content}
             </div>
-
-            {msg.files && msg.files.length > 0 && (
+            {msg.files?.length ? (
               <div className="attached-preview" style={{ marginTop: "5px" }}>
                 {msg.files.map((file, idx) => (
                   <span key={idx} className="file-chip">
@@ -130,7 +134,7 @@ export default function ChatArea({ chatId }: ChatAreaProps) {
                   </span>
                 ))}
               </div>
-            )}
+            ) : null}
           </div>
         ))}
         <div ref={chatEndRef}></div>
@@ -166,6 +170,7 @@ export default function ChatArea({ chatId }: ChatAreaProps) {
             onKeyDown={(e) =>
               e.key === "Enter" && !e.shiftKey && (e.preventDefault(), sendMessage())
             }
+            disabled={isLoading}
           />
         </div>
 
@@ -182,7 +187,12 @@ export default function ChatArea({ chatId }: ChatAreaProps) {
             />
           </label>
 
-          <button className="send-btn" onClick={sendMessage} title="Enviar">
+          <button
+            className="send-btn"
+            onClick={sendMessage}
+            title="Enviar"
+            disabled={isLoading}
+          >
             <img src={sendIcon} alt="Enviar" className="icon-btn" />
           </button>
         </div>

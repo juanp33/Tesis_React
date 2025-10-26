@@ -25,7 +25,7 @@ const MasterPage = ({ children }: MasterPageProps) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const location = useLocation();
-  const { cargando } = usePermisos();
+  const { cargando, permisos } = usePermisos();
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -49,6 +49,17 @@ const MasterPage = ({ children }: MasterPageProps) => {
       </div>
     );
   }
+
+  // ✅ Verificamos si tiene al menos un permiso de administración
+  const tieneAlgunoDeAdmin = [
+    "Abogado CRUD",
+    "Usuario Crud",
+    "Roles Crud",
+    "Permisos",
+    "Asignar permisos a rol",
+    "Asignar roles a usuario",
+    
+  ].some((p) => permisos.includes(p));
 
   return (
     <div className="mp-container">
@@ -81,73 +92,106 @@ const MasterPage = ({ children }: MasterPageProps) => {
           </NavLink>
 
           <IfPermiso nombre="Transcripcion">
-            <NavLink to="/transcripcion" className={({ isActive }) => "mp-toplink" + (isActive ? " active" : "")}>
+            <NavLink
+              to="/transcripcion"
+              className={({ isActive }) =>
+                "mp-toplink" + (isActive ? " active" : "")
+              }
+            >
               <img src={MicLogo} alt="" className="mp-topicon" /> Transcripción
             </NavLink>
           </IfPermiso>
 
           <IfPermiso nombre="Redaccion Asistida">
-            <NavLink to="/redactorautomatico" className={({ isActive }) => "mp-toplink" + (isActive ? " active" : "")}>
+            <NavLink
+              to="/redactorautomatico"
+              className={({ isActive }) =>
+                "mp-toplink" + (isActive ? " active" : "")
+              }
+            >
               <img src={PencilLogo} alt="" className="mp-topicon" /> Redacción Asistida
             </NavLink>
           </IfPermiso>
 
           <IfPermiso nombre="ChatBot">
-            <NavLink to="/chatbot" className={({ isActive }) => "mp-toplink" + (isActive ? " active" : "")}>
+            <NavLink
+              to="/chatbot"
+              className={({ isActive }) =>
+                "mp-toplink" + (isActive ? " active" : "")
+              }
+            >
               <img src={ChatLogo} alt="" className="mp-topicon" /> ChatBot Jurídico
             </NavLink>
           </IfPermiso>
 
           <IfPermiso nombre="Resumidor">
-            <NavLink to="/resumidor" className={({ isActive }) => "mp-toplink" + (isActive ? " active" : "")}>
+            <NavLink
+              to="/resumidor"
+              className={({ isActive }) =>
+                "mp-toplink" + (isActive ? " active" : "")
+              }
+            >
               <img src={Resumidor} alt="" className="mp-topicon" /> Resumidor
             </NavLink>
           </IfPermiso>
 
           <IfPermiso nombre="OCR">
-            <NavLink to="/ocr" className={({ isActive }) => "mp-toplink" + (isActive ? " active" : "")}>
+            <NavLink
+              to="/ocr"
+              className={({ isActive }) =>
+                "mp-toplink" + (isActive ? " active" : "")
+              }
+            >
               <img src={ZoomLogo} alt="" className="mp-topicon" /> OCR
             </NavLink>
           </IfPermiso>
 
           <IfPermiso nombre="Transformar Documento">
-            <NavLink to="/transformardocumento" className={({ isActive }) => "mp-toplink" + (isActive ? " active" : "")}>
+            <NavLink
+              to="/transformardocumento"
+              className={({ isActive }) =>
+                "mp-toplink" + (isActive ? " active" : "")
+              }
+            >
               <img src={Transformar} alt="" className="mp-topicon" /> Transformar Documento
             </NavLink>
           </IfPermiso>
 
-          <div className="mp-admin-top" ref={dropdownRef}>
-            <button
-              className="mp-toplink mp-admin-btn"
-              onClick={() => setAdminOpen((v) => !v)}
-            >
-              <img src={ConfigLogo} alt="Administración" className="mp-config-icon" />
-              Administración <span className="mp-arrow">{adminOpen ? "▲" : "▼"}</span>
-            </button>
+          {/* ✅ Mostrar Administración solo si tiene permisos */}
+          {tieneAlgunoDeAdmin && (
+            <div className="mp-admin-top" ref={dropdownRef}>
+              <button
+                className="mp-toplink mp-admin-btn"
+                onClick={() => setAdminOpen((v) => !v)}
+              >
+                <img src={ConfigLogo} alt="Administración" className="mp-config-icon" />
+                Administración <span className="mp-arrow">{adminOpen ? "▲" : "▼"}</span>
+              </button>
 
-            {adminOpen && (
-              <div className="mp-admin-dropdown">
-                <IfPermiso nombre="Abogado CRUD">
-                  <NavLink to="/abogados" className="mp-admin-link">Abogados</NavLink>
-                </IfPermiso>
-                <IfPermiso nombre="Usuario Crud">
-                  <NavLink to="/usuarios" className="mp-admin-link">Usuarios</NavLink>
-                </IfPermiso>
-                <IfPermiso nombre="Roles Crud">
-                  <NavLink to="/roles" className="mp-admin-link">Roles</NavLink>
-                </IfPermiso>
-                <IfPermiso nombre="Permisos">
-                  <NavLink to="/permisos" className="mp-admin-link">Permisos</NavLink>
-                </IfPermiso>
-                <IfPermiso nombre="Asignar permisos a rol">
-                  <NavLink to="/asignar-permisos" className="mp-admin-link">Asignar Permisos a Rol</NavLink>
-                </IfPermiso>
-                <IfPermiso nombre="Usuario Crud">
-                  <NavLink to="/asignar-roles" className="mp-admin-link">Asignar Roles a Usuario</NavLink>
-                </IfPermiso>
-              </div>
-            )}
-          </div>
+              {adminOpen && (
+                <div className="mp-admin-dropdown">
+                  <IfPermiso nombre="Abogado CRUD">
+                    <NavLink to="/abogados" className="mp-admin-link">Abogados</NavLink>
+                  </IfPermiso>
+                  <IfPermiso nombre="Usuario Crud">
+                    <NavLink to="/usuarios" className="mp-admin-link">Usuarios</NavLink>
+                  </IfPermiso>
+                  <IfPermiso nombre="Roles Crud">
+                    <NavLink to="/roles" className="mp-admin-link">Roles</NavLink>
+                  </IfPermiso>
+                  <IfPermiso nombre="Permisos">
+                    <NavLink to="/permisos" className="mp-admin-link">Permisos</NavLink>
+                  </IfPermiso>
+                  <IfPermiso nombre="Asignar permisos a rol">
+                    <NavLink to="/asignar-permisos" className="mp-admin-link">Asignar Permisos a Rol</NavLink>
+                  </IfPermiso>
+                  <IfPermiso nombre="Asignar roles a usuario">
+                    <NavLink to="/asignar-roles" className="mp-admin-link">Asignar Roles a Usuario</NavLink>
+                  </IfPermiso>
+                </div>
+              )}
+            </div>
+          )}
         </nav>
       </header>
 
