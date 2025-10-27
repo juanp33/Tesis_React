@@ -1,19 +1,24 @@
+/* ===========================
+   Cliente Detalle (layout)
+   =========================== */
+
 .cliente-detalle-layout {
   display: flex;
   gap: 20px;
   padding: 20px;
-  background: #e6f2ff;
-  min-height: 100vh; /* ocupa toda la pantalla */
+  background: #ffffff;
+  min-height: 100vh;
   box-sizing: border-box;
+  color: #000;
 }
 
-/* 📂 Casos */
+/* Casos (columna izquierda) */
 .casos-section {
-  flex: 2; /* ocupa más espacio */
+  flex: 2;
   display: flex;
   flex-direction: column;
   gap: 20px;
-  overflow-y: auto; /* permite scroll si hay muchos casos */
+  overflow-y: auto;
   max-height: calc(100vh - 40px);
   padding-right: 10px;
 }
@@ -32,60 +37,114 @@
   gap: 15px;
 }
 
+/* ===========================
+   Caso (ficha enmarcada)
+   =========================== */
+
 .caso-card {
-  background: white;
-  border-radius: 10px;
-  padding: 15px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  background: #fff;                  /* panel blanco */
+  color: #0f172a;
+  border: 1px solid #d1d5db;         /* marco sutil */
+  border-radius: 0;                  /* esquinas rectas */
+  padding: 20px 24px;
+  box-shadow: 0 4px 12px rgba(0,0,0,.12);
+  max-width: 900px;
+  margin: 0 auto;
+  line-height: 1.55;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.caso-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(0,0,0,.18);
 }
 
 .caso-card h3 {
-  margin: 0 0 10px;
-  color: #333;
+  margin: 0 0 14px 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #0f172a;
 }
 
+/* Filas "Label: Valor" estilo tabla */
 .caso-card p {
-  margin: 5px 0;
+  margin: 0;
+  padding: 10px 8px;
+  display: grid;
+  grid-template-columns: 150px 1fr; /* etiqueta fija + valor flexible */
+  align-items: start;
+  gap: 8px;
+  border-bottom: 1px solid #e5e7eb;
 }
 
+.caso-card p:last-child {
+  border-bottom: none;
+}
+
+.caso-card p strong {
+  color: #111;
+  font-weight: 700;
+  min-width: 0;
+}
+
+.caso-card p span,
+.caso-card p em,
+.caso-card p i {
+  color: #0f172a;
+}
+
+/* Enlaces (archivos) */
 .caso-card a {
-  display: inline-block;
-  margin: 5px 10px 0 0;
-  color: #6a5acd;
+  color: #0a66ff;
   text-decoration: none;
-  font-size: 0.9rem;
+  font-weight: 600;
 }
 
 .caso-card a:hover {
   text-decoration: underline;
 }
 
-/* Botón de nuevo caso */
+/* Texto vacío */
+.caso-card .sin-archivos {
+  color: #6b7280;
+  font-style: italic;
+  padding: 10px 8px;
+}
+
+/* Botón "Agregar Caso" */
 .nuevo-caso-btn {
   margin-top: 15px;
   padding: 10px;
-  background: #6a5acd;
-  color: white;
+  background: #6ccce4;
+  color: #fff;
   border: none;
-  border-radius: 6px;
+  border-radius: 0;
   cursor: pointer;
   font-size: 0.9rem;
+  box-shadow: 0 4px 10px rgba(0,0,0,.15);
+  transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .nuevo-caso-btn:hover {
-  background: #5848c2;
+  background: #4fb3cc;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(0,0,0,.2);
 }
 
-/* 👤 Info Cliente */
+/* ===========================
+   Info del Cliente (derecha)
+   =========================== */
+
 .cliente-info-section {
-  flex: 1; /* más chica que casos */
-  background: white;
+  flex: 1;
+  background: #fff;
   padding: 20px;
-  border-radius: 10px;
+  border-radius: 0;
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-  position: sticky; /* siempre visible en scroll */
+  position: sticky;
   top: 20px;
   height: fit-content;
+  color: #000;
 }
 
 .cliente-info-section h2 {
@@ -96,31 +155,30 @@
   gap: 8px;
 }
 
+/* Si usás tarjetas internas en la barra derecha */
 .perfil-card p {
   margin: 6px 0;
 }
 
-/* 📱 Responsive */
+/* ===========================
+   Responsive
+   =========================== */
+
 @media (max-width: 900px) {
   .cliente-detalle-layout {
     flex-direction: column;
   }
-
   .casos-section {
     max-height: none;
     overflow-y: visible;
   }
-
   .cliente-info-section {
     position: relative;
     top: auto;
   }
 }
-.caso-card {
-  transition: transform 0.2s, box-shadow 0.2s;
-}
 
-.caso-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
+@media (max-width: 600px) {
+  .caso-card { padding: 16px 18px; }
+  .caso-card p { grid-template-columns: 120px 1fr; padding: 8px 6px; }
 }

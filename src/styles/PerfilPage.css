@@ -14,7 +14,7 @@
 .usuario-section h2,
 .clientes-section h3,
 .usuario-section h3 {
-  color: #000;
+  color: #000000;
   font-weight: 700;
   margin-bottom: 15px;
 }
@@ -54,11 +54,12 @@
 /* ===== PANEL LATERAL (ABOGADO) ===== */
 .usuario-section {
   flex: 1;
-  background: #ffffff;
+  background: #dff5fb;;
   padding: 15px;
   border: none;
   border-radius: 0; /* ⬛ sin bordes redondeados */
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.35);
+  color: #000;
 }
 
 /* ===== GRID DE CLIENTES ===== */
@@ -70,7 +71,7 @@
 
 /* ===== TARJETAS DE CLIENTE / PERFIL ===== */
 .perfil-card {
-  background: #fff;
+  background: #ffffff;
   border: none;
   border-radius: 0; /* ⬛ sin bordes redondeados */
   padding: 15px;
@@ -147,6 +148,7 @@
     font-size: 15px;
   }
 }
+/* ===== POP-UP (MODAL) — override final ===== */
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -159,8 +161,9 @@
 }
 
 .modal {
-  background: white;
-  border-radius: 10px;
+  background: #ffffff;
+  color: #000000;
+  border-radius: 0;              /* recto */
   padding: 25px 30px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   width: 380px;
@@ -168,19 +171,40 @@
 }
 
 .modal h3 {
-  color: #1e3a8a;
+  color: #000000;                /* título negro */
   margin-bottom: 15px;
 }
 
-.modal input {
+/* Inputs blancos, texto negro, bordes rectos */
+.modal input,
+.modal select,
+.modal textarea {
   width: 100%;
   margin-bottom: 10px;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
+  padding: 8px 10px;
+  background: #ffffff !important;
+  color: #000000 !important;
+  border: 1px solid #cbd5e1;
+  border-radius: 0 !important;   /* recto */
   font-size: 0.95rem;
+  outline: none;
+  box-shadow: none;
 }
 
+.modal input::placeholder,
+.modal textarea::placeholder {
+  color: #4b5563;
+  opacity: 0.9;
+}
+
+.modal input:focus,
+.modal select:focus,
+.modal textarea:focus {
+  border-color: #4D8BFF;
+  box-shadow: 0 0 0 2px rgba(77,139,255,0.18);
+}
+
+/* Botonera del modal */
 .modal-buttons {
   display: flex;
   justify-content: center;
@@ -188,65 +212,26 @@
   margin-top: 10px;
 }
 
-.btn-primary {
-  background-color: #1e3a8a;
-  color: white;
+/* Solo los botones dentro del modal (no toca otros) */
+.modal .btn-primary,
+.modal .btn-secondary {
+  border-radius: 0;              /* recto */
   border: none;
   padding: 8px 16px;
-  border-radius: 6px;
   cursor: pointer;
   font-weight: 600;
 }
 
-.btn-primary:hover {
-  background-color: #2e4eb0;
-}
+.modal .btn-primary { background-color: #6ccce4; color: #fff; }
+.modal .btn-primary:hover { background-color: #4fb3cc; }
 
-.btn-secondary {
-  background-color: #e5e7eb;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 6px;
-  cursor: pointer;
-}
+.modal .btn-secondary { background-color: #e5e7eb; color: #000; }
+.modal .btn-secondary:hover { background-color: #d1d5db; }
 
-.btn-secondary:hover {
-  background-color: #d1d5db;
-}
-
-.mensaje {
+/* Mensaje dentro del modal */
+.modal .mensaje {
   color: #b91c1c;
   font-weight: 500;
   font-size: 0.9rem;
   margin: 5px 0;
-}
-/* ===== FORZAR COLOR DE TEXTO ===== */
-body, 
-.clientes-layout, 
-.clientes-section, 
-.usuario-section, 
-.perfil-card, 
-.modal {
-  color: #000 !important;
-}
-
-/* ===== BOTONES CON COLOR #6ccce4 ===== */
-.nuevo-cliente-btn,
-.perfil-actions button,
-.btn-primary {
-  background-color: #6ccce4 !important;
-  color: #fff !important;
-  border: none;
-}
-
-.nuevo-cliente-btn:hover,
-.perfil-actions button:hover,
-.btn-primary:hover {
-  background-color: #4fb3cc !important; /* tono más oscuro para hover */
-}
-
-/* ===== AJUSTE PARA .btn-secondary (opcional) ===== */
-.btn-secondary {
-  background-color: #e5e7eb;
-  color: #000;
 }

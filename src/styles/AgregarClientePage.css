@@ -3,9 +3,9 @@
   justify-content: center;
   align-items: center;
   min-height: calc(100vh - 80px);
-  background: #eaf3ff;
-}
+ 
 
+}
 
 .agregar-cliente-container {
   width: 100%;
@@ -135,7 +135,7 @@
   font-size: 14px;
   border: none;
   border-radius: 0;
-  background: #28a745;
+  background: #4e915d;
   color: #fff;
   cursor: pointer;
   box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.35);
@@ -144,4 +144,43 @@
 
 .cliente-card button:hover {
   background: #1e7e34;
+}
+/* ==== Campos de ingreso: fondo blanco y texto negro ==== */
+.agregar-cliente-form label {
+  color: #000 !important;         /* letras negras en labels */
+  font-weight: 600;
+}
+
+.agregar-cliente-form input,
+.agregar-cliente-form select,
+.agregar-cliente-form textarea {
+  background: #fff !important;    /* blanco */
+  color: #000 !important;         /* texto negro */
+  border: 1px solid #ccc;         /* borde claro (no negro) */
+  border-radius: 0;               /* esquinas rectas */
+  padding: 10px;
+  font-size: 15px;
+  outline: none;
+  box-shadow: none;
+}
+
+/* Placeholders legibles (gris oscuro) */
+.agregar-cliente-form input::placeholder,
+.agregar-cliente-form textarea::placeholder {
+  color: #555;
+  opacity: 0.9;
+}
+
+/* Focus azul (sin sombra negra) */
+.agregar-cliente-form input:focus,
+.agregar-cliente-form select:focus,
+.agregar-cliente-form textarea:focus {
+  border-color: #4D8BFF;
+  box-shadow: 0 0 0 2px rgba(77,139,255,0.18);
+}
+
+/* Por si el contenedor heredaba otro color de texto */
+.agregar-cliente-container,
+.agregar-cliente-form {
+  color: #000 !important;
 }
