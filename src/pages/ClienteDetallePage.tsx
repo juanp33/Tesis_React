@@ -41,6 +41,7 @@ const ClienteDetallePage = () => {
   const [showConfirm, setShowConfirm] = useState(false);
   const navigate = useNavigate();
 
+  // ===================== 🔹 Cargar cliente y casos =====================
   useEffect(() => {
     const token = localStorage.getItem("jwt");
     if (!token) {
@@ -73,6 +74,7 @@ const ClienteDetallePage = () => {
       .finally(() => setLoading(false));
   }, [id]);
 
+  // ===================== 🔹 Cargar archivos de cada caso =====================
   const fetchArchivo = async (casoId: number, archivo: ArchivoCaso) => {
     const token = localStorage.getItem("jwt");
     try {
@@ -100,7 +102,34 @@ const ClienteDetallePage = () => {
     });
   }, [casos]);
 
-  // 🧹 Función para eliminar el cliente
+  // ===================== 🔹 Descargar caso completo (ZIP) =====================
+  const handleDescargarCaso = async (casoId: number, e: React.MouseEvent) => {
+    e.stopPropagation(); // evita navegar al caso al hacer click en el botón
+    const token = localStorage.getItem("jwt");
+
+    try {
+      const response = await fetch(`http://localhost:8080/casos/${casoId}/descargar`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (!response.ok) throw new Error("Error al descargar el caso");
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `caso_${casoId}.zip`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("❌ Error al descargar el caso:", error);
+      alert("No se pudo descargar el caso.");
+    }
+  };
+
+  // ===================== 🔹 Eliminar cliente =====================
   const handleEliminarCliente = async () => {
     const token = localStorage.getItem("jwt");
     if (!token) {
@@ -122,6 +151,7 @@ const ClienteDetallePage = () => {
     }
   };
 
+  // ===================== 🔹 Render =====================
   return (
     <MasterPage>
       <div className="cliente-detalle-layout">
@@ -141,7 +171,17 @@ const ClienteDetallePage = () => {
                   onClick={() => navigate(`/casos/${caso.id}`)}
                   style={{ cursor: "pointer" }}
                 >
-                  <h3>{caso.titulo}</h3>
+                  <div className="caso-header">
+                    <h3>{caso.titulo}</h3>
+                    {/* 📦 Botón de descarga */}
+                    <button
+                      className="btn-descargar"
+                      onClick={(e) => handleDescargarCaso(caso.id, e)}
+                    >
+                      📦 Descargar
+                    </button>
+                  </div>
+
                   <p><b>Tipo:</b> {caso.tipo}</p>
                   <p><b>Estado:</b> {caso.estado}</p>
                   <p><b>Descripción:</b> {caso.descripcion}</p>
@@ -159,7 +199,7 @@ const ClienteDetallePage = () => {
                               download={a.nombreArchivo}
                               target="_blank"
                               rel="noopener noreferrer"
-                              onClick={(e) => e.stopPropagation()} 
+                              onClick={(e) => e.stopPropagation()}
                             >
                               {a.nombreArchivo}
                             </a>
@@ -208,7 +248,7 @@ const ClienteDetallePage = () => {
           )}
         </div>
 
-        {/* Modal de confirmación */}
+        {/* ⚠️ Modal de confirmación */}
         {showConfirm && (
           <div className="modal-overlay">
             <div className="modal">
