@@ -20,7 +20,7 @@ const LoginPage = () => {
   const navigate = useNavigate();
   const { refrescarPermisos } = usePermisos();
 
-  // 🔹 Cada vez que cambia de paso, limpiamos los campos
+  
   useEffect(() => {
     setEmail("");
     setPassword("");
