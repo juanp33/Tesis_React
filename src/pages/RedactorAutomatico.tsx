@@ -176,7 +176,7 @@ export default function RedaccionAutomatica() {
   }, [chatMsgs]);
 
   const docTypeOptions = useMemo(
-    () => ["Demanda", "Poder", "Escrito", "Testamento", "Declaración Jurada"],
+    () => ["Demanda", "Poder", "Escrito", "Testamento", "Declaración Jurada","Denuncia"],
     []
   );
 
