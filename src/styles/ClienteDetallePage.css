@@ -75,6 +75,7 @@
   align-items: start;
   gap: 8px;
   border-bottom: 1px solid #e5e7eb;
+  
 }
 
 .caso-card p:last-child {
@@ -109,6 +110,7 @@
   color: #6b7280;
   font-style: italic;
   padding: 10px 8px;
+  
 }
 
 /* Botón "Agregar Caso" */
@@ -158,6 +160,7 @@
 /* Si usás tarjetas internas en la barra derecha */
 .perfil-card p {
   margin: 6px 0;
+  color:#000;
 }
 
 /* ===========================
