@@ -1,209 +1,157 @@
-# ⚖️ AI Assistant for Lawyers
+# ⚖️ AI Assistant for Lawyers — Frontend
 
-AI-powered assistant designed to help legal professionals process, analyze, and query legal documents and hearing audio. Combines text extraction from PDFs (including scanned ones via OCR), audio transcription with speaker diarization, and language models to deliver context-aware answers about the content.
+React + TypeScript web client for the [AI Assistant for Lawyers](https://github.com/juanp33/PythonTesis) project. Provides the user interface for uploading legal documents and audio recordings, running AI-powered queries against them, and exporting results as Word or PDF files.
 
-> **Thesis project** for the Software Analysis and Development program — Instituto CEI (2025–2026).
+> **Companion frontend** to the [`PythonTesis`](https://github.com/juanp33/PythonTesis) FastAPI backend. Thesis project — Instituto CEI (2025–2026).
 
-![Python](https://img.shields.io/badge/Python-3.11+-3776AB?style=flat&logo=python&logoColor=white)
-![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=flat&logo=fastapi&logoColor=white)
-![OpenAI](https://img.shields.io/badge/OpenAI-412991?style=flat&logo=openai&logoColor=white)
+![React](https://img.shields.io/badge/React-19-20232A?style=flat&logo=react&logoColor=61DAFB)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.8-3178C6?style=flat&logo=typescript&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-6.3-646CFF?style=flat&logo=vite&logoColor=white)
 ![Status](https://img.shields.io/badge/status-in%20development-yellow)
 
 ---
 
-## 🎯 Problem it solves
+## 🎯 What it does
 
-Lawyers handle large volumes of legal documentation (briefs, rulings, judgments) and audio recordings (hearings, interviews, statements). Processing this material manually is slow, repetitive, and error-prone. This assistant automates tasks that normally take hours:
+The frontend lets legal professionals interact with the AI assistant through a clean web UI:
 
-- Extract text from **native and scanned PDFs** (with automatic OCR fallback).
-- **Transcribe audio** from hearings or interviews, identifying who is speaking at each moment.
-- Allow **natural-language queries** over the processed content using OpenAI models.
-- Generate **output PDFs** with summaries, formatted transcripts, or structured answers.
+- **Authenticated access** with JWT-based login.
+- **Upload PDFs** (digital or scanned) and trigger backend processing with OCR fallback.
+- **Upload audio files** for transcription and speaker diarization.
+- **Ask natural-language questions** about the processed documents using OpenAI models.
+- **Export results** as `.docx` or `.pdf` files generated client-side, ready to share with colleagues.
+- **Multiple views/routes**: separate sections for documents, audio, queries, and exports.
 
 ---
 
 ## 🛠️ Tech stack
 
-**Backend**
-- [FastAPI](https://fastapi.tiangolo.com/) — Modern async web framework with automatic OpenAPI docs.
-- [Uvicorn](https://www.uvicorn.org/) — Production-grade ASGI server.
-- [Pydantic](https://docs.pydantic.dev/) — Data validation and serialization.
+**Core**
+- [React 19](https://react.dev/) — UI library.
+- [TypeScript 5.8](https://www.typescriptlang.org/) — Static typing across the codebase.
+- [Vite 6](https://vitejs.dev/) — Build tool with instant HMR.
 
-**Document processing**
-- [PyPDF2](https://pypdf2.readthedocs.io/) — Text extraction from digital PDFs.
-- [OCRmyPDF](https://ocrmypdf.readthedocs.io/) — Automatic OCR for scanned PDFs.
-- [FPDF](https://pyfpdf.github.io/fpdf2/) — Output PDF generation.
+**Routing & data**
+- [react-router-dom 7](https://reactrouter.com/) — Client-side routing.
+- [Axios](https://axios-http.com/) — HTTP client for the backend API.
+- [jwt-decode](https://github.com/auth0/jwt-decode) — JWT parsing for auth state.
 
-**Audio processing**
-- [pyannote.audio](https://github.com/pyannote/pyannote-audio) — Speaker diarization (detect how many speakers there are and when each one is talking).
-- [pydub](https://github.com/jiaaro/pydub) — Audio manipulation and format conversion.
+**Document export (client-side)**
+- [docx](https://docx.js.org/) — Generate `.docx` files entirely in the browser.
+- [jsPDF](https://github.com/parallax/jsPDF) — Generate `.pdf` files in the browser.
 
-**AI / NLP**
-- [OpenAI API](https://platform.openai.com/) — Transcription (Whisper) and answer generation (GPT).
-
-**Other**
-- `python-multipart` — File uploads in FastAPI endpoints.
-- `aiofiles` — Async I/O to keep the event loop unblocked.
-- `Pillow` — Image manipulation (OCR preprocessing).
+**Tooling**
+- ESLint with `typescript-eslint` and `react-hooks` plugins for code quality.
 
 ---
 
-## 🏗️ Architecture
+## 🏗️ How it connects to the backend
 
 ```
-┌─────────────────────────────────────────────────────────┐
-│  Client                                                  │
-│  (Web frontend / Postman / Swagger UI)                  │
-└──────────────────────┬──────────────────────────────────┘
-                       │ HTTP (multipart upload)
-                       ▼
-┌─────────────────────────────────────────────────────────┐
-│  FastAPI                                                 │
-│  ─ REST endpoints                                       │
-│  ─ Pydantic validation                                  │
-│  ─ Async upload handling                                │
-└──────────────────────┬──────────────────────────────────┘
-                       │
-       ┌───────────────┼─────────────────┐
-       ▼               ▼                 ▼
-  ┌─────────┐    ┌──────────┐    ┌──────────────┐
-  │  PDF    │    │  Audio   │    │   Queries    │
-  │ ─PyPDF2 │    │ ─pydub   │    │ ─OpenAI GPT  │
-  │ ─OCR    │    │ ─Whisper │    │              │
-  │         │    │ ─Diariz. │    │              │
-  └─────────┘    └──────────┘    └──────────────┘
-       │               │                 │
-       └───────────────┴─────────────────┘
-                       ▼
-              ┌─────────────────┐
-              │ Output: text /  │
-              │ PDF / JSON      │
-              └─────────────────┘
+┌─────────────────────────────┐         ┌─────────────────────────────┐
+│  Tesis_React (this repo)    │  HTTP   │  PythonTesis (backend)      │
+│  React + TypeScript + Vite  │ ──────► │  FastAPI + OpenAI + OCR     │
+│                             │  JSON   │                             │
+│  - Login form               │ ◄────── │  - JWT auth                 │
+│  - PDF/audio upload UI      │         │  - PDF/audio processing     │
+│  - Query interface          │         │  - GPT integration          │
+│  - .docx / .pdf export      │         │                             │
+└─────────────────────────────┘         └─────────────────────────────┘
 ```
+
+The backend handles all heavy processing (OCR, transcription, AI calls). The frontend handles UX, auth state, and client-side document generation — keeping the user's exported files private (they never leave their browser when generated locally).
 
 ---
 
-## 🚀 Running it locally
+## 🚀 Running locally
 
 ### Requirements
-- Python 3.11+
-- Tesseract OCR (for `ocrmypdf`):
-  - Windows: `choco install tesseract`
-  - Linux: `sudo apt install tesseract-ocr`
-  - Mac: `brew install tesseract`
-- FFmpeg (for `pydub`):
-  - Windows: `choco install ffmpeg`
-  - Linux: `sudo apt install ffmpeg`
-  - Mac: `brew install ffmpeg`
+- Node.js 20+
+- The [backend](https://github.com/juanp33/PythonTesis) running locally on `http://localhost:8000` (or update the API URL via `.env`).
 
 ### Setup
 
 ```bash
-git clone https://github.com/juanp33/PythonTesis.git
-cd PythonTesis
-
-# Create virtual environment
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1   # Windows
-# source .venv/bin/activate     # Linux/Mac
+git clone https://github.com/juanp33/Tesis_React.git
+cd Tesis_React
 
 # Install dependencies
-pip install -r requirements.txt
+npm install
+
+# Create env file
+echo "VITE_API_URL=http://localhost:8000" > .env
+
+# Run dev server
+npm run dev
 ```
 
-### Configure environment variables
+Open http://localhost:5173
 
-Create a `.env` file in the project root:
+### Available scripts
 
-```env
-OPENAI_API_KEY=sk-your-api-key-here
-HUGGINGFACE_TOKEN=hf_your-token-here   # Required for pyannote.audio
-```
-
-> 🔑 Get your OpenAI API key at https://platform.openai.com/api-keys  
-> 🔑 Get your HuggingFace token at https://huggingface.co/settings/tokens (free)
-
-### Run the server
-
-```bash
-uvicorn app.main:app --reload --port 8000
-```
-
-Interactive API docs: http://localhost:8000/docs
-
----
-
-## 📡 Main endpoints
-
-> *Replace this section with the actual endpoints from your project. This is an example of the expected format:*
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `POST` | `/api/pdf/upload` | Upload a PDF and extract text (with OCR if scanned) |
-| `POST` | `/api/audio/transcribe` | Upload audio and get back a transcript with speaker diarization |
-| `POST` | `/api/chat/ask` | Ask a natural-language question about the processed documents |
-| `GET` | `/api/documents` | List processed documents |
+| Command | What it does |
+|---|---|
+| `npm run dev` | Start Vite dev server with HMR |
+| `npm run build` | Type-check and bundle for production |
+| `npm run preview` | Serve the production build locally |
+| `npm run lint` | Run ESLint over the codebase |
 
 ---
 
 ## 📁 Project structure
 
 ```
-PythonTesis/
-├── app/                  # FastAPI application code
-│   ├── main.py           # Entry point
-│   ├── routers/          # REST endpoints grouped by domain
-│   ├── services/         # Business logic (PDF, audio, AI)
-│   └── models/           # Pydantic models
-├── data/
-│   └── pdfs/             # Processed PDFs (not committed)
-├── pdfs/                 # Sample input PDFs
-├── requirements.txt
-└── README.md
+Tesis_React/
+├── public/               # Static assets (favicon, etc.)
+├── src/
+│   ├── components/       # Reusable UI components
+│   ├── pages/            # Route-level views
+│   ├── services/         # API clients (axios)
+│   ├── hooks/            # Custom React hooks (auth, fetching)
+│   ├── utils/            # Helpers (JWT, file export, formatting)
+│   ├── App.tsx           # Root component + routing
+│   └── main.tsx          # Vite entry point
+├── index.html
+├── package.json
+├── tsconfig.json
+└── vite.config.ts
 ```
 
 ---
 
 ## 🧠 Notable technical decisions
 
-### OCR as automatic fallback
-PyPDF2 only extracts text from native digital PDFs. When a PDF is a scanned image (common with older legal documents), PyPDF2 returns an empty string. The system detects this case and triggers `ocrmypdf` automatically, keeping the API uniform: the client uploads a PDF and gets text back, without caring which engine was used.
+### Client-side document export
+Generating `.docx` and `.pdf` files directly in the browser (via `docx` and `jsPDF`) instead of asking the backend to do it has a key benefit for legal contexts: **the formatted exports never leave the user's machine**. Sensitive content stays local.
 
-### Combined diarization + transcription
-Whisper transcribes but doesn't identify speakers. `pyannote.audio` identifies speakers but doesn't transcribe. Combining the two yields output formatted like:
+### JWT auth with `jwt-decode`
+The login flow stores the JWT and uses `jwt-decode` to read the expiration claim client-side. This avoids making a request to validate the token on every page render — instead, expired tokens trigger an automatic logout and redirect to login.
 
-```
-[00:00:12 - 00:00:34] SPEAKER_1: Can you confirm your full name?
-[00:00:35 - 00:00:48] SPEAKER_2: Yes, my name is...
-```
+### Strict TypeScript
+The project uses `strict` mode and `noUnusedLocals`/`noUnusedParameters` to catch issues at compile time. Combined with `typescript-eslint`, it pushes the codebase toward fewer runtime surprises.
 
-### Async FastAPI
-Uploads and OpenAI calls are I/O-bound operations that benefit from async. FastAPI handles them without blocking the event loop, supporting multiple concurrent uploads with a single process.
+### Vite over CRA
+Vite was chosen over Create React App for instant HMR (changes show up in <100ms) and significantly faster production builds. CRA is also officially deprecated as of 2025.
 
 ---
 
 ## 🗺️ Roadmap
 
-- [x] Base setup with FastAPI
-- [x] Text extraction from native PDFs
-- [x] Automatic OCR for scanned PDFs
-- [ ] Audio transcription with Whisper
-- [ ] Speaker diarization
-- [ ] OpenAI GPT query endpoint
-- [ ] PDF report generation
-- [ ] Web frontend (next phase)
-- [ ] Automated tests
-- [ ] Deployment to Railway/Render
+- [x] Login screen with JWT auth
+- [x] PDF upload UI and processing flow
+- [x] Audio upload UI
+- [ ] Audio transcription view with diarization
+- [ ] Query interface (natural-language Q&A)
+- [ ] `.docx` / `.pdf` client-side export
+- [ ] User document history view
+- [ ] Responsive design polish
+- [ ] Deployment to Vercel/Netlify
 
 ---
 
-## 🔒 Privacy and sensitive data
+## 🔗 Related
 
-This project handles legal documents that may contain highly sensitive information. Considerations taken:
-
-- Uploaded PDFs and audio files are **not stored permanently** in production.
-- OpenAI calls use the direct API (no training on user data, per [OpenAI's terms](https://openai.com/policies/api-data-usage-policies)).
-- For real-world deployments, on-premise solutions (local models with [Ollama](https://ollama.com/) or similar) should be evaluated for clients with strict confidentiality requirements.
+- 🔧 **Backend**: [juanp33/PythonTesis](https://github.com/juanp33/PythonTesis) — FastAPI server, OCR, audio processing, and OpenAI integration.
 
 ---
 
@@ -220,4 +168,4 @@ This project handles legal documents that may contain highly sensitive informati
 
 ## 📜 License
 
-Academic project. If you're interested in collaborating or using it as a base for something, reach out — happy to chat.
+Academic project. Reach out if you'd like to collaborate.
